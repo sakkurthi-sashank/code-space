@@ -1,5 +1,15 @@
-import { Card, Badge, Button, Text, Stack, Flex, List, ThemeIcon } from '@mantine/core'
-import { IconCalendarTime } from '@tabler/icons-react'
+import {
+  Card,
+  Badge,
+  Button,
+  Text,
+  Stack,
+  Flex,
+  List,
+  ThemeIcon,
+  Progress,
+} from "@mantine/core";
+import { IconCalendarTime } from "@tabler/icons-react";
 
 export default function CourseCard() {
   return (
@@ -10,18 +20,30 @@ export default function CourseCard() {
       withBorder
       sx={{
         maxWidth: 370,
-        width: '100%',
+        width: "100%",
+        minHeight: 300,
       }}
     >
-      <Card.Section withBorder>
-        <Stack px={20} py={16} bg={''}>
-          <Text size={30} weight={500} color="dark">
+      <Card.Section>
+        <Stack px={20} spacing={4} py={16}>
+          <Text
+            sx={{
+              overflow: "hidden",
+              textOverflow: "ellipsis",
+              whiteSpace: "nowrap",
+            }}
+            size={30}
+            weight={500}
+            color="dark"
+          >
             Data Structures and Algorithms
           </Text>
+          <Text size={12}>Odd Sem | 2024</Text>
+          <Text size={12}>Amith Kumar Mandal</Text>
         </Stack>
       </Card.Section>
 
-      <Card.Section p={20}>
+      <Card.Section px={20}>
         <Flex gap={10}>
           <Badge color="red" variant="filled">
             C++
@@ -35,12 +57,12 @@ export default function CourseCard() {
         </Flex>
       </Card.Section>
 
-      <Card.Section pb={20} px={20}>
-        <List spacing="xs" mt={10}>
+      <Card.Section pt={10} px={20}>
+        <List spacing="xs" size={"sm"} mt={10}>
           <List.Item
             icon={
-              <ThemeIcon color="indigo" variant="light" size={24} radius="xl">
-                <IconCalendarTime size={'0.9rem'} />
+              <ThemeIcon color="indigo" variant="light" size={22} radius="xl">
+                <IconCalendarTime size={"0.8rem"} />
               </ThemeIcon>
             }
           >
@@ -48,8 +70,8 @@ export default function CourseCard() {
           </List.Item>
           <List.Item
             icon={
-              <ThemeIcon color="indigo" variant="light" size={24} radius="xl">
-                <IconCalendarTime size={'0.9rem'} />
+              <ThemeIcon color="indigo" variant="light" size={22} radius="xl">
+                <IconCalendarTime size={"0.8rem"} />
               </ThemeIcon>
             }
           >
@@ -57,11 +79,15 @@ export default function CourseCard() {
           </List.Item>
         </List>
       </Card.Section>
-      <Card.Section px={20} withBorder>
-        <Button variant="light" color="indigo" fullWidth my={20}>
-          Explore Course
-        </Button>
+
+      <Card.Section px={20} pt={20}>
+        <Stack spacing={5}>
+          <Text size={12} color="gray">
+            Progress
+          </Text>
+          <Progress color="indigo" size="sm" value={0} />
+        </Stack>
       </Card.Section>
     </Card>
-  )
+  );
 }

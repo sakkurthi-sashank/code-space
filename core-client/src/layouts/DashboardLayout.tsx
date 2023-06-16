@@ -8,7 +8,7 @@ export function DashboardLayout({ children }: { children: React.ReactNode }) {
 
   return (
     <AppShell
-      padding="md"
+      padding={0}
       styles={(theme) => ({
         main: {
           backgroundColor:
