@@ -1,10 +1,10 @@
-import { AppHeader } from "@/components/dashboard/AppHeader";
-import { AppSidebar } from "@/components/dashboard/AppSidebar";
-import { AppShell } from "@mantine/core";
-import { useState } from "react";
+import { AppHeader } from '@/components/dashboard/AppHeader'
+import { AppSidebar } from '@/components/dashboard/AppSidebar'
+import { AppShell } from '@mantine/core'
+import { useState } from 'react'
 
 export function DashboardLayout({ children }: { children: React.ReactNode }) {
-  const [opened, setOpened] = useState(false);
+  const [opened, setOpened] = useState(false)
 
   return (
     <AppShell
@@ -12,7 +12,7 @@ export function DashboardLayout({ children }: { children: React.ReactNode }) {
       styles={(theme) => ({
         main: {
           backgroundColor:
-            theme.colorScheme === "dark"
+            theme.colorScheme === 'dark'
               ? theme.colors.dark[8]
               : theme.colors.gray[0],
         },
@@ -23,5 +23,5 @@ export function DashboardLayout({ children }: { children: React.ReactNode }) {
     >
       {children}
     </AppShell>
-  );
+  )
 }

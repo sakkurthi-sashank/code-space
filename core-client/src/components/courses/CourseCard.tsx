@@ -1,15 +1,14 @@
 import {
-  Card,
   Badge,
-  Button,
-  Text,
-  Stack,
+  Card,
   Flex,
   List,
-  ThemeIcon,
   Progress,
-} from "@mantine/core";
-import { IconCalendarTime } from "@tabler/icons-react";
+  Stack,
+  Text,
+  ThemeIcon,
+} from '@mantine/core'
+import { IconCalendarTime } from '@tabler/icons-react'
 
 export default function CourseCard() {
   return (
@@ -20,7 +19,7 @@ export default function CourseCard() {
       withBorder
       sx={{
         maxWidth: 370,
-        width: "100%",
+        width: '100%',
         minHeight: 300,
       }}
     >
@@ -28,9 +27,9 @@ export default function CourseCard() {
         <Stack px={20} spacing={4} py={16}>
           <Text
             sx={{
-              overflow: "hidden",
-              textOverflow: "ellipsis",
-              whiteSpace: "nowrap",
+              overflow: 'hidden',
+              textOverflow: 'ellipsis',
+              whiteSpace: 'nowrap',
             }}
             size={30}
             weight={500}
@@ -58,11 +57,11 @@ export default function CourseCard() {
       </Card.Section>
 
       <Card.Section pt={10} px={20}>
-        <List spacing="xs" size={"sm"} mt={10}>
+        <List spacing="xs" size={'sm'} mt={10}>
           <List.Item
             icon={
               <ThemeIcon color="indigo" variant="light" size={22} radius="xl">
-                <IconCalendarTime size={"0.8rem"} />
+                <IconCalendarTime size={'0.8rem'} />
               </ThemeIcon>
             }
           >
@@ -71,7 +70,7 @@ export default function CourseCard() {
           <List.Item
             icon={
               <ThemeIcon color="indigo" variant="light" size={22} radius="xl">
-                <IconCalendarTime size={"0.8rem"} />
+                <IconCalendarTime size={'0.8rem'} />
               </ThemeIcon>
             }
           >
@@ -89,5 +88,5 @@ export default function CourseCard() {
         </Stack>
       </Card.Section>
     </Card>
-  );
+  )
 }

@@ -1,21 +1,21 @@
-import { DashboardLayout } from "@/layouts/DashboardLayout";
+import { DashboardLayout } from '@/layouts/DashboardLayout'
 import {
+  Badge,
   Box,
+  Button,
   Divider,
   Flex,
+  List,
   Stack,
   Tabs,
-  useMantineTheme,
   Text,
-  Badge,
-  List,
   ThemeIcon,
-  Button,
-} from "@mantine/core";
-import { IconCalendarTime } from "@tabler/icons-react";
+  useMantineTheme,
+} from '@mantine/core'
+import { IconCalendarTime } from '@tabler/icons-react'
 
 export default function CoursePage() {
-  const theme = useMantineTheme();
+  const theme = useMantineTheme()
 
   return (
     <DashboardLayout>
@@ -23,7 +23,7 @@ export default function CoursePage() {
         <Box
           sx={{
             height: 50,
-            backgroundColor: "white",
+            backgroundColor: 'white',
             borderBottom: `1px solid ${theme.colors.gray[2]}`,
           }}
         ></Box>
@@ -35,7 +35,7 @@ export default function CoursePage() {
             borderBottom: `1px solid ${theme.colors.gray[2]}`,
           }}
         >
-          <Box sx={{ width: "40%" }}>
+          <Box sx={{ width: '40%' }}>
             <Tabs defaultValue="pending">
               <Tabs.List grow h={50}>
                 <Tabs.Tab value="pending">Pending</Tabs.Tab>
@@ -46,9 +46,9 @@ export default function CoursePage() {
                 <Box
                   p="sm"
                   sx={{
-                    "&:hover": {
+                    '&:hover': {
                       backgroundColor: theme.colors.gray[0],
-                      cursor: "pointer",
+                      cursor: 'pointer',
                     },
                   }}
                 >
@@ -82,7 +82,7 @@ export default function CoursePage() {
 
           <Divider orientation="vertical" color={theme.colors.gray[2]} />
 
-          <Box sx={{ width: "60%" }}>
+          <Box sx={{ width: '60%' }}>
             <Stack spacing={8} p="md">
               <Text size={24} fw={600}>
                 Introduction to Data Structures
@@ -247,5 +247,5 @@ export default function CoursePage() {
         </Flex>
       </Stack>
     </DashboardLayout>
-  );
+  )
 }
