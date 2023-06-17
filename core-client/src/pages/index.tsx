@@ -1,13 +1,12 @@
-import CourseCard from '@/components/courses/CourseCard'
-import { DashboardLayout } from '@/layouts/DashboardLayout'
-import { Flex } from '@mantine/core'
+import { useRouter } from 'next/router'
+import { useEffect } from 'react'
 
 export default function HomePage() {
-  return (
-    <DashboardLayout>
-      <Flex wrap="wrap" gap="md" p={'md'}>
-        <CourseCard />
-      </Flex>
-    </DashboardLayout>
-  )
+  const router = useRouter()
+
+  useEffect(() => {
+    router.push('/courses')
+  }, [])
+
+  return <div></div>
 }
