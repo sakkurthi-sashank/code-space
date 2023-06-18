@@ -6,7 +6,7 @@ export default function HomePage() {
 
   useEffect(() => {
     router.push('/courses')
-  }, [])
+  }, [router])
 
   return <div></div>
 }

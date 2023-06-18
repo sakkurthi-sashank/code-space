@@ -1,12 +1,5 @@
 import { useUser } from '@clerk/nextjs'
-import {
-  Box,
-  Group,
-  Text,
-  UnstyledButton,
-  rem,
-  useMantineTheme,
-} from '@mantine/core'
+import { rem, useMantineTheme } from '@mantine/core'
 import { IconChevronRight } from '@tabler/icons-react'
 
 export function User() {
@@ -14,46 +7,23 @@ export function User() {
   const { user } = useUser()
 
   return (
-    <Box
-      sx={{
-        paddingTop: theme.spacing.sm,
-        borderTop: `${rem(1)} solid ${
-          theme.colorScheme === 'dark'
-            ? theme.colors.dark[4]
-            : theme.colors.gray[2]
-        }`,
+    <div
+      className="p-1"
+      style={{
+        borderTop: `1px solid ${theme.colors.gray[2]}`,
       }}
     >
-      <UnstyledButton
-        mb={theme.spacing.xs}
-        sx={{
-          display: 'block',
-          width: '100%',
-          padding: theme.spacing.xs,
-          borderRadius: theme.radius.sm,
-          color:
-            theme.colorScheme === 'dark' ? theme.colors.dark[0] : theme.black,
-
-          '&:hover': {
-            backgroundColor:
-              theme.colorScheme === 'dark'
-                ? theme.colors.dark[6]
-                : theme.colors.gray[0],
-          },
-        }}
-      >
-        <Group>
-          <Box sx={{ flex: 1 }}>
-            <Text size="sm" className="text-gray-700" weight={500}>
-              {user?.firstName}
-            </Text>
-            <Text color="dimmed" size="xs">
+      <div className="rounded-md px-2 py-2 hover:bg-gray-100">
+        <div className="flex items-center justify-between">
+          <div className="flex flex-col">
+            <span className="text-sm text-gray-800">{user?.firstName}</span>
+            <span className="text-xs text-gray-600">
               {user?.emailAddresses[0]?.emailAddress}
-            </Text>
-          </Box>
+            </span>
+          </div>
           <IconChevronRight size={rem(18)} />
-        </Group>
-      </UnstyledButton>
-    </Box>
+        </div>
+      </div>
+    </div>
   )
 }

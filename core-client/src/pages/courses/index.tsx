@@ -16,7 +16,7 @@ const courses = [
   },
 ]
 
-export default function CoursePage() {
+export default function CoursesPage() {
   return (
     <DashboardLayout>
       <Flex wrap="wrap" gap="md" p={'md'}>
