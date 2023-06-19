@@ -6,7 +6,7 @@ export const Editor = () => {
     <CodeMirror
       value="console.log('Hello, World!')"
       theme={vscodeDark}
-      height="calc(100vh - 60px - 50vh)"
+      height="60vh"
     />
   )
 }

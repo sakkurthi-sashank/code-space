@@ -1,5 +1,5 @@
 import { CourseDisplayCard } from '@/components/courses/course-display-card'
-import { DashboardLayout } from '@/layouts/DashboardLayout'
+import { DashboardLayout } from '@/layouts/dashboard-layout'
 import { Flex } from '@mantine/core'
 
 const courses = [

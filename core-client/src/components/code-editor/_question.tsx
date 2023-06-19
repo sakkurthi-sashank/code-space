@@ -6,6 +6,7 @@ const question = {
   and you may not use the same element twice.
   <br />
   You can return the answer in any order.`,
+
   examples: [
     {
       input: {
@@ -34,7 +35,7 @@ const question = {
 
 export const Question = () => {
   return (
-    <div className="w-full px-6">
+    <div className="w-full rounded-t-xl bg-gray-50 px-6">
       <h3>{question.title}</h3>
       <p>
         {question.description.split('<br />').map((line, i) => (

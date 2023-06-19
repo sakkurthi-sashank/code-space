@@ -10,9 +10,9 @@ export const Brand = () => {
       style={{
         fontFamily: inter.style.fontFamily,
       }}
-      className="text-xl font-bold tracking-normal text-gray-700"
+      className="text-xl font-bold tracking-normal text-gray-600"
     >
-      CodeSpace
+      codespace
     </div>
   )
 }
