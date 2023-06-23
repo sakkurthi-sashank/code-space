@@ -1,4 +1,5 @@
 import { Navbar } from '@mantine/core'
+import { HelpLinks } from './_helpLinks'
 import { MainLinks } from './_mainLinks'
 
 export function AppSidebar({ opened }: { opened: boolean }) {
@@ -8,8 +9,7 @@ export function AppSidebar({ opened }: { opened: boolean }) {
         <MainLinks />
       </Navbar.Section>
       <Navbar.Section>
-        {/* TODO: Implement Help Links */}
-        {/* <HelpLinks /> */}
+        <HelpLinks />
       </Navbar.Section>
     </Navbar>
   )

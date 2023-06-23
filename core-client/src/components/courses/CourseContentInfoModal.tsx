@@ -4,38 +4,30 @@ import {
   Modal,
   ScrollArea,
   Table,
-  Text,
   ThemeIcon,
 } from '@mantine/core'
 import { IconCircleCheck } from '@tabler/icons-react'
+import { useRouter } from 'next/router'
 
-const information = [
-  {
-    id: 1,
-    name: 'Section 1',
-    type: 'MCQ',
-    questions: 10,
-    time: '10 min',
-    marks: 10,
-  },
-  {
-    id: 2,
-    name: 'Section 2',
-    type: 'Coding Questions',
-    questions: 5,
-    time: '20 min',
-    marks: 20,
-  },
-]
-
-export const InstructionModel = ({
-  opened,
-  close,
-}: {
+interface CourseContentInfoModalProps {
   opened: boolean
   close: () => void
-}) => {
-  const rows = information.map((info) => (
+  courseId: string
+  courseTestId: String
+  courseContentInfo: {
+    id: number
+    name: string
+    type: string
+    questions: number
+    time: string
+    marks: number
+  }[]
+}
+
+export const CourseContentInfoModal = (props: CourseContentInfoModalProps) => {
+  const router = useRouter()
+
+  const rows = props.courseContentInfo.map((info) => (
     <tr key={info.id}>
       <td>{info.id}</td>
       <td>{info.name}</td>
@@ -48,17 +40,8 @@ export const InstructionModel = ({
 
   return (
     <>
-      <Modal opened={opened} onClose={close} size="xl" pt={20}>
-        <Text
-          p={'md'}
-          className="text-gray-600"
-          align="center"
-          fw={500}
-          size={'lg'}
-        >
-          Information
-        </Text>
-        <ScrollArea>
+      <Modal opened={props.opened} onClose={props.close} size="xl" pt={20}>
+        <ScrollArea p={10}>
           <Table
             horizontalSpacing="xl"
             className="mx-auto"
@@ -78,19 +61,11 @@ export const InstructionModel = ({
             <tbody>{rows}</tbody>
           </Table>
         </ScrollArea>
-        <Text
-          p={'md'}
-          className="text-gray-600"
-          align="center"
-          fw={500}
-          size={'lg'}
-        >
-          Instructions
-        </Text>
         <List
-          p={'sm'}
           spacing={'lg'}
           size={'xs'}
+          p={'sm'}
+          mt={'xl'}
           icon={
             <ThemeIcon color="red" variant="light" size={18} radius="xl">
               <IconCircleCheck size="0.7rem" />
@@ -120,7 +95,16 @@ export const InstructionModel = ({
           </List.Item>
         </List>
         <div className="flex justify-end p-6">
-          <Button>Start Assignment</Button>
+          <Button
+            fw={500}
+            onClick={() =>
+              router.push(
+                `/courses/${props.courseId}test/${props.courseTestId}`,
+              )
+            }
+          >
+            Start Assignment
+          </Button>
         </div>
       </Modal>
     </>

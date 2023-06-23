@@ -1,6 +1,5 @@
-import { CommingSoon } from '@/components/custom-error/comming-soon'
-import { AppHeader } from '@/components/dashboard/header'
-import { AppSidebar } from '@/components/dashboard/sidebar'
+import { AppHeader } from '@/components/dashboard/AppHeader'
+import { AppSidebar } from '@/components/dashboard/AppSidebar'
 import { AppShell } from '@mantine/core'
 import { useState } from 'react'
 
@@ -19,7 +18,7 @@ export function DashboardLayout({ children }: { children?: React.ReactNode }) {
       navbar={<AppSidebar opened={opened} />}
       header={<AppHeader opened={opened} setOpened={setOpened} />}
     >
-      {children ? children : <CommingSoon />}
+      {children}
     </AppShell>
   )
 }
