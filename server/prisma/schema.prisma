@@ -1,0 +1,131 @@
+generator client {
+  provider     = "prisma-kysely"
+  output       = "../src/db"
+  fileName     = "types.ts"
+  enumFileName = "enums.ts"
+}
+
+datasource db {
+  provider = "postgresql"
+  url      = env("DATABASE_URL")
+}
+
+model Student {
+  id                    String                 @id @default(dbgenerated("gen_random_uuid()"))
+  firstName             String
+  lastName              String
+  emailAddress          String                 @unique
+  admissionNumber       String                 @unique
+  section               String
+  batch                 Int
+  branch                String
+  enrollments           Enrollment[]
+  // assignmentCompletions AssignmentCompletion[]
+  createdAt             DateTime               @default(now())
+}
+
+model Course {
+  id                String       @id @default(dbgenerated("gen_random_uuid()"))
+  courseId          String       @unique
+  courseName        String
+  courseDescription String
+  professorName     String
+  learningTags      String[]
+  courseStartDate   DateTime
+  courseEndDate     DateTime
+  enrollments       Enrollment[]
+  // assignments       Assignment[]
+  createdAt         DateTime     @default(now())
+}
+
+model Enrollment {
+  id        String   @id @default(dbgenerated("gen_random_uuid()"))
+  studentId String
+  courseId  String
+  student   Student  @relation(fields: [studentId], references: [id], onDelete: Cascade)
+  course    Course   @relation(fields: [courseId], references: [id], onDelete: Cascade)
+  createdAt DateTime @default(now())
+}
+
+// model Assignment {
+//   id                    String                 @id @default(dbgenerated("gen_random_uuid()"))
+//   courseId              String
+//   course                Course                 @relation(fields: [courseId], references: [id], onDelete: Cascade)
+//   sections              Section[]
+//   assignmentCompletions AssignmentCompletion[]
+//   createdAt             DateTime               @default(now())
+// }
+
+// model AssignmentCompletion {
+//   id                  String                @id @default(dbgenerated("gen_random_uuid()"))
+//   assignment          Assignment            @relation(fields: [assignmentId], references: [id], onDelete: Cascade)
+//   assignmentId        String
+//   student             Student               @relation(fields: [studentId], references: [id], onDelete: Cascade)
+//   studentId           String
+//   completedAt         DateTime              @default(now())
+//   createdAt           DateTime              @default(now())
+//   codingQuestionStats CodingQuestionStats[]
+// }
+
+// model Section {
+//   id              String           @id @default(dbgenerated("gen_random_uuid()"))
+//   assignment      Assignment?      @relation(fields: [assignmentId], references: [id], onDelete: Cascade)
+//   assignmentId    String?
+//   createdAt       DateTime         @default(now())
+//   sectionName     String
+//   mcqQuestions    MCQQuestion[]
+//   codingQuestions CodingQuestion[]
+// }
+
+// model CodingQuestion {
+//   id                  String                @id @default(dbgenerated("gen_random_uuid()"))
+//   questionTitle       String
+//   questionDescription String
+//   answer              String
+//   createdAt           DateTime              @default(now())
+//   testCases           TestCases[]
+//   section             Section?              @relation(fields: [sectionId], references: [id], onDelete: Cascade)
+//   sectionId           String?
+//   codingQuestionStats CodingQuestionStats[]
+// }
+
+// model MCQQuestion {
+//   id            String   @id @default(dbgenerated("gen_random_uuid()"))
+//   questionTitle String
+//   options       String[]
+//   correctOption Int
+//   createdAt     DateTime @default(now())
+//   section       Section  @relation(fields: [sectionId], references: [id], onDelete: Cascade)
+//   sectionId     String
+// }
+
+// model TestCases {
+//   id               String           @id @default(dbgenerated("gen_random_uuid()"))
+//   input            String
+//   output           String
+//   isExample        Boolean          @default(false)
+//   createdAt        DateTime         @default(now())
+//   codingQuestion   CodingQuestion   @relation(fields: [codingQuestionId], references: [id], onDelete: Cascade)
+//   codingQuestionId String
+//   testCasePasseds  TestCasePassed[]
+// }
+
+// model TestCasePassed {
+//   id                    String              @id @default(dbgenerated("gen_random_uuid()"))
+//   testCase              TestCases           @relation(fields: [testCaseId], references: [id], onDelete: Cascade)
+//   testCaseId            String
+//   codingQuestionStats   CodingQuestionStats @relation(fields: [codingQuestionStatsId], references: [id], onDelete: Cascade)
+//   codingQuestionStatsId String
+//   createdAt             DateTime            @default(now())
+// }
+
+// model CodingQuestionStats {
+//   id                     String               @id @default(dbgenerated("gen_random_uuid()"))
+//   codingQuestion         CodingQuestion       @relation(fields: [codingQuestionId], references: [id], onDelete: Cascade)
+//   codingQuestionId       String
+//   assignmentCompletion   AssignmentCompletion @relation(fields: [assignmentCompletionId], references: [id], onDelete: Cascade)
+//   assignmentCompletionId String
+//   isCorrect              Boolean
+//   createdAt              DateTime             @default(now())
+//   testCasePassed         TestCasePassed[]
+// }
