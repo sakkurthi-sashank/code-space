@@ -1,26 +1,41 @@
 import { CourseCard } from '@/components/courses/CourseCard'
+import { backendUrl } from '@/constants'
 import { DashboardLayout } from '@/layouts/dashboard-layout'
 import { Flex } from '@mantine/core'
+import { useQuery } from 'react-query'
 
-const courses = [
-  {
-    id: '1',
-    courseName: 'Java Programming',
-    courseDescription: 'Odd semester 2021',
-    professorName: 'Dr. John Doe',
-    Learningtags: ['Java', 'Programming', 'OOP'],
-    courseStartDate: '2021-08-01',
-    courseEndDate: '2021-12-31',
-    Studentprogress: 30,
-    courseValidity: 50,
-  },
-]
+interface Course {
+  id: string
+  courseName: string
+  courseDescription: string
+  professorName: string
+  Learningtags: string[]
+  courseStartDate: string
+  courseEndDate: string
+  Studentprogress: number
+  courseValidity: number
+}
 
 export default function CoursesPage() {
+  const { isLoading, error, data } = useQuery(
+    'courses',
+    async () =>
+      await fetch(`${backendUrl}/courses/get-all-courses-by-user`, {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+        },
+        body: JSON.stringify({
+          studentId: '3534ffca-1341-11ee-be56-0242ac120002',
+        }),
+      }).then((res) => res.json()),
+  )
+
   return (
     <DashboardLayout>
+      {isLoading && <div>Loading...</div>}
       <Flex wrap="wrap" gap="md" p={'md'}>
-        {courses.map((course) => (
+        {data?.courses.map((course: Course) => (
           <CourseCard key={course.id} {...course} />
         ))}
       </Flex>

@@ -21,11 +21,29 @@ interface CourseCardProps {
   courseStartDate: string
   courseEndDate: string
   Studentprogress: number
-  courseValidity: number
 }
 
 export function CourseCard(props: CourseCardProps) {
   const router = useRouter()
+
+  const formattedDateStart = new Date(props.courseStartDate).toDateString()
+  const formattedDateEnd = new Date(props.courseEndDate).toDateString()
+
+  const checkCourseValidityFromStartDateAndEndDate = () => {
+    const { courseStartDate, courseEndDate } = props
+    const startDate = new Date(courseStartDate)
+    const endDate = new Date(courseEndDate)
+    const today = new Date()
+
+    const totalDays = Math.floor(
+      (endDate.getTime() - startDate.getTime()) / (1000 * 3600 * 24),
+    )
+    const daysPassed = Math.floor(
+      (today.getTime() - startDate.getTime()) / (1000 * 3600 * 24),
+    )
+
+    return Math.floor((daysPassed / totalDays) * 100)
+  }
 
   return (
     <Card
@@ -34,7 +52,7 @@ export function CourseCard(props: CourseCardProps) {
       withBorder
       className="w-full max-w-sm cursor-pointer transition-shadow duration-300 ease-in-out hover:shadow-xl"
       sx={{
-        minHeight: 350,
+        minHeight: 310,
       }}
       onClick={() => router.push(`/courses/courseId=${props.id}`)}
     >
@@ -59,11 +77,17 @@ export function CourseCard(props: CourseCardProps) {
 
       <Card.Section px={20} py={8}>
         <Flex gap={10}>
-          {props.Learningtags.map((tag) => (
-            <Badge color="indigo" variant="light" key={tag}>
-              {tag}
+          {props.Learningtags ? (
+            props.Learningtags.map((tag) => (
+              <Badge color="indigo" variant="light" key={tag}>
+                {tag}
+              </Badge>
+            ))
+          ) : (
+            <Badge color="gray" variant="light" key={props.courseName}>
+              No tags
             </Badge>
-          ))}
+          )}
         </Flex>
       </Card.Section>
 
@@ -74,7 +98,7 @@ export function CourseCard(props: CourseCardProps) {
               <IconCalendarTime stroke={1.5} size={'0.8rem'} />
             </ThemeIcon>
             <Text size={12} color="gray">
-              Starts Date <br /> {props.courseStartDate}
+              Starts Date <br /> {formattedDateStart}
             </Text>
           </UnstyledButton>
 
@@ -85,7 +109,7 @@ export function CourseCard(props: CourseCardProps) {
               <IconCalendarTime stroke={1.5} size={'0.8rem'} />
             </ThemeIcon>
             <Text size={12} color="gray">
-              Ends Date <br /> {props.courseEndDate}
+              Ends Date <br /> {formattedDateEnd}
             </Text>
           </UnstyledButton>
         </div>
@@ -95,16 +119,13 @@ export function CourseCard(props: CourseCardProps) {
         <Stack spacing={10}>
           <Stack spacing={6}>
             <Text size={12} color="gray">
-              Progress
-            </Text>
-            <Progress color="indigo" size="sm" value={props.Studentprogress} />
-          </Stack>
-
-          <Stack spacing={6}>
-            <Text size={12} color="gray">
               Validity
             </Text>
-            <Progress color="red" size="sm" value={props.courseValidity} />
+            <Progress
+              color="red"
+              size="sm"
+              value={checkCourseValidityFromStartDateAndEndDate()}
+            />
           </Stack>
         </Stack>
       </Card.Section>

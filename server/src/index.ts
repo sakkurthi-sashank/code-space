@@ -1,10 +1,13 @@
+import cors from 'cors';
 import dotenv from 'dotenv';
 import express from 'express';
-import { courseController } from './controllers/courses';
 dotenv.config();
+
+import { courseController } from './controllers/courses';
 
 const app = express();
 
+app.use(cors());
 app.use(express.json());
 app.use(express.urlencoded({ extended: true }));
 
