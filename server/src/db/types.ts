@@ -4,13 +4,6 @@ export type Generated<T> = T extends ColumnType<infer S, infer I, infer U>
   : ColumnType<T, T | undefined, T>;
 export type Timestamp = ColumnType<Date, Date | string, Date | string>;
 
-export type Assignment = {
-  id: Generated<string>;
-  contentName: string;
-  assignmentStartDate: Timestamp;
-  assignmentEndDate: Timestamp;
-  courseId: string | null;
-};
 export type Course = {
   id: Generated<string>;
   courseId: string;
@@ -20,6 +13,14 @@ export type Course = {
   learningTags: string[];
   courseStartDate: Timestamp;
   courseEndDate: Timestamp;
+  createdAt: Generated<Timestamp>;
+};
+export type CourseContent = {
+  id: Generated<string>;
+  courseId: string;
+  contentName: string;
+  courseContentStartDate: Timestamp;
+  courseContentEndDate: Timestamp;
   createdAt: Generated<Timestamp>;
 };
 export type Enrollment = {
@@ -40,8 +41,8 @@ export type Student = {
   createdAt: Generated<Timestamp>;
 };
 export type DB = {
-  Assignment: Assignment;
   Course: Course;
+  CourseContent: CourseContent;
   Enrollment: Enrollment;
   Student: Student;
 };

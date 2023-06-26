@@ -1,3 +1,4 @@
+import { ICourseContent } from '@/interface/course-content'
 import {
   Badge,
   Button,
@@ -9,13 +10,6 @@ import {
 } from '@mantine/core'
 import { useDisclosure } from '@mantine/hooks'
 import { CourseContentInfoModal } from './CourseContentInfoModal'
-
-interface CourseContentCardProps {
-  id: string
-  assignmentName: string
-  startDate: string
-  endDate: string
-}
 
 const courseContentInfo = [
   {
@@ -36,12 +30,27 @@ const courseContentInfo = [
   },
 ]
 
-export const CourseContentCard = (props: CourseContentCardProps) => {
+export const CourseContentCard = (props: ICourseContent) => {
   const theme = useMantineTheme()
   const [opened, { close, open }] = useDisclosure(false)
 
+  const formatedDateAndTime = (date: string) => {
+    const covertedDate = new Date(date)
+    const formatedDate = covertedDate.toLocaleDateString('en-US', {
+      weekday: 'long',
+      year: 'numeric',
+      month: 'long',
+      day: 'numeric',
+    })
+    const formatedTime = covertedDate.toLocaleTimeString('en-US', {
+      hour: '2-digit',
+      minute: '2-digit',
+    })
+    return `${formatedDate} at ${formatedTime}`
+  }
+
   const FindDaysAgoFromStartDate = () => {
-    const startDate = new Date(props.startDate)
+    const startDate = new Date(props.courseContentStartDate)
     const today = new Date()
     const diffTime = Math.abs(today.getTime() - startDate.getTime())
     const diffDays = Math.ceil(diffTime / (1000 * 60 * 60 * 24))
@@ -49,14 +58,14 @@ export const CourseContentCard = (props: CourseContentCardProps) => {
   }
 
   const isContinueButtonDisabled = () => {
-    const startDate = new Date(props.startDate)
-    const endDate = new Date(props.endDate)
+    const startDate = new Date(props.courseContentStartDate)
+    const endDate = new Date(props.courseContentEndDate)
     const today = new Date()
     return today < startDate || today > endDate
   }
 
   const isViewResultButtonDisabled = () => {
-    const endDate = new Date(props.endDate)
+    const endDate = new Date(props.courseContentEndDate)
     const today = new Date()
     return today < endDate
   }
@@ -66,7 +75,7 @@ export const CourseContentCard = (props: CourseContentCardProps) => {
       <Paper p="md" radius={'md'} mih={130} withBorder>
         <div className="flex flex-wrap items-center justify-between">
           <div className="text-xl font-medium text-gray-800">
-            {props.assignmentName}
+            {props.contentName}
           </div>
           <Badge color="cyan" size="sm" my={4}>
             {FindDaysAgoFromStartDate()} days ago
@@ -74,11 +83,11 @@ export const CourseContentCard = (props: CourseContentCardProps) => {
         </div>
         <Flex justify="start" mt={4} gap={10}>
           <Text size={12} align="center">
-            Starts At: {props.startDate}
+            Starts At: {formatedDateAndTime(props.courseContentStartDate)}
           </Text>
           <Divider color={theme.colors.gray[2]} orientation="vertical" />
           <Text size={12} align="center">
-            Ends At: {props.endDate}
+            Ends At: {formatedDateAndTime(props.courseContentEndDate)}
           </Text>
         </Flex>
         <div className="space-x-4">

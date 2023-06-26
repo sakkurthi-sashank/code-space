@@ -24,8 +24,8 @@ model Student {
 }
 
 model Course {
-  id                String       @id @default(dbgenerated("gen_random_uuid()"))
-  courseId          String       @unique
+  id                String          @id @default(dbgenerated("gen_random_uuid()"))
+  courseId          String          @unique
   courseName        String
   courseDescription String
   professorName     String
@@ -33,8 +33,8 @@ model Course {
   courseStartDate   DateTime
   courseEndDate     DateTime
   enrollments       Enrollment[]
-  createdAt         DateTime     @default(now())
-  Assignments       Assignment[]
+  createdAt         DateTime        @default(now())
+  couserContents    CourseContent[]
 }
 
 model Enrollment {
@@ -46,11 +46,12 @@ model Enrollment {
   createdAt DateTime @default(now())
 }
 
-model Assignment {
-  id                  String   @id @default(dbgenerated("gen_random_uuid()"))
-  contentName         String
-  assignmentStartDate DateTime
-  assignmentEndDate   DateTime
-  Course              Course?  @relation(fields: [courseId], references: [id])
-  courseId            String?
+model CourseContent {
+  id                     String   @id @default(dbgenerated("gen_random_uuid()"))
+  courseId               String
+  contentName            String
+  courseContentStartDate DateTime
+  courseContentEndDate   DateTime
+  course                 Course   @relation(fields: [courseId], references: [id], onDelete: Cascade)
+  createdAt              DateTime @default(now())
 }

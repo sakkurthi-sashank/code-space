@@ -1,7 +1,7 @@
 import { Kysely, PostgresDialect } from 'kysely';
 import { Pool } from 'pg';
 import { createClient } from 'redis';
-import { DB } from './db/types'; // this is the Database interface we defined earlier
+import { DB } from './db/types';
 
 export const redisClient = createClient();
 redisClient.connect();

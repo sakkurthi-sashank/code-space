@@ -17,7 +17,7 @@ interface CourseCardProps {
   courseName: string
   courseDescription: string
   professorName: string
-  Learningtags: string[]
+  learningTags: string[]
   courseStartDate: string
   courseEndDate: string
   Studentprogress: number
@@ -54,7 +54,7 @@ export function CourseCard(props: CourseCardProps) {
       sx={{
         minHeight: 310,
       }}
-      onClick={() => router.push(`/courses/courseId=${props.id}`)}
+      onClick={() => router.push(`/courses/${props.id}`)}
     >
       <Card.Section px={20} py={16}>
         <Stack spacing={4}>
@@ -77,8 +77,8 @@ export function CourseCard(props: CourseCardProps) {
 
       <Card.Section px={20} py={8}>
         <Flex gap={10}>
-          {props.Learningtags ? (
-            props.Learningtags.map((tag) => (
+          {props.learningTags?.length > 0 ? (
+            props.learningTags.map((tag) => (
               <Badge color="indigo" variant="light" key={tag}>
                 {tag}
               </Badge>

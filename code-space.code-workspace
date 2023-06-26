@@ -2,19 +2,19 @@
   "folders": [
     {
       "name": "root",
-      "path": ".."
+      "path": "."
     },
     {
       "name": "server",
-      "path": "../server"
+      "path": "./server"
     },
     {
       "name": "core-client",
-      "path": "../core-client"
+      "path": "./core-client"
     },
     {
       "name": "admin-client",
-      "path": "../admin-client"
+      "path": "./admin-client"
     }
   ],
   "settings": {}

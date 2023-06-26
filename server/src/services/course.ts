@@ -20,11 +20,35 @@ export const getAllCoursesByUser = async (req: Request, res: Response) => {
         .execute();
 
       await redisClient.setEx(studentId, 3600, JSON.stringify(courses));
-      return res.status(200).json({ courses });
+      return res.status(200).json(courses);
     } else {
       const courses = JSON.parse(cachedCourses);
-      return res.status(200).json({ courses });
+      return res.status(200).json(courses);
     }
+  } catch (error) {
+    console.error('Error:', error);
+    return res.status(500).json({ message: 'Internal server error' });
+  }
+};
+
+export const getAllAssignmentsByCourse = async (
+  req: Request,
+  res: Response,
+) => {
+  const { courseId } = req.body;
+
+  if (!courseId) {
+    return res.status(400).json({ message: 'Missing courseId' });
+  }
+
+  try {
+    const courseContents = await db
+      .selectFrom('CourseContent')
+      .where('courseId', '=', courseId)
+      .selectAll('CourseContent')
+      .execute();
+
+    return res.status(200).json(courseContents);
   } catch (error) {
     console.error('Error:', error);
     return res.status(500).json({ message: 'Internal server error' });
