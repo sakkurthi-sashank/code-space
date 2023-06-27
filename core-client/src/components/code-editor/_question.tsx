@@ -1,11 +1,6 @@
 const question = {
-  title: 'Two Sum',
-  description: `Given an array of integers nums and an integer target, return indices of
-  the two numbers such that they add up to target.
-  <br /> You may assume that each input would have exactly one solution,
-  and you may not use the same element twice.
-  <br />
-  You can return the answer in any order.`,
+  title: 'Reverse The Array',
+  problemStatement: `Given an array of integers nums and an integer target, return indices of the two numbers such that they add up to target.`,
 
   examples: [
     {
@@ -38,9 +33,7 @@ export const Question = () => {
     <div className="w-full rounded-t-xl bg-gray-50 px-6">
       <h3>{question.title}</h3>
       <p>
-        {question.description.split('<br />').map((line, i) => (
-          <span key={i}>{line}</span>
-        ))}
+        {question.problemStatement}
         <br />
       </p>
       {question.examples.map((example, i) => (

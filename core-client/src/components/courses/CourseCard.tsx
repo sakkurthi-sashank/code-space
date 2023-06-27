@@ -12,18 +12,15 @@ import {
 import { IconCalendarTime } from '@tabler/icons-react'
 import { useRouter } from 'next/router'
 
-interface CourseCardProps {
-  id: string
-  courseName: string
-  courseDescription: string
-  professorName: string
-  learningTags: string[]
+export function CourseCard(props: {
   courseStartDate: string
   courseEndDate: string
-  Studentprogress: number
-}
-
-export function CourseCard(props: CourseCardProps) {
+  id?: string
+  courseName?: string
+  courseDescription?: string
+  professorName?: string
+  learningTags?: string[]
+}) {
   const router = useRouter()
 
   const formattedDateStart = new Date(props.courseStartDate).toDateString()
@@ -77,17 +74,11 @@ export function CourseCard(props: CourseCardProps) {
 
       <Card.Section px={20} py={8}>
         <Flex gap={10}>
-          {props.learningTags?.length > 0 ? (
-            props.learningTags.map((tag) => (
-              <Badge color="indigo" variant="light" key={tag}>
-                {tag}
-              </Badge>
-            ))
-          ) : (
-            <Badge color="gray" variant="light" key={props.courseName}>
-              No tags
+          {props.learningTags?.map((tag) => (
+            <Badge color="indigo" variant="light" key={tag}>
+              {tag}
             </Badge>
-          )}
+          ))}
         </Flex>
       </Card.Section>
 

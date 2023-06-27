@@ -1,4 +1,3 @@
-import { ICourseContent } from '@/interface/course-content'
 import {
   Badge,
   Button,
@@ -9,28 +8,8 @@ import {
   useMantineTheme,
 } from '@mantine/core'
 import { useDisclosure } from '@mantine/hooks'
-import { CourseContentInfoModal } from './CourseContentInfoModal'
 
-const courseContentInfo = [
-  {
-    id: 1,
-    name: 'Section 1',
-    type: 'MCQ',
-    questions: 10,
-    time: '10 min',
-    marks: 10,
-  },
-  {
-    id: 2,
-    name: 'Section 2',
-    type: 'Coding Questions',
-    questions: 5,
-    time: '20 min',
-    marks: 20,
-  },
-]
-
-export const CourseContentCard = (props: ICourseContent) => {
+export const CourseContentCard = (props: any) => {
   const theme = useMantineTheme()
   const [opened, { close, open }] = useDisclosure(false)
 
@@ -109,13 +88,12 @@ export const CourseContentCard = (props: ICourseContent) => {
           </Button>
         </div>
       </Paper>
-      <CourseContentInfoModal
+      {/* <CourseContentInfoModal
         opened={opened}
         close={close}
         courseId={props.id}
-        courseTestId={'1'}
-        courseContentInfo={courseContentInfo}
-      />
+        courseTestId={props.id}
+      /> */}
     </>
   )
 }

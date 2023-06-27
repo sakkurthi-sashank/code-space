@@ -16,10 +16,12 @@
     "@mantine/core": "^6.0.14",
     "@mantine/hooks": "^6.0.14",
     "@mantine/next": "^6.0.14",
+    "@supabase/supabase-js": "^2.26.0",
     "@tabler/icons-react": "^2.22.0",
     "@uiw/codemirror-theme-vscode": "^4.21.4",
     "@uiw/react-codemirror": "^4.21.4",
     "next": "13.4.5",
+    "prisma": "^4.16.1",
     "react": "18.2.0",
     "react-dom": "18.2.0",
     "react-query": "^3.39.3"

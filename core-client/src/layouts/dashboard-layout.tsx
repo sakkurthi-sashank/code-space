@@ -1,5 +1,5 @@
-import { AppHeader } from '@/components/dashboard/AppHeader'
-import { AppSidebar } from '@/components/dashboard/AppSidebar'
+import { AppHeader } from '@/components/common/AppHeader'
+import { AppSidebar } from '@/components/common/AppSidebar'
 import { AppShell } from '@mantine/core'
 import { useState } from 'react'
 
