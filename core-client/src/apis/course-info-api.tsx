@@ -1,9 +1,11 @@
-import { supabase } from '@/utils/db'
+import { supabase } from '@/lib/db'
+import { useRouter } from 'next/router'
 import { useEffect, useState } from 'react'
 
 export interface ICourse {
   id: string
   courseName: string
+  courseUnqId: string
   courseDescription: string
   professorName: string
   learningTags: string[]
@@ -11,8 +13,9 @@ export interface ICourse {
   courseEndDate: string
 }
 
-export const CourseAPI = (studentId: string) => {
+export const CourseInfoAPI = (studentId: string) => {
   const [data, setData] = useState<ICourse[]>([])
+  const router = useRouter()
 
   useEffect(() => {
     const fetchCourses = async () => {
@@ -39,12 +42,13 @@ export const CourseAPI = (studentId: string) => {
         )
         .eq('Enrollment.studentId', studentId)
       if (error) {
+        router.push('/404')
         return
       }
       setData(data)
     }
     fetchCourses()
-  }, [studentId])
+  }, [studentId, router])
 
   return { data }
 }

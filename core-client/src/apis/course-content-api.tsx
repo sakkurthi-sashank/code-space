@@ -1,4 +1,4 @@
-import { supabase } from '@/utils/db'
+import { supabase } from '@/lib/db'
 import { useEffect, useState } from 'react'
 
 export interface ICourseContent {
@@ -23,7 +23,9 @@ export const CourseContentAPI = (courseId: string) => {
       }
       setData(data)
     }
-    fetchCourseContent()
+    if (courseId) {
+      fetchCourseContent()
+    }
   }, [courseId])
   return { data }
 }

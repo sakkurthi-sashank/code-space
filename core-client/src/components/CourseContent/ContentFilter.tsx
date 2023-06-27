@@ -1,6 +1,6 @@
 import { Box, useMantineTheme } from '@mantine/core'
 
-export const CourseContentFilter = () => {
+export const ContentFilter = () => {
   const theme = useMantineTheme()
   return (
     <Box

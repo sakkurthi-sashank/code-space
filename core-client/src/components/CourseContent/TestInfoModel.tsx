@@ -24,7 +24,9 @@ interface CourseContentInfoModalProps {
   }[]
 }
 
-export const CourseContentInfoModal = (props: CourseContentInfoModalProps) => {
+export const CourseInfoContentCardModel = (
+  props: CourseContentInfoModalProps,
+) => {
   const router = useRouter()
 
   const rows = props.courseContentInfo.map((info) => (

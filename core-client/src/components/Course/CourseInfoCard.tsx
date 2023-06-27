@@ -1,3 +1,4 @@
+import { formatDate } from '@/utils/formatDate'
 import {
   Badge,
   Card,
@@ -12,34 +13,45 @@ import {
 import { IconCalendarTime } from '@tabler/icons-react'
 import { useRouter } from 'next/router'
 
-export function CourseCard(props: {
+interface CourseInfoCardProps {
+  id: string
+  courseName: string
+  courseUnqId: string
+  courseDescription: string
+  professorName: string
   courseStartDate: string
   courseEndDate: string
-  id?: string
-  courseName?: string
-  courseDescription?: string
-  professorName?: string
-  learningTags?: string[]
-}) {
+  learningTags: string[]
+}
+
+export const CourseInfoCard: React.FC<CourseInfoCardProps> = ({
+  id,
+  courseName,
+  courseUnqId,
+  courseDescription,
+  professorName,
+  courseStartDate,
+  courseEndDate,
+  learningTags,
+}) => {
   const router = useRouter()
 
-  const formattedDateStart = new Date(props.courseStartDate).toDateString()
-  const formattedDateEnd = new Date(props.courseEndDate).toDateString()
-
-  const checkCourseValidityFromStartDateAndEndDate = () => {
-    const { courseStartDate, courseEndDate } = props
-    const startDate = new Date(courseStartDate)
-    const endDate = new Date(courseEndDate)
+  const getCourseValidity = () => {
+    const start = new Date(courseStartDate)
+    const end = new Date(courseEndDate)
     const today = new Date()
 
     const totalDays = Math.floor(
-      (endDate.getTime() - startDate.getTime()) / (1000 * 3600 * 24),
+      (end.getTime() - start.getTime()) / (1000 * 3600 * 24),
     )
     const daysPassed = Math.floor(
-      (today.getTime() - startDate.getTime()) / (1000 * 3600 * 24),
+      (today.getTime() - start.getTime()) / (1000 * 3600 * 24),
     )
-
     return Math.floor((daysPassed / totalDays) * 100)
+  }
+
+  const handleCardClick = () => {
+    router.push(`/courses/${id}`)
   }
 
   return (
@@ -49,9 +61,9 @@ export function CourseCard(props: {
       withBorder
       className="w-full max-w-sm cursor-pointer transition-shadow duration-300 ease-in-out hover:shadow-xl"
       sx={{
-        minHeight: 310,
+        minHeight: 320,
       }}
-      onClick={() => router.push(`/courses/${props.id}`)}
+      onClick={handleCardClick}
     >
       <Card.Section px={20} py={16}>
         <Stack spacing={4}>
@@ -65,16 +77,17 @@ export function CourseCard(props: {
             weight={500}
             color="dark"
           >
-            {props.courseName}
+            {courseName}
           </Text>
-          <Text size={12}>{props.courseDescription}</Text>
-          <Text size={12}>Professor: {props.professorName}</Text>
+          <Text size={12}>Course ID: {courseUnqId}</Text>
+          <Text size={12}>{courseDescription}</Text>
+          <Text size={12}>Professor: {professorName}</Text>
         </Stack>
       </Card.Section>
 
       <Card.Section px={20} py={8}>
         <Flex gap={10}>
-          {props.learningTags?.map((tag) => (
+          {learningTags?.map((tag) => (
             <Badge color="indigo" variant="light" key={tag}>
               {tag}
             </Badge>
@@ -89,7 +102,7 @@ export function CourseCard(props: {
               <IconCalendarTime stroke={1.5} size={'0.8rem'} />
             </ThemeIcon>
             <Text size={12} color="gray">
-              Starts Date <br /> {formattedDateStart}
+              Starts Date <br /> {formatDate(courseStartDate)}
             </Text>
           </UnstyledButton>
 
@@ -100,7 +113,7 @@ export function CourseCard(props: {
               <IconCalendarTime stroke={1.5} size={'0.8rem'} />
             </ThemeIcon>
             <Text size={12} color="gray">
-              Ends Date <br /> {formattedDateEnd}
+              Ends Date <br /> {formatDate(courseEndDate)}
             </Text>
           </UnstyledButton>
         </div>
@@ -112,11 +125,7 @@ export function CourseCard(props: {
             <Text size={12} color="gray">
               Validity
             </Text>
-            <Progress
-              color="red"
-              size="sm"
-              value={checkCourseValidityFromStartDateAndEndDate()}
-            />
+            <Progress color="red" size="sm" value={getCourseValidity()} />
           </Stack>
         </Stack>
       </Card.Section>

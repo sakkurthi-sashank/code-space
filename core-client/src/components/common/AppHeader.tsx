@@ -35,7 +35,13 @@ export const AppHeader = ({ opened, setOpened }: AppHeaderProps) => {
         </MediaQuery>
 
         {/* Brand Logo */}
-        <Image src="/images/brand-logo.svg" alt="Logo" width={28} height={28} />
+        <Image
+          src="/images/brand-logo.svg"
+          priority={false}
+          alt="Logo"
+          width={28}
+          height={28}
+        />
       </div>
 
       <div className="flex space-x-6">
