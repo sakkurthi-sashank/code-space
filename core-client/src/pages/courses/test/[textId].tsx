@@ -1,4 +1,4 @@
-import { CodeEditor } from '@/components/code-editor'
+import { CodeEditor } from '@/components/TestCodeEditor'
 
 export default function CourseTestPage() {
   return (
