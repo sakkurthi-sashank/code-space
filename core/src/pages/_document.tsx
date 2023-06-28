@@ -13,7 +13,7 @@ export default class _Document extends Document {
         <body>
           <Main />
           <NextScript />
-        </body>
+        </body> 
       </Html>
     )
   }

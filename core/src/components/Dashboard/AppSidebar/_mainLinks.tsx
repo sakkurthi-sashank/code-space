@@ -1,27 +1,9 @@
 import { Group, Text, UnstyledButton, clsx } from '@mantine/core'
-import {
-  IconBook,
-  IconBuildingSkyscraper,
-  IconSettings,
-  IconTrophy,
-  IconUser,
-} from '@tabler/icons-react'
+import { IconBook } from '@tabler/icons-react'
 import { useRouter } from 'next/router'
 
 const linksData = [
   { icon: <IconBook size="1rem" />, label: 'Courses', href: '/courses' },
-  {
-    icon: <IconTrophy size="1rem" />,
-    label: 'Competitions',
-    href: '/competitions',
-  },
-  {
-    icon: <IconBuildingSkyscraper size="1rem" />,
-    label: 'Job Profile',
-    href: '/job-profiles',
-  },
-  { icon: <IconUser size="1rem" />, label: 'My Profile', href: '/profile' },
-  { icon: <IconSettings size="1rem" />, label: 'Settings', href: '/settings' },
 ]
 
 export const MainLinks = () => {

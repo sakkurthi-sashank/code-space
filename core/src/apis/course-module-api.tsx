@@ -1,4 +1,3 @@
-import { supabase } from '@/lib/db'
 import { useEffect, useState } from 'react'
 
 export interface IModule {
@@ -14,13 +13,22 @@ export const CourseModuleAPI = (courseId: string) => {
 
   useEffect(() => {
     const fetchCourseContent = async () => {
-      const { data, error } = await supabase
-        .from('CourseContent')
-        .select('*')
-        .eq('courseId', courseId)
-      if (error) {
-        return
-      }
+      const data = [
+        {
+          id: '1',
+          courseId: '1',
+          contentName: 'Introduction to Python',
+          courseContentStartDate: '2021-08-01',
+          courseContentEndDate: '2021-08-07',
+        },
+        {
+          id: '2',
+          courseId: '1',
+          contentName: 'Python Data Types',
+          courseContentStartDate: '2021-08-08',
+          courseContentEndDate: '2021-08-14',
+        },
+      ]
       setData(data)
     }
     if (courseId) {

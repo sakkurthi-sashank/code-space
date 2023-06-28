@@ -1,4 +1,4 @@
-import { formatDate } from '@/utils/formatDate'
+import { ICourse } from '@/interface/course'
 import {
   Badge,
   Card,
@@ -13,18 +13,7 @@ import {
 import { IconCalendarTime } from '@tabler/icons-react'
 import { useRouter } from 'next/router'
 
-interface CourseInfoCardProps {
-  id: string
-  courseName: string
-  courseUnqId: string
-  courseDescription: string
-  professorName: string
-  courseStartDate: string
-  courseEndDate: string
-  learningTags: string[]
-}
-
-export const CourseInfoCard: React.FC<CourseInfoCardProps> = ({
+export const CourseInfoCard: React.FC<ICourse> = ({
   id,
   courseName,
   courseUnqId,
@@ -33,22 +22,10 @@ export const CourseInfoCard: React.FC<CourseInfoCardProps> = ({
   courseStartDate,
   courseEndDate,
   learningTags,
+  cousreValidityPeriod,
+  studentProgress,
 }) => {
   const router = useRouter()
-
-  const getCourseValidity = () => {
-    const start = new Date(courseStartDate)
-    const end = new Date(courseEndDate)
-    const today = new Date()
-
-    const totalDays = Math.floor(
-      (end.getTime() - start.getTime()) / (1000 * 3600 * 24),
-    )
-    const daysPassed = Math.floor(
-      (today.getTime() - start.getTime()) / (1000 * 3600 * 24),
-    )
-    return Math.floor((daysPassed / totalDays) * 100)
-  }
 
   const handleCardClick = () => {
     router.push(`/courses/${id}`)
@@ -61,7 +38,7 @@ export const CourseInfoCard: React.FC<CourseInfoCardProps> = ({
       withBorder
       className="w-full max-w-sm cursor-pointer transition-shadow duration-300 ease-in-out hover:shadow-xl"
       sx={{
-        minHeight: 320,
+        minHeight: 350,
       }}
       onClick={handleCardClick}
     >
@@ -102,7 +79,7 @@ export const CourseInfoCard: React.FC<CourseInfoCardProps> = ({
               <IconCalendarTime stroke={1.5} size={'0.8rem'} />
             </ThemeIcon>
             <Text size={12} color="gray">
-              Starts Date <br /> {formatDate(courseStartDate)}
+              Starts Date <br /> {courseStartDate}
             </Text>
           </UnstyledButton>
 
@@ -113,7 +90,7 @@ export const CourseInfoCard: React.FC<CourseInfoCardProps> = ({
               <IconCalendarTime stroke={1.5} size={'0.8rem'} />
             </ThemeIcon>
             <Text size={12} color="gray">
-              Ends Date <br /> {formatDate(courseEndDate)}
+              Ends Date <br /> {courseEndDate}
             </Text>
           </UnstyledButton>
         </div>
@@ -125,7 +102,13 @@ export const CourseInfoCard: React.FC<CourseInfoCardProps> = ({
             <Text size={12} color="gray">
               Validity
             </Text>
-            <Progress color="red" size="sm" value={getCourseValidity()} />
+            <Progress color="red" size="sm" value={cousreValidityPeriod} />
+          </Stack>
+          <Stack spacing={6}>
+            <Text size={12} color="gray">
+              Progress
+            </Text>
+            <Progress color="indigo" size="sm" value={studentProgress} />
           </Stack>
         </Stack>
       </Card.Section>
