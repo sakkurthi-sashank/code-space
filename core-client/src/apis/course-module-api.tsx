@@ -1,7 +1,7 @@
 import { supabase } from '@/lib/db'
 import { useEffect, useState } from 'react'
 
-export interface ICourseContent {
+export interface IModule {
   id: string
   courseId: string
   contentName: string
@@ -9,8 +9,8 @@ export interface ICourseContent {
   courseContentEndDate: string
 }
 
-export const CourseContentAPI = (courseId: string) => {
-  const [data, setData] = useState<ICourseContent[]>([])
+export const CourseModuleAPI = (courseId: string) => {
+  const [data, setData] = useState<IModule[]>([])
 
   useEffect(() => {
     const fetchCourseContent = async () => {

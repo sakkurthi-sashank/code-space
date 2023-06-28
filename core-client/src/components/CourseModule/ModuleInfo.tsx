@@ -9,7 +9,7 @@ import {
 import { IconCircleCheck } from '@tabler/icons-react'
 import { useRouter } from 'next/router'
 
-interface CourseContentInfoModalProps {
+interface ModuleInfoProps {
   opened: boolean
   close: () => void
   courseId: string
@@ -24,9 +24,7 @@ interface CourseContentInfoModalProps {
   }[]
 }
 
-export const CourseInfoContentCardModel = (
-  props: CourseContentInfoModalProps,
-) => {
+export const ModuleInfo = (props: ModuleInfoProps) => {
   const router = useRouter()
 
   const rows = props.courseContentInfo.map((info) => (

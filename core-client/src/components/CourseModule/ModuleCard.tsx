@@ -9,13 +9,13 @@ import {
   useMantineTheme,
 } from '@mantine/core'
 
-interface CourseInfoContentCardProps {
+interface ModuleCardProps {
   contentName: string
   courseContentStartDate: string
   courseContentEndDate: string
 }
 
-export const CourseInfoContentCard: React.FC<CourseInfoContentCardProps> = ({
+export const ModuleCard: React.FC<ModuleCardProps> = ({
   contentName,
   courseContentStartDate,
   courseContentEndDate,
