@@ -1,3 +1,12 @@
+import { useRouter } from 'next/router'
+import { useEffect } from 'react'
+
 export default function HomePage() {
-  return <div>HomePage</div>
+  const router = useRouter()
+
+  useEffect(() => {
+    router.push('/courses')
+  }, [])
+
+  return <div></div>
 }

@@ -44,8 +44,8 @@ export const AppSidebar = ({ opened }: { opened: boolean }) => {
             className={clsx(
               'my-1.5 block w-full rounded-md px-4 py-2.5 hover:bg-gray-100',
               isActive(link.href)
-                ? 'bg-indigo-50 text-indigo-700 hover:bg-indigo-50 hover:text-indigo-700'
-                : 'bg-transparent text-gray-500 hover:bg-indigo-50 hover:text-indigo-700',
+                ? 'bg-indigo-50 text-indigo-600 hover:bg-indigo-50 hover:text-indigo-600'
+                : 'bg-transparent text-gray-500 hover:bg-indigo-50 hover:text-indigo-600',
             )}
             onClick={() => router.push(link.href)}
           >
