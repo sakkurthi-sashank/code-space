@@ -1,0 +1,15 @@
+{
+  "cSpell.words": [
+    "autosize",
+    "clsx",
+    "codemirror",
+    "lezer",
+    "Mantine",
+    "nextjs",
+    "supabase",
+    "tabler",
+    "tailwindcss",
+    "zustand"
+  ],
+  "css.lint.unknownAtRules": "ignore"
+}
