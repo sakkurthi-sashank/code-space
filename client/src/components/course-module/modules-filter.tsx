@@ -1,7 +1,7 @@
 import { Box, Select, TextInput, useMantineTheme } from '@mantine/core'
 import { IconSearch } from '@tabler/icons-react'
 
-export const CourseModuleFilter = () => {
+export const ModuleFilter = () => {
   const theme = useMantineTheme()
   return (
     <Box

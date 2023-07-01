@@ -1,4 +1,4 @@
-import { CourseModuleFilter } from '@/components/course/course-module-filter'
+import { ModuleFilter } from '@/components/course-module/modules-filter'
 import { CourseModuleLayout } from '@/layout/course-module-layout'
 import { MainLayout } from '@/layout/main-layout'
 import { Stack, useMantineTheme } from '@mantine/core'
@@ -8,7 +8,7 @@ export default function CourseModulesPage() {
   return (
     <MainLayout>
       <Stack spacing={0} className="h-full w-full">
-        <CourseModuleFilter />
+        <ModuleFilter />
         <CourseModuleLayout />
       </Stack>
     </MainLayout>

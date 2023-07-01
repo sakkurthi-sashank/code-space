@@ -1,6 +1,6 @@
-import { UserButton } from '@clerk/nextjs'
 import {
   ActionIcon,
+  Avatar,
   Burger,
   Header,
   MediaQuery,
@@ -56,7 +56,10 @@ export const AppHeader = ({ opened, setOpened }: AppHeaderProps) => {
         </ActionIcon>
 
         {/* Clerk User Profile */}
-        <UserButton />
+        <Avatar
+          size="sm"
+          src="https://avatars.githubusercontent.com/u/51054900?v=4"
+        />
       </div>
     </Header>
   )
