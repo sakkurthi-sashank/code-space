@@ -4,7 +4,7 @@ import cors from "cors";
 
 dotenv.config();
 
-import { router as courseRouter } from "./api/course/router";
+import { router as courseRouter } from "./routes/courseRouter";
 
 const app = express();
 

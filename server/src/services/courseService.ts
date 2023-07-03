@@ -1,9 +1,7 @@
-import { Request, Response } from "express";
-import { db } from "../../database";
-import { dateFormatter } from "../../util/date-formatter";
+import { db } from "src/database";
+import { dateFormatter } from "src/utils/date-formatter";
 
-export const getCoursesByUserId = async (req: Request, res: Response) => {
-  const { studentId } = req.body;
+export const getCoursesByUserIdService = async (studentId: string) => {
   try {
     const data = await db
       .selectFrom("Course")
@@ -47,9 +45,8 @@ export const getCoursesByUserId = async (req: Request, res: Response) => {
         validity,
       };
     });
-
-    res.json(courses);
+    return courses;
   } catch (error) {
-    res.json(error);
+    return error;
   }
 };
