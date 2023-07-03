@@ -1,0 +1,179 @@
+generator kysely {
+  provider     = "prisma-kysely"
+  output       = "../src/db"
+  fileName     = "types.ts"
+  enumFileName = "enums.ts"
+}
+
+datasource db {
+  provider = "postgresql"
+  url      = env("DATABASE_URL")
+}
+
+model Professor {
+  professor_id    String   @id @default(dbgenerated("gen_random_uuid()"))
+  first_name      String
+  last_name       String
+  image_url       String
+  email_address   String
+  hashed_password String
+  phone_number    String
+  created_at      DateTime @default(now())
+  courses         Course[]
+}
+
+model Course {
+  course_id             String                  @id @default(dbgenerated("gen_random_uuid()"))
+  course_code           String
+  course_name           String
+  course_description    String
+  course_start_date     DateTime
+  course_end_date       DateTime
+  learning_tags         String[]
+  created_at            DateTime                @default(now())
+  professor             Professor               @relation(fields: [professor_id], references: [professor_id])
+  professor_id          String
+  course_modules        CourseModule[]
+  studentEnrolledCourse studentEnrolledCourse[]
+}
+
+model Student {
+  student_id                     String                           @id @default(dbgenerated("gen_random_uuid()"))
+  first_name                     String
+  last_name                      String
+  image_url                      String
+  email_address                  String
+  hashed_password                String
+  admission_number               String
+  date_of_birth                  DateTime
+  gender                         String
+  batch                          String
+  branch                         String
+  phone_number                   String
+  created_at                     DateTime                         @default(now())
+  StudentCompletedCodingQuestion StudentCompletedCodingQuestion[]
+  StudentMCQQuestion             StudentMCQQuestion[]
+  StudentCompletedCourseModule   StudentCompletedCourseModule[]
+  studentEnrolledCourse          studentEnrolledCourse[]
+}
+
+model studentEnrolledCourse {
+  student_id        String
+  course_id         String
+  enrollment_status Boolean
+  student           Student @relation(fields: [student_id], references: [student_id])
+  course            Course  @relation(fields: [course_id], references: [course_id])
+
+  @@id([student_id, course_id])
+}
+
+model CourseModule {
+  course_module_id                 String                         @id @default(dbgenerated("gen_random_uuid()"))
+  module_name                      String
+  module_description               String
+  is_full_screen_enabled           Boolean                        @default(false)
+  is_tab_switching_enabled         Boolean                        @default(false)
+  module_unit                      String
+  module_start_date                DateTime
+  module_end_date                  DateTime
+  is_result_disabled               Boolean
+  created_at                       DateTime                       @default(now())
+  course                           Course                         @relation(fields: [course_id], references: [course_id])
+  course_id                        String
+  sections                         Section[]
+  student_completed_course_modules StudentCompletedCourseModule[]
+}
+
+model Section {
+  section_id        String           @id @default(dbgenerated("gen_random_uuid()"))
+  section_name      String
+  is_retake_allowed Boolean
+  time_limit        Int
+  retake_count      Int
+  created_at        DateTime         @default(now())
+  course_module     CourseModule     @relation(fields: [course_module_id], references: [course_module_id])
+  course_module_id  String
+  coding_questions  CodingQuestion[]
+  mcq_questions     MCQQuestion[]
+}
+
+model CodingQuestion {
+  coding_question_id                 String                           @id @default(dbgenerated("gen_random_uuid()"))
+  problem_name                       String
+  problem_statement                  String
+  input_format                       String
+  output_format                      String
+  section                            Section                          @relation(fields: [section_id], references: [section_id])
+  section_id                         String
+  created_at                         DateTime                         @default(now())
+  student_completed_coding_questions StudentCompletedCodingQuestion[]
+  TestCases                          TestCases[]
+}
+
+model TestCases {
+  test_case_id                            String                                    @id @default(dbgenerated("gen_random_uuid()"))
+  test_case_input                         String
+  test_case_output                        String
+  is_sample_testcase                      Boolean
+  coding_question                         CodingQuestion                            @relation(fields: [coding_question_id], references: [coding_question_id])
+  coding_question_id                      String
+  created_at                              DateTime                                  @default(now())
+  StudentCompletedCodingQuestionTestCases StudentCompletedCodingQuestionTestCases[]
+}
+
+model MCQQuestion {
+  mcq_question_id       String               @id @default(dbgenerated("gen_random_uuid()"))
+  question_text         String
+  options               String[]
+  correct_answer_choice String
+  section               Section              @relation(fields: [section_id], references: [section_id])
+  section_id            String
+  created_at            DateTime             @default(now())
+  student_mcq_questions StudentMCQQuestion[]
+}
+
+model StudentCompletedCodingQuestion {
+  student_id                              String
+  coding_question_id                      String
+  completion_status                       Boolean
+  created_at                              DateTime                                  @default(now())
+  student                                 Student                                   @relation(fields: [student_id], references: [student_id])
+  coding_question                         CodingQuestion                            @relation(fields: [coding_question_id], references: [coding_question_id])
+  StudentCompletedCodingQuestionTestCases StudentCompletedCodingQuestionTestCases[]
+
+  @@id([student_id, coding_question_id])
+}
+
+model StudentCompletedCodingQuestionTestCases {
+  student_id                        String
+  coding_question_id                String
+  test_case_id                      String
+  created_at                        DateTime                       @default(now())
+  student_completed_coding_question StudentCompletedCodingQuestion @relation(fields: [student_id, coding_question_id], references: [student_id, coding_question_id])
+  test_case                         TestCases                      @relation(fields: [test_case_id], references: [test_case_id])
+
+  @@id([student_id, coding_question_id, test_case_id])
+}
+
+model StudentMCQQuestion {
+  student_id      String
+  mcq_question_id String
+  answer_choice   String
+  created_at      DateTime    @default(now())
+  student         Student     @relation(fields: [student_id], references: [student_id])
+  mcq_question    MCQQuestion @relation(fields: [mcq_question_id], references: [mcq_question_id])
+
+  @@id([student_id, mcq_question_id])
+}
+
+model StudentCompletedCourseModule {
+  student_id        String
+  retake_count      Int
+  course_module_id  String
+  completion_status Boolean
+  created_at        DateTime     @default(now())
+  student           Student      @relation(fields: [student_id], references: [student_id])
+  course_module     CourseModule @relation(fields: [course_module_id], references: [course_module_id])
+
+  @@id([student_id, course_module_id])
+}

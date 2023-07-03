@@ -1,4 +1,3 @@
-import { FetchStudentCourseDetails } from '@/services/course/fetch-student-course-details'
 import {
   Badge,
   Card,
@@ -11,7 +10,23 @@ import {
   UnstyledButton,
 } from '@mantine/core'
 import { IconCalendarTime } from '@tabler/icons-react'
+import axios from 'axios'
+import camelcaseKeys from 'camelcase-keys'
 import { useRouter } from 'next/router'
+import { useQuery } from 'react-query'
+
+interface Course {
+  courseId: string
+  courseName: string
+  professorFirstName: string
+  professorLastName: string
+  learningTags: string[]
+  courseCode: string
+  courseEndDate: string
+  courseStartDate: string
+  courseDescription: string
+  validity: number
+}
 
 export const CourseDisplayCards = () => {
   const router = useRouter()
@@ -20,15 +35,21 @@ export const CourseDisplayCards = () => {
     router.push(`/courses/${courseId}`)
   }
 
-  const { data } = FetchStudentCourseDetails({
-    studentId: '4e29e9fa-b0ea-499f-bbb5-c7ab124db622',
+  const studentId = '3d815ad6-c63d-4c07-81a5-3b6bd89ebe1c'
+
+  const { data } = useQuery<Course[]>('course', async () => {
+    const response = await axios.post<Course[]>(
+      'http://localhost:8080/api/v1/course/get-courses-by-user-id',
+      { studentId },
+    )
+    return camelcaseKeys(response.data)
   })
 
   return (
     <Flex wrap="wrap" gap="md" p="md">
       {data?.map((course) => (
         <Card
-          key={course.id}
+          key={course.courseId}
           shadow="xs"
           radius="md"
           withBorder
@@ -36,7 +57,7 @@ export const CourseDisplayCards = () => {
           sx={{
             minHeight: 320,
           }}
-          onClick={() => handleCardClick(course.id)}
+          onClick={() => handleCardClick(course.courseId)}
         >
           {/* Course Details */}
           <Card.Section px={20} py={16}>
@@ -55,14 +76,17 @@ export const CourseDisplayCards = () => {
               </Text>
               <Text size={12}>Course ID: {course.courseCode}</Text>
               <Text size={12}>{course.courseDescription}</Text>
-              <Text size={12}>Professor: {course.professorName}</Text>
+              <Text size={12}>
+                Professor: {course.professorFirstName}
+                {course.professorLastName}
+              </Text>
             </Stack>
           </Card.Section>
 
           {/* Learning Tags */}
           <Card.Section px={20} py={8}>
             <Flex gap={10}>
-              {course.learningTags?.map((tag: string) => (
+              {course.learningTags?.map((tag) => (
                 <Badge color="indigo" variant="light" key={tag}>
                   {tag}
                 </Badge>
