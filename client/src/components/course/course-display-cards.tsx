@@ -39,7 +39,7 @@ export const CourseDisplayCards = () => {
 
   const { data } = useQuery<Course[]>('course', async () => {
     const response = await axios.post<Course[]>(
-      'http://localhost:8080/api/v1/course/get-courses-by-user-id',
+      'http://localhost:8080/api/v1/course/get-courses-by-student-id',
       { studentId },
     )
     return camelcaseKeys(response.data)

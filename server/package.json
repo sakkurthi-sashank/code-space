@@ -18,7 +18,9 @@
     "cors": "^2.8.5",
     "express": "^4.18.2",
     "kysely": "^0.25.0",
-    "pg": "^8.11.1"
+    "pg": "^8.11.1",
+    "swagger-jsdoc": "^6.2.8",
+    "swagger-ui-express": "^4.6.3"
   },
   "devDependencies": {
     "@types/cors": "^2.8.13",
