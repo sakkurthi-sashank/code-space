@@ -1,5 +1,6 @@
 import express from "express";
 import {
+  getBriefModuleDetailsByModuleId,
   getCourseModulesByCourseIdAndStudentId,
   getCoursesByUserId,
 } from "../controllers/courseController";
@@ -65,4 +66,31 @@ router.post(
   getCourseModulesByCourseIdAndStudentId
 );
 
-export default router;
+/**
+ * @swagger
+ * /api/v1/course/get-brief-module-details-by-module-id:
+ *   post:
+ *     description: Get brief module details by module id
+ *     requestBody:
+ *       content:
+ *         application/json:
+ *           schema:
+ *             type: object
+ *             properties:
+ *               moduleId:
+ *                 type: string
+ *                 example: "string"
+ *             required:
+ *               - moduleId
+ *     responses:
+ *       200:
+ *         description: Success
+ *       400:
+ *         description: Bad request
+ *       500:
+ *         description: Internal server error
+ */
+router.post(
+  "/get-brief-module-details-by-module-id",
+  getBriefModuleDetailsByModuleId
+);

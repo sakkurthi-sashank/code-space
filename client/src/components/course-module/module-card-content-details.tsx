@@ -31,10 +31,15 @@ const information = [
 export const ModuleCardContentDetails = ({
   opened,
   close,
+  moduleId,
 }: {
   opened: boolean
   close: () => void
+  moduleId: string
 }) => {
+
+  
+
   const rows = information.map((info) => (
     <tr key={info.id}>
       <td>{info.id}</td>

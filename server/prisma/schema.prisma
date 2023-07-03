@@ -68,7 +68,7 @@ model studentEnrolledCourse {
 }
 
 model CourseModule {
-  course_module_id                 String                         @id @default(dbgenerated("gen_random_uuid()"))
+  module_id                        String                         @id @default(dbgenerated("gen_random_uuid()"))
   module_name                      String
   module_description               String
   is_full_screen_enabled           Boolean                        @default(false)
@@ -89,10 +89,11 @@ model Section {
   section_name      String
   is_retake_allowed Boolean
   time_limit        Int
+  type              String
   retake_count      Int
   created_at        DateTime         @default(now())
-  course_module     CourseModule     @relation(fields: [course_module_id], references: [course_module_id])
-  course_module_id  String
+  course_module     CourseModule     @relation(fields: [module_id], references: [module_id])
+  module_id         String
   coding_questions  CodingQuestion[]
   mcq_questions     MCQQuestion[]
 }
@@ -103,6 +104,7 @@ model CodingQuestion {
   problem_statement                  String
   input_format                       String
   output_format                      String
+  marks                              Int                              @default(10)
   section                            Section                          @relation(fields: [section_id], references: [section_id])
   section_id                         String
   created_at                         DateTime                         @default(now())
@@ -169,11 +171,11 @@ model StudentMCQQuestion {
 model StudentCompletedCourseModule {
   student_id        String
   retake_count      Int
-  course_module_id  String
+  module_id         String
   completion_status Boolean
   created_at        DateTime     @default(now())
   student           Student      @relation(fields: [student_id], references: [student_id])
-  course_module     CourseModule @relation(fields: [course_module_id], references: [course_module_id])
+  course_module     CourseModule @relation(fields: [module_id], references: [module_id])
 
-  @@id([student_id, course_module_id])
+  @@id([student_id, module_id])
 }

@@ -85,3 +85,30 @@ export const getCourseModulesByCourseIdAndStudentIdService = async (
     return error;
   }
 };
+
+export const getBriefModuleDetailsByModuleIdService = async (
+  moduleId: string
+) => {
+  try {
+    const data = db
+      .selectFrom("CourseModule")
+      .where("CourseModule.course_module_id", "=", moduleId)
+      .innerJoin(
+        "Section",
+        "Section.course_module_id",
+        "CourseModule.course_module_id"
+      )
+      .select([
+        "Section.section_id",
+        "Section.section_name",
+        "Section.retake_count",
+        "Section.is_retake_allowed",
+        "Section.type",
+      ])
+      .execute();
+
+    return data;
+  } catch (error) {
+    return error;
+  }
+};
