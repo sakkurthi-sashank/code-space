@@ -52,7 +52,7 @@ model Student {
   phone_number                   String
   created_at                     DateTime                         @default(now())
   StudentCompletedCodingQuestion StudentCompletedCodingQuestion[]
-  StudentMCQQuestion             StudentMCQQuestion[]
+  StudentCompletedMCQQuestion    StudentCompletedMCQQuestion[]
   StudentCompletedCourseModule   StudentCompletedCourseModule[]
   studentEnrolledCourse          studentEnrolledCourse[]
 }
@@ -124,14 +124,14 @@ model TestCases {
 }
 
 model MCQQuestion {
-  mcq_question_id       String               @id @default(dbgenerated("gen_random_uuid()"))
+  mcq_question_id       String                        @id @default(dbgenerated("gen_random_uuid()"))
   question_text         String
   options               String[]
   correct_answer_choice String
-  section               Section              @relation(fields: [section_id], references: [section_id])
+  section               Section                       @relation(fields: [section_id], references: [section_id])
   section_id            String
-  created_at            DateTime             @default(now())
-  student_mcq_questions StudentMCQQuestion[]
+  created_at            DateTime                      @default(now())
+  student_mcq_questions StudentCompletedMCQQuestion[]
 }
 
 model StudentCompletedCodingQuestion {
@@ -157,7 +157,7 @@ model StudentCompletedCodingQuestionTestCases {
   @@id([student_id, coding_question_id, test_case_id])
 }
 
-model StudentMCQQuestion {
+model StudentCompletedMCQQuestion {
   student_id      String
   mcq_question_id String
   answer_choice   String

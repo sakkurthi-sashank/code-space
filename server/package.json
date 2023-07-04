@@ -18,9 +18,7 @@
     "cors": "^2.8.5",
     "express": "^4.18.2",
     "kysely": "^0.25.0",
-    "pg": "^8.11.1",
-    "swagger-jsdoc": "^6.2.8",
-    "swagger-ui-express": "^4.6.3"
+    "pg": "^8.11.1"
   },
   "devDependencies": {
     "@types/cors": "^2.8.13",
@@ -31,7 +29,7 @@
     "eslint": "^8.44.0",
     "prettier": "^2.8.8",
     "prisma": "^4.16.2",
-    "prisma-kysely": "^1.4.2",
+    "prisma-kysely": "^1.5.0",
     "ts-node-dev": "^2.0.0",
     "typescript": "^5.1.6"
   }
