@@ -8,6 +8,7 @@ import {
   ThemeIcon,
 } from '@mantine/core'
 import { IconCircleCheck } from '@tabler/icons-react'
+import { useRouter } from 'next/router'
 
 const information = [
   {
@@ -37,8 +38,11 @@ export const ModuleCardContentDetails = ({
   close: () => void
   moduleId: string
 }) => {
+  const router = useRouter()
 
-  
+  const handleCardClick = (courseId: string, moduleId: string) => {
+    router.push(`/courses/${courseId}/${moduleId}`)
+  }
 
   const rows = information.map((info) => (
     <tr key={info.id}>
@@ -125,7 +129,13 @@ export const ModuleCardContentDetails = ({
           </List.Item>
         </List>
         <div className="flex justify-end p-6">
-          <Button size="xs">Start Assignment</Button>
+          <Button
+            fw={400}
+            size="xs"
+            onClick={() => handleCardClick(moduleId, '1')}
+          >
+            Start Exam
+          </Button>
         </div>
       </Modal>
     </>

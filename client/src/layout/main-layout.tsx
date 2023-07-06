@@ -1,5 +1,4 @@
-import { AppHeader } from '@/components/common/app-header'
-import { AppSidebar } from '@/components/common/app-sidebar'
+import { AppHeader } from '@/components/common/AppHeader'
 import { AppShell } from '@mantine/core'
 import React, { useState } from 'react'
 
@@ -14,8 +13,6 @@ export const MainLayout = ({ children }: { children: React.ReactNode }) => {
           backgroundColor: theme.colors.gray[0],
         },
       })}
-      navbarOffsetBreakpoint="md"
-      navbar={<AppSidebar opened={opened} />}
       header={<AppHeader opened={opened} setOpened={setOpened} />}
     >
       {children}

@@ -1,4 +1,4 @@
-import { CodeEditor } from '@/components/code-editor'
+import { CodeEditor } from '@/components/CodeEditorExam'
 
 export default function TestPage() {
   return <CodeEditor />

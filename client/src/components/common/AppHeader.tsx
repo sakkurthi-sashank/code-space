@@ -1,22 +1,8 @@
-import {
-  ActionIcon,
-  Avatar,
-  Burger,
-  Header,
-  MediaQuery,
-  useMantineTheme,
-} from '@mantine/core'
+import { ActionIcon, Avatar, Header } from '@mantine/core'
 import { IconBell, IconSearch } from '@tabler/icons-react'
 import Image from 'next/image'
 
-interface AppHeaderProps {
-  opened: boolean
-  setOpened: React.Dispatch<React.SetStateAction<boolean>>
-}
-
-export const AppHeader = ({ opened, setOpened }: AppHeaderProps) => {
-  const theme = useMantineTheme()
-
+export const AppHeader = () => {
   return (
     <Header
       height={{ base: 55 }}
@@ -24,17 +10,6 @@ export const AppHeader = ({ opened, setOpened }: AppHeaderProps) => {
       className="flex items-center justify-between"
     >
       <div className="flex items-center space-x-3">
-        {/* Burger Button (Responsive) */}
-        <MediaQuery largerThan="md" styles={{ display: 'none' }}>
-          <Burger
-            opened={opened}
-            onClick={() => setOpened((o) => !o)}
-            size="sm"
-            color={theme.colors.gray[6]}
-          />
-        </MediaQuery>
-
-        {/* Brand Logo */}
         <Image
           src="/images/brand-logo.svg"
           priority={false}

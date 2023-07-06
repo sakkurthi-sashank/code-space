@@ -1,5 +1,5 @@
-import { ModuleDisplayCards } from '@/components/course-module/module-display-cards'
-import { ModuleFilter } from '@/components/course-module/modules-filter'
+import { ModuleDisplayCards } from '@/components/CourseModule/ModuleCards'
+import { ModuleFilter } from '@/components/CourseModule/ModuleFilter'
 import { MainLayout } from '@/layout/main-layout'
 import { Stack, useMantineTheme } from '@mantine/core'
 

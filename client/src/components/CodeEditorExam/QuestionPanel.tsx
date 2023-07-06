@@ -1,14 +1,20 @@
 import { Divider, Paper, ScrollArea, useMantineTheme } from '@mantine/core'
+import { TestCase } from './TestCases'
 
 export const QuestionPanel = () => {
   const theme = useMantineTheme()
 
   return (
-    <div className="h-full w-full space-y-2">
-      <Paper h={50} radius={'md'}></Paper>
-      <div className="rounded-md bg-white">
-        <ScrollArea h={700}>
-          <div className="prose prose-sm max-w-none px-6">
+    <div>
+      <Paper
+        h={'7vh'}
+        sx={{
+          borderBottom: `1px solid ${theme.colors.gray[2]}`,
+        }}
+      ></Paper>
+      <div className="bg-white">
+        <ScrollArea h={'53vh'}>
+          <div className="prose prose-sm max-w-none px-6 py-3">
             <h3>Two Sum</h3>
             <Divider color={theme.colors.gray[2]} />
             <p>
@@ -55,6 +61,7 @@ export const QuestionPanel = () => {
           </div>
         </ScrollArea>
       </div>
+      <TestCase />
     </div>
   )
 }

@@ -1,11 +1,11 @@
-import { AddNewCourseModel } from '@/components/course/add-new-course-model'
-import { CourseDisplayCards } from '@/components/course/course-display-cards'
+import { AddNewCourseModel } from '@/components/course/AddNewCourse'
+import { CourseCards } from '@/components/course/CourseCards'
 import { MainLayout } from '@/layout/main-layout'
 
 export default function CoursesPage() {
   return (
     <MainLayout>
-      <CourseDisplayCards />
+      <CourseCards />
       <AddNewCourseModel />
     </MainLayout>
   )
