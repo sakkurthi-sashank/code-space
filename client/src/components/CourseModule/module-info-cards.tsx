@@ -9,13 +9,13 @@ import {
   useMantineTheme,
 } from '@mantine/core'
 import { useDisclosure } from '@mantine/hooks'
+import axios from 'axios'
+import { useQuery } from 'react-query'
 import { ModuleDetails } from './module-details'
 
 interface Module {
-  course_module_id: string
+  module_id: string
   module_name: string
-  is_full_screen_enabled: boolean
-  is_tab_switching_enabled: boolean
   module_unit: string
   module_start_date: string
   module_end_date: string
@@ -24,78 +24,72 @@ interface Module {
   course_id: string
 }
 
-export const ModuleInfoCards = () => {
+export const ModuleInfoCards = ({ courseId }: { courseId: string }) => {
   const theme = useMantineTheme()
 
   const [opened, { open, close }] = useDisclosure(false)
 
-  const courseId = '8f83a252-400c-4e90-bdcb-0691732e48e5'
-  const studentId = '3d815ad6-c63d-4c07-81a5-3b6bd89ebe1c'
+  const studentId = 'fc8cb36a-93fc-42a1-a43b-3384730295c7'
 
-  // const { isLoading, error, data } = useQuery<Module[]>(
-  //   ['course-module-details'],
-  //   async () => {
-  //     const response = await axios.post(
-  //       'http://localhost:8080/api/v1/course/get-course-modules-by-course-id-and-student-id',
-  //       {
-  //         courseId: courseId,
-  //         studentId: studentId,
-  //       },
-  //     )
-  //     return response.data
-  //   },
-  // )
-
-  const data = [
-    {
-      module_id: '1',
-      module_name: 'Introduction to Linked List',
-      module_unit: 'Unit 1',
-      module_start_date: 'July 6, 2021 12:00 PM',
-      module_end_date: 'July 10, 2021 12:00 PM',
-      is_result_disabled: false,
+  const { isLoading, error, data } = useQuery<Module[]>(
+    ['course-module-details'],
+    async () => {
+      const response = await axios.post(
+        'http://localhost:8080/api/course-module/get-course-modules-by-course-id-and-student-id',
+        {
+          courseId: courseId,
+          studentId: studentId,
+        },
+      )
+      return response.data
     },
-  ]
+    {
+      enabled: !!courseId,
+    },
+  )
 
   return (
-    <Stack p={'sm'}>
+    <Stack p={'xs'}>
       {data?.map((module) => (
         <Paper
           w={'100%'}
-          p={'md'}
-          radius={'md'}
-          withBorder
+          p={'sm'}
+          radius={5}
+          sx={{
+            border: `1px solid ${theme.colors.gray[2]}`,
+          }}
           key={module.module_id}
         >
-          <Flex align={'center'} gap={'md'}>
-            <Title
-              order={4}
-              fw={600}
-              sx={{
-                overflow: 'hidden',
-                textOverflow: 'ellipsis',
-                whiteSpace: 'nowrap',
-              }}
-              color={theme.colors.gray[7]}
-            >
-              {module.module_name}
-            </Title>
-            <Badge color="gray" size="sm" variant="light">
-              {module.module_unit}
-            </Badge>
-          </Flex>
-
-          <Flex align={'center'} justify={'space-between'} wrap={'wrap'}>
-            <Stack spacing={2}>
-              <Text size={'xs'} color="dimmed">
-                Starts Date {module.module_start_date}
-              </Text>
-              <Text size={'xs'} color="dimmed">
-                Ends Date {module.module_end_date}
-              </Text>
+          <Flex justify={'space-between'} wrap={'wrap'} align={'center'}>
+            <Stack spacing={0}>
+              <Flex align={'center'} gap={'md'}>
+                <Title
+                  order={4}
+                  fw={600}
+                  sx={{
+                    overflow: 'hidden',
+                    textOverflow: 'ellipsis',
+                    whiteSpace: 'nowrap',
+                  }}
+                  color={theme.colors.gray[7]}
+                >
+                  {module.module_name}
+                </Title>
+                <Badge color="gray" size="sm" variant="light">
+                  {module.module_unit}
+                </Badge>
+              </Flex>
+              <Flex align={'center'} gap={'md'}>
+                <Text size={'xs'} color="dimmed">
+                  Starts Date {module.module_start_date}
+                </Text>
+                <Text size={'xs'} color="dimmed">
+                  Ends Date {module.module_end_date}
+                </Text>
+              </Flex>
             </Stack>
 
-            <Flex mt={4} gap={'md'}>
+            <Flex gap={'md'} mt={'sm'}>
               <Button size="xs" fw={500} onClick={open}>
                 Continue
               </Button>

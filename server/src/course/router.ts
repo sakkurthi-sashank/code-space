@@ -3,4 +3,4 @@ import { getCoursesByStudentIdController } from "./controller";
 
 export const router = express.Router();
 
-router.get("/get-courses-by-student-id", getCoursesByStudentIdController);
+router.post("/get-courses-by-student-id", getCoursesByStudentIdController);

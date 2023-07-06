@@ -4,7 +4,6 @@ import { getCoursesByStudentIdRepository } from "./repository";
 export const getCoursesByUserIdService = async (studentId: string) => {
   try {
     const data = await getCoursesByStudentIdRepository(studentId);
-
     /**
      *  Map through the data and format the date
      */
@@ -22,14 +21,14 @@ export const getCoursesByUserIdService = async (studentId: string) => {
         ...course,
         course_start_date: dateFormatter(course_start_date),
         course_end_date: dateFormatter(course_end_date),
-        professor_first_name: course.first_name,
-        professor_last_name: course.last_name,
         validity,
       };
     });
 
     return courses;
   } catch (error) {
+    console.log(error);
+
     return error;
   }
 };

@@ -24,7 +24,8 @@ interface Course {
   course_end_date: string
   course_start_date: string
   course_description: string
-  professor_name: string
+  professor_first_name: string
+  professor_last_name: string
   validity: number
 }
 
@@ -36,11 +37,11 @@ export const CourseInfoCards: React.FC = () => {
     router.push(`/courses/${courseId}`)
   }
 
-  const studentId = '3d815ad6-c63d-4c07-81a5-3b6bd89ebe1c'
+  const studentId = 'fc8cb36a-93fc-42a1-a43b-3384730295c7'
 
   const { data } = useQuery<Course[]>(['course'], async () => {
     const response = await axios.post<Course[]>(
-      'http://localhost:8080/api/v1/course/get-courses-by-student-id',
+      'http://localhost:8080/api/courses/get-courses-by-student-id',
       { studentId },
     )
     return response.data!
@@ -86,7 +87,8 @@ export const CourseInfoCards: React.FC = () => {
               {course.course_description}
             </Text>
             <Text size="xs" color="dimmed">
-              Professor: {course.professor_name}
+              Professor: {course.professor_first_name}{' '}
+              {course.professor_last_name}
             </Text>
           </Stack>
           <Divider my="md" color={theme.colors.gray[2]} />

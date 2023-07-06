@@ -4,6 +4,6 @@ import { getCourseModuleByCourseIdAndStudentIdController } from "./controller";
 export const router = express.Router();
 
 router.post(
-  "/get-course-module-by-course-id-and-student-id",
+  "/get-course-modules-by-course-id-and-student-id",
   getCourseModuleByCourseIdAndStudentIdController
 );

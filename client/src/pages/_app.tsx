@@ -16,7 +16,7 @@ export default function App({ Component, pageProps }: AppProps) {
         withGlobalStyles
         withNormalizeCSS
         theme={{
-          primaryColor: 'dark',
+          primaryColor: 'indigo',
           fontFamily: inter.style.fontFamily,
         }}
       >

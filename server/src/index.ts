@@ -1,12 +1,14 @@
 import express from "express";
 import dotenv from "dotenv";
 import cors from "cors";
+import admin from "firebase-admin";
 dotenv.config();
 
 import { router as courseRouter } from "./course/router";
 import { router as courseModuleRouter } from "./course-module/router";
 
 const app = express();
+const serviceAccount = require("../serviceAccountKey.json");
 
 app.use(
   cors({
@@ -14,10 +16,14 @@ app.use(
   })
 );
 
+admin.initializeApp({
+  credential: admin.credential.cert(serviceAccount),
+});
+
 app.use(express.json());
 app.use(express.urlencoded({ extended: true }));
 
-app.use("/api/course", courseRouter);
+app.use("/api/courses", courseRouter);
 app.use("/api/course-module", courseModuleRouter);
 
 app.get("/", (_req, res) => {

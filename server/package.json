@@ -7,7 +7,7 @@
     "test": "echo \"Error: no test specified\" && exit 1",
     "dev": "ts-node-dev --respawn --transpile-only src/index.ts",
     "build": "tsc",
-    "start": "node dist/index.js",
+    "start": "node build/index.js",
     "format": "prettier --write \"**/*.{ts,tsx,md}\""
   },
   "keywords": [],
@@ -17,6 +17,7 @@
     "@tsconfig/recommended": "^1.0.2",
     "cors": "^2.8.5",
     "express": "^4.18.2",
+    "firebase-admin": "^11.9.0",
     "kysely": "^0.25.0",
     "pg": "^8.11.1"
   },

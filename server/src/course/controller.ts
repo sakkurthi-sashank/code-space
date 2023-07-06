@@ -6,7 +6,7 @@ export const getCoursesByStudentIdController = async (
   res: Response
 ) => {
   try {
-    const { studentId } = req.params;
+    const { studentId } = req.body;
 
     const coursesData = await getCoursesByUserIdService(studentId);
 
