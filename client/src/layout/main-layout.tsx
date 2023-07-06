@@ -1,4 +1,4 @@
-import { AppHeader } from '@/components/common/AppHeader'
+import { AppHeader } from '@/components/Dashboard/app-header'
 import { AppShell } from '@mantine/core'
 import React, { useState } from 'react'
 
@@ -13,7 +13,7 @@ export const MainLayout = ({ children }: { children: React.ReactNode }) => {
           backgroundColor: theme.colors.gray[0],
         },
       })}
-      header={<AppHeader opened={opened} setOpened={setOpened} />}
+      header={<AppHeader />}
     >
       {children}
     </AppShell>

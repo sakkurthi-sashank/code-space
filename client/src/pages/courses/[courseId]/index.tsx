@@ -1,5 +1,4 @@
-import { ModuleDisplayCards } from '@/components/CourseModule/ModuleCards'
-import { ModuleFilter } from '@/components/CourseModule/ModuleFilter'
+import { ModuleInfoCards } from '@/components/CourseModule/module-info-cards'
 import { MainLayout } from '@/layout/main-layout'
 import { Stack, useMantineTheme } from '@mantine/core'
 
@@ -9,8 +8,7 @@ export default function CourseModulesPage() {
   return (
     <MainLayout>
       <Stack spacing={0} className="h-full w-full">
-        <ModuleFilter />
-        <ModuleDisplayCards />
+        <ModuleInfoCards />
       </Stack>
     </MainLayout>
   )

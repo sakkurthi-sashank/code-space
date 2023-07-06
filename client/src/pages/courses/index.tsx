@@ -1,12 +1,12 @@
-import { AddNewCourseModel } from '@/components/course/AddNewCourse'
-import { CourseCards } from '@/components/course/CourseCards'
+import { CourseInfoCards } from '@/components/Course/course-info-cards'
+import { EnrollNewCourse } from '@/components/Course/enroll-new-course'
 import { MainLayout } from '@/layout/main-layout'
 
 export default function CoursesPage() {
   return (
     <MainLayout>
-      <CourseCards />
-      <AddNewCourseModel />
+      <CourseInfoCards />
+      <EnrollNewCourse />
     </MainLayout>
   )
 }

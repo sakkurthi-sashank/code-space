@@ -1,11 +1,16 @@
+import { Box } from '@mantine/core'
 import MonacoEditor from '@monaco-editor/react'
-import { CompileAndSubmit } from './CompileAndSubmit'
 
 export const EditorPanel = () => {
   return (
-    <div className="relative h-screen w-full">
+    <Box
+      sx={{
+        borderRadius: '5px',
+        overflow: 'hidden',
+      }}
+    >
       <MonacoEditor
-        height="100vh"
+        height="60vh"
         options={{
           fontSize: 14,
           scrollBeyondLastLine: false,
@@ -16,12 +21,8 @@ export const EditorPanel = () => {
             top: 10,
           },
         }}
-        // language={language}
         theme="vs-dark"
-        // value={code}
-        // onChange={(value) => setCode(value!)}
       />
-      <CompileAndSubmit />
-    </div>
+    </Box>
   )
 }

@@ -1,4 +1,4 @@
-import { ActionIcon, Avatar, Header } from '@mantine/core'
+import { ActionIcon, Avatar, Flex, Header } from '@mantine/core'
 import { IconBell, IconSearch } from '@tabler/icons-react'
 import Image from 'next/image'
 
@@ -7,19 +7,21 @@ export const AppHeader = () => {
     <Header
       height={{ base: 55 }}
       p="md"
-      className="flex items-center justify-between"
+      sx={{
+        display: 'flex',
+        justifyContent: 'space-between',
+        alignItems: 'center',
+      }}
     >
-      <div className="flex items-center space-x-3">
-        <Image
-          src="/images/brand-logo.svg"
-          priority={false}
-          alt="Logo"
-          width={28}
-          height={28}
-        />
-      </div>
+      <Image
+        src="/images/brand-logo.svg"
+        priority={false}
+        alt="Logo"
+        width={28}
+        height={28}
+      />
 
-      <div className="flex space-x-6">
+      <Flex align="center" gap="lg">
         {/* Search Button */}
         <ActionIcon variant="light">
           <IconSearch size="1.125rem" />
@@ -35,7 +37,7 @@ export const AppHeader = () => {
           size="sm"
           src="https://avatars.githubusercontent.com/u/51054900?v=4"
         />
-      </div>
+      </Flex>
     </Header>
   )
 }

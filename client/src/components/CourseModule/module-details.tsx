@@ -1,5 +1,6 @@
 import {
   Button,
+  Flex,
   List,
   Modal,
   ScrollArea,
@@ -29,7 +30,7 @@ const information = [
   },
 ]
 
-export const ModuleCardContentDetails = ({
+export const ModuleDetails = ({
   opened,
   close,
   moduleId,
@@ -58,15 +59,6 @@ export const ModuleCardContentDetails = ({
   return (
     <>
       <Modal opened={opened} onClose={close} size="xl" pt={20}>
-        <Text
-          p={'md'}
-          className="text-gray-600"
-          align="center"
-          fw={500}
-          size={'lg'}
-        >
-          Information
-        </Text>
         <ScrollArea>
           <Table
             horizontalSpacing="xl"
@@ -87,13 +79,7 @@ export const ModuleCardContentDetails = ({
             <tbody>{rows}</tbody>
           </Table>
         </ScrollArea>
-        <Text
-          p={'md'}
-          className="text-gray-600"
-          align="center"
-          fw={500}
-          size={'lg'}
-        >
+        <Text p={'md'} align="center" fw={500} size={'lg'}>
           Instructions
         </Text>
         <List
@@ -128,7 +114,7 @@ export const ModuleCardContentDetails = ({
             responses are accurate and complete.
           </List.Item>
         </List>
-        <div className="flex justify-end p-6">
+        <Flex justify="center" mt={10}>
           <Button
             fw={400}
             size="xs"
@@ -136,7 +122,7 @@ export const ModuleCardContentDetails = ({
           >
             Start Exam
           </Button>
-        </div>
+        </Flex>
       </Modal>
     </>
   )

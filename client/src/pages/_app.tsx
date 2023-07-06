@@ -1,4 +1,3 @@
-import '@/styles/globals.css'
 import { MantineProvider } from '@mantine/core'
 import type { AppProps } from 'next/app'
 import { Inter } from 'next/font/google'
