@@ -7,13 +7,7 @@ export const EnrollNewCourse = () => {
 
   return (
     <>
-      <Box
-        sx={{
-          position: 'fixed',
-          bottom: '2rem',
-          right: '2rem',
-        }}
-      >
+      <Box className="fixed bottom-8 right-8">
         <ActionIcon
           variant="filled"
           size="xl"
@@ -21,13 +15,15 @@ export const EnrollNewCourse = () => {
           radius={'xl'}
           onClick={open}
         >
-          <IconPlus size={'1.6rem'} stroke={1.5} />
+          <IconPlus size={'1.6rem'} />
         </ActionIcon>
       </Box>
       <Modal opened={opened} onClose={close} title="Course Enrollment">
         <TextInput
           placeholder="Enter Course ID"
           description="Enter the course ID as specified by the professor"
+          radius={'md'}
+          mt={6}
         />
         <Box
           sx={{
@@ -36,7 +32,7 @@ export const EnrollNewCourse = () => {
             marginTop: '1rem',
           }}
         >
-          <Button size="xs" fw={400}>
+          <Button size="xs" fw={500}>
             Enroll Course
           </Button>
         </Box>
