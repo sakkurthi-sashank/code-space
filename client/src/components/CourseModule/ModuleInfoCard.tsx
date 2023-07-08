@@ -1,3 +1,4 @@
+import { useModuleStore } from '@/store/moduleStore'
 import {
   ActionIcon,
   Flex,
@@ -23,6 +24,14 @@ export const ModuleInfoCards: React.FC<Module> = ({
 }) => {
   const theme = useMantineTheme()
 
+  const { setModuleId } = useModuleStore((state) => ({
+    setModuleId: state.setModuleId,
+  }))
+
+  const handleSetModuleId = () => {
+    setModuleId(module_id)
+  }
+
   return (
     <Paper
       className="w-full px-4 py-3"
@@ -45,7 +54,7 @@ export const ModuleInfoCards: React.FC<Module> = ({
             </Text>
           </Flex>
         </div>
-        <ActionIcon variant="light" color="gray">
+        <ActionIcon variant="light" color="gray" onClick={handleSetModuleId}>
           <IconChevronRight size={20} stroke={1.5} />
         </ActionIcon>
       </div>

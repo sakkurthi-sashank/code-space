@@ -1,12 +1,12 @@
 import { Request, Response } from "express";
-import { getCoursesByUserIdService } from "./service";
+import { getCoursesByUserIdService } from "../service/courseService";
 
 export const getCoursesByStudentIdController = async (
   req: Request,
   res: Response
 ) => {
   try {
-    const { studentId } = req.body;
+    const { studentId } = req.params;
 
     const coursesData = await getCoursesByUserIdService(studentId);
 

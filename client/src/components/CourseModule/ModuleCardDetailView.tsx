@@ -1,3 +1,4 @@
+import { useModuleStore } from '@/store/moduleStore'
 import { Button, Flex, ScrollArea, Table, Title } from '@mantine/core'
 import { useRouter } from 'next/router'
 
@@ -22,6 +23,10 @@ const information = [
 
 export const ModuleDCardDetailView = ({ moduleId }: { moduleId: string }) => {
   const router = useRouter()
+
+  const { module_id } = useModuleStore((state) => ({
+    module_id: state.module_id,
+  }))
 
   const handleCardClick = (courseId: string, moduleId: string) => {
     router.push(`/courses/${courseId}/${moduleId}`)

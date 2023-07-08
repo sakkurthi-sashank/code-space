@@ -1,26 +1,23 @@
-import { Box, Button } from '@mantine/core'
-import { useFullscreen } from '@mantine/hooks'
+import { Button, Paper, useMantineTheme } from '@mantine/core'
 
 export const CompileAndSubmit = () => {
-  const { toggle } = useFullscreen()
+  const theme = useMantineTheme()
 
   return (
-    <Box
+    <Paper
       h={60}
-      className="absolute bottom-0 left-0 right-0 flex w-full items-center justify-end space-x-6 bg-white px-6"
+      radius={'md'}
+      sx={{
+        border: `1px solid ${theme.colors.gray[2]}`,
+      }}
+      className="flex w-full items-center justify-end space-x-6 bg-white px-6"
     >
-      <Button
-        size="xs"
-        radius={'sm'}
-        fw={500}
-        variant="outline"
-        onClick={toggle}
-      >
+      <Button size="xs" radius={'sm'} fw={500} variant="outline">
         Run
       </Button>
       <Button size="xs" radius={'sm'} fw={500}>
         Submit
       </Button>
-    </Box>
+    </Paper>
   )
 }

@@ -74,28 +74,16 @@ model CourseModule {
   is_full_screen_enabled           Boolean                        @default(false)
   is_tab_switching_enabled         Boolean                        @default(false)
   module_unit                      String
+  time_limit                       Int
   module_start_date                DateTime
   module_end_date                  DateTime
   is_result_disabled               Boolean
   created_at                       DateTime                       @default(now())
   course                           Course                         @relation(fields: [course_id], references: [course_id])
   course_id                        String
-  sections                         Section[]
+  coding_questions                 CodingQuestion[]
+  mcq_questions                    MCQQuestion[]
   student_completed_course_modules StudentCompletedCourseModule[]
-}
-
-model Section {
-  section_id        String           @id @default(dbgenerated("gen_random_uuid()"))
-  section_name      String
-  is_retake_allowed Boolean
-  time_limit        Int
-  type              String
-  retake_count      Int
-  created_at        DateTime         @default(now())
-  course_module     CourseModule     @relation(fields: [module_id], references: [module_id])
-  module_id         String
-  coding_questions  CodingQuestion[]
-  mcq_questions     MCQQuestion[]
 }
 
 model CodingQuestion {
@@ -105,8 +93,8 @@ model CodingQuestion {
   input_format                       String
   output_format                      String
   marks                              Int                              @default(10)
-  section                            Section                          @relation(fields: [section_id], references: [section_id])
-  section_id                         String
+  course_module                      CourseModule                     @relation(fields: [module_id], references: [module_id])
+  module_id                          String
   created_at                         DateTime                         @default(now())
   student_completed_coding_questions StudentCompletedCodingQuestion[]
   TestCases                          TestCases[]
@@ -128,8 +116,9 @@ model MCQQuestion {
   question_text         String
   options               String[]
   correct_answer_choice String
-  section               Section                       @relation(fields: [section_id], references: [section_id])
-  section_id            String
+  marks                 Int                           @default(10)
+  course_module         CourseModule                  @relation(fields: [module_id], references: [module_id])
+  module_id             String
   created_at            DateTime                      @default(now())
   student_mcq_questions StudentCompletedMCQQuestion[]
 }
@@ -170,7 +159,6 @@ model StudentCompletedMCQQuestion {
 
 model StudentCompletedCourseModule {
   student_id        String
-  retake_count      Int
   module_id         String
   completion_status Boolean
   created_at        DateTime     @default(now())

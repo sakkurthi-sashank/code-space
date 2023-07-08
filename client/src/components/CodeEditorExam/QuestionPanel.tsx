@@ -14,9 +14,9 @@ export const QuestionPanel = () => {
     <ScrollArea
       sx={{
         borderRadius: '5px',
-        border: `1px solid ${theme.colors.gray[1]}`,
+        border: `1px solid ${theme.colors.gray[2]}`,
       }}
-      h={'70vh'}
+      h={'80vh'}
       type="never"
       p={'md'}
     >

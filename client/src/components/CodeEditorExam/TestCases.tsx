@@ -8,7 +8,7 @@ export const TestCase = () => {
       bg={'white'}
       radius={'md'}
       sx={{
-        border: `1px solid ${theme.colors.gray[1]}`,
+        border: `1px solid ${theme.colors.gray[2]}`,
       }}
     >
       <Tabs defaultValue={'test-cases'} className="h-full">

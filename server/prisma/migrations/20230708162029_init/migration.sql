@@ -73,20 +73,6 @@ CREATE TABLE "CourseModule" (
 );
 
 -- CreateTable
-CREATE TABLE "Section" (
-    "section_id" TEXT NOT NULL DEFAULT gen_random_uuid(),
-    "section_name" TEXT NOT NULL,
-    "is_retake_allowed" BOOLEAN NOT NULL,
-    "time_limit" INTEGER NOT NULL,
-    "type" TEXT NOT NULL,
-    "retake_count" INTEGER NOT NULL,
-    "created_at" TIMESTAMP(3) NOT NULL DEFAULT CURRENT_TIMESTAMP,
-    "module_id" TEXT NOT NULL,
-
-    CONSTRAINT "Section_pkey" PRIMARY KEY ("section_id")
-);
-
--- CreateTable
 CREATE TABLE "CodingQuestion" (
     "coding_question_id" TEXT NOT NULL DEFAULT gen_random_uuid(),
     "problem_name" TEXT NOT NULL,
@@ -94,7 +80,7 @@ CREATE TABLE "CodingQuestion" (
     "input_format" TEXT NOT NULL,
     "output_format" TEXT NOT NULL,
     "marks" INTEGER NOT NULL DEFAULT 10,
-    "section_id" TEXT NOT NULL,
+    "module_id" TEXT NOT NULL,
     "created_at" TIMESTAMP(3) NOT NULL DEFAULT CURRENT_TIMESTAMP,
 
     CONSTRAINT "CodingQuestion_pkey" PRIMARY KEY ("coding_question_id")
@@ -118,7 +104,8 @@ CREATE TABLE "MCQQuestion" (
     "question_text" TEXT NOT NULL,
     "options" TEXT[],
     "correct_answer_choice" TEXT NOT NULL,
-    "section_id" TEXT NOT NULL,
+    "marks" INTEGER NOT NULL DEFAULT 10,
+    "module_id" TEXT NOT NULL,
     "created_at" TIMESTAMP(3) NOT NULL DEFAULT CURRENT_TIMESTAMP,
 
     CONSTRAINT "MCQQuestion_pkey" PRIMARY KEY ("mcq_question_id")
@@ -157,7 +144,6 @@ CREATE TABLE "StudentCompletedMCQQuestion" (
 -- CreateTable
 CREATE TABLE "StudentCompletedCourseModule" (
     "student_id" TEXT NOT NULL,
-    "retake_count" INTEGER NOT NULL,
     "module_id" TEXT NOT NULL,
     "completion_status" BOOLEAN NOT NULL,
     "created_at" TIMESTAMP(3) NOT NULL DEFAULT CURRENT_TIMESTAMP,
@@ -178,16 +164,13 @@ ALTER TABLE "studentEnrolledCourse" ADD CONSTRAINT "studentEnrolledCourse_course
 ALTER TABLE "CourseModule" ADD CONSTRAINT "CourseModule_course_id_fkey" FOREIGN KEY ("course_id") REFERENCES "Course"("course_id") ON DELETE RESTRICT ON UPDATE CASCADE;
 
 -- AddForeignKey
-ALTER TABLE "Section" ADD CONSTRAINT "Section_module_id_fkey" FOREIGN KEY ("module_id") REFERENCES "CourseModule"("module_id") ON DELETE RESTRICT ON UPDATE CASCADE;
-
--- AddForeignKey
-ALTER TABLE "CodingQuestion" ADD CONSTRAINT "CodingQuestion_section_id_fkey" FOREIGN KEY ("section_id") REFERENCES "Section"("section_id") ON DELETE RESTRICT ON UPDATE CASCADE;
+ALTER TABLE "CodingQuestion" ADD CONSTRAINT "CodingQuestion_module_id_fkey" FOREIGN KEY ("module_id") REFERENCES "CourseModule"("module_id") ON DELETE RESTRICT ON UPDATE CASCADE;
 
 -- AddForeignKey
 ALTER TABLE "TestCases" ADD CONSTRAINT "TestCases_coding_question_id_fkey" FOREIGN KEY ("coding_question_id") REFERENCES "CodingQuestion"("coding_question_id") ON DELETE RESTRICT ON UPDATE CASCADE;
 
 -- AddForeignKey
-ALTER TABLE "MCQQuestion" ADD CONSTRAINT "MCQQuestion_section_id_fkey" FOREIGN KEY ("section_id") REFERENCES "Section"("section_id") ON DELETE RESTRICT ON UPDATE CASCADE;
+ALTER TABLE "MCQQuestion" ADD CONSTRAINT "MCQQuestion_module_id_fkey" FOREIGN KEY ("module_id") REFERENCES "CourseModule"("module_id") ON DELETE RESTRICT ON UPDATE CASCADE;
 
 -- AddForeignKey
 ALTER TABLE "StudentCompletedCodingQuestion" ADD CONSTRAINT "StudentCompletedCodingQuestion_student_id_fkey" FOREIGN KEY ("student_id") REFERENCES "Student"("student_id") ON DELETE RESTRICT ON UPDATE CASCADE;
