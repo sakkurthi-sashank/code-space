@@ -1,14 +1,11 @@
 import { Request, Response } from "express";
-import { getCoursesByUserIdService } from "../service/courseService";
+import { getCoursesService } from "../service/courseService";
 
-export const getCoursesByStudentIdController = async (
-  req: Request,
-  res: Response
-) => {
+export const getCoursesController = async (_req: Request, res: Response) => {
   try {
-    const { studentId } = req.params;
+    const { uid: studentId } = res.locals;
 
-    const coursesData = await getCoursesByUserIdService(studentId);
+    const coursesData = await getCoursesService(studentId);
 
     res.status(200).json(coursesData);
   } catch (error) {

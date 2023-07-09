@@ -23,22 +23,16 @@ export default function CourseModulesPage() {
   const courseId = router.query.courseId as string
   const studentId = 'fc8cb36a-93fc-42a1-a43b-3384730295c7'
 
-  const { data } = useQuery<Module[]>(
-    ['course-module-details'],
-    async () => {
-      const response = await axios.post(
-        'http://localhost:8080/api/course-module/get-course-modules-by-course-id-and-student-id',
-        {
-          courseId: courseId,
-          studentId: studentId,
-        },
-      )
-      return response.data
-    },
-    {
-      enabled: !!courseId,
-    },
-  )
+  const { data } = useQuery<Module[]>(['course-module-details'], async () => {
+    const response = await axios.post(
+      'http://localhost:8080/api/course-module/get-course-modules-by-course-id-and-student-id',
+      {
+        courseId: courseId,
+        studentId: studentId,
+      },
+    )
+    return response.data
+  })
 
   return (
     <MainLayout>

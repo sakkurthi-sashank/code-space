@@ -1,7 +1,7 @@
 import { db } from "../database";
 import { dateFormatter } from "../utils/date-formatter";
 
-export const getCoursesByUserIdService = async (studentId: string) => {
+export const getCoursesService = async (studentId: string) => {
   try {
     const data = await db
       .selectFrom("Course")

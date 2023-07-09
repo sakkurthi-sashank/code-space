@@ -1,12 +1,28 @@
-import { ActionIcon, Avatar, Flex, Header } from '@mantine/core'
+import { supabase } from '@/lib/supabase'
+import { ActionIcon, Flex, Header } from '@mantine/core'
+import { User } from '@supabase/supabase-js'
 import { IconBell, IconSearch } from '@tabler/icons-react'
 import Image from 'next/image'
+import { useEffect, useState } from 'react'
+import { UserMenu } from './UserMenu'
 
 export const AppHeader = () => {
+  const [userData, setUserData] = useState<User | null>(null)
+
+  useEffect(() => {
+    const fetchUser = async () => {
+      const {
+        data: { user },
+      } = await supabase.auth.getUser()
+      setUserData(user)
+    }
+    fetchUser()
+  }, [])
+
   return (
     <Header
       height={{ base: 55 }}
-      p="md"
+      className="px-6"
       sx={{
         display: 'flex',
         justifyContent: 'space-between',
@@ -33,10 +49,7 @@ export const AppHeader = () => {
         </ActionIcon>
 
         {/* Clerk User Profile */}
-        <Avatar
-          size="sm"
-          src="https://avatars.githubusercontent.com/u/51054900?v=4"
-        />
+        <UserMenu />
       </Flex>
     </Header>
   )

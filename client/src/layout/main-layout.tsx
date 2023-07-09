@@ -1,4 +1,4 @@
-import { AppHeader } from '@/components/Dashboard/app-header'
+import { AppHeader } from '@/components/Dashboard/AppHeader'
 import { AppShell } from '@mantine/core'
 import React, { useState } from 'react'
 

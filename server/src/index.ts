@@ -4,8 +4,7 @@ import cors from "cors";
 import admin from "firebase-admin";
 dotenv.config();
 
-import { router as courseRouter } from "./course/router";
-import { router as courseModuleRouter } from "./course-module/router";
+import { router } from "./router";
 
 const app = express();
 const serviceAccount = require("../serviceAccountKey.json");
@@ -23,8 +22,23 @@ admin.initializeApp({
 app.use(express.json());
 app.use(express.urlencoded({ extended: true }));
 
-app.use("/api/courses", courseRouter);
-app.use("/api/course-module", courseModuleRouter);
+app.use(async (req, res, next) => {
+  const { authorization } = req.headers;
+  if (!authorization) {
+    res.status(401).send({
+      message: "Unauthorized: No token provided.",
+    });
+    return;
+  }
+  const token = authorization.split(" ")[1];
+  console.log(token);
+
+  const data = await admin.auth().verifyIdToken(token);
+
+  console.log(data);
+});
+
+app.use("/api/v1", router);
 
 app.get("/", (_req, res) => {
   res.send({

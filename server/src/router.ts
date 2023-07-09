@@ -1,17 +1,14 @@
 import express from "express";
+import { getCoursesController } from "./controller/courseController";
 import {
-  getCourseModuleByCourseIdAndStudentIdController,
-  getModuleDetailsByModuleIdController,
+  getCourseModulesController,
+  getModuleDetailsController,
 } from "./controller/courseModuleController";
-import { getCoursesByStudentIdController } from "./controller/courseController";
 
 export const router = express.Router();
 
-router.get("/courses-enrolled/:studentId", getCoursesByStudentIdController);
+router.post("/user/create");
 
-router.get(
-  "/course-modules/:courseId/:studentId",
-  getCourseModuleByCourseIdAndStudentIdController
-);
-
-router.get("/module-details/:moduleId", getModuleDetailsByModuleIdController);
+router.get("/course/student-enrolled-courses", getCoursesController);
+router.get("/course/course-modules/:courseId", getCourseModulesController);
+router.get("/course/module-details/:moduleId", getModuleDetailsController);

@@ -41,15 +41,14 @@ model Student {
   student_id                     String                           @id @default(dbgenerated("gen_random_uuid()"))
   first_name                     String
   last_name                      String
-  image_url                      String
+  image_url                      String?
   email_address                  String
-  hashed_password                String
-  admission_number               String
-  date_of_birth                  DateTime
-  gender                         String
-  batch                          String
-  branch                         String
-  phone_number                   String
+  admission_number               String                           @unique
+  date_of_birth                  DateTime?
+  gender                         String?
+  batch                          String?
+  branch                         String?
+  phone_number                   String?
   created_at                     DateTime                         @default(now())
   StudentCompletedCodingQuestion StudentCompletedCodingQuestion[]
   StudentCompletedMCQQuestion    StudentCompletedMCQQuestion[]
