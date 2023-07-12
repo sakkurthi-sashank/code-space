@@ -1,4 +1,3 @@
-import { useModuleStore } from '@/store/moduleStore'
 import {
   ActionIcon,
   Flex,
@@ -9,27 +8,25 @@ import {
 } from '@mantine/core'
 import { IconChevronRight } from '@tabler/icons-react'
 
-interface Module {
-  module_id: string
+interface InfoCardProps {
   module_name: string
-  module_start_date: string
-  module_end_date: string
+  start_date: string
+  end_date: string
+  id: string
+  setModuleId: (id: string) => void
 }
 
-export const ModuleInfoCards: React.FC<Module> = ({
-  module_id,
+export const InfoCard = ({
   module_name,
-  module_start_date,
-  module_end_date,
-}) => {
+  start_date,
+  end_date,
+  id,
+  setModuleId,
+}: InfoCardProps) => {
   const theme = useMantineTheme()
 
-  const { setModuleId } = useModuleStore((state) => ({
-    setModuleId: state.setModuleId,
-  }))
-
   const handleSetModuleId = () => {
-    setModuleId(module_id)
+    setModuleId(id)
   }
 
   return (
@@ -47,10 +44,10 @@ export const ModuleInfoCards: React.FC<Module> = ({
           </Title>
           <Flex align={'center'} gap={'md'} mt={2}>
             <Text size={'xs'} color="dimmed">
-              Starts Date {module_start_date}
+              Starts Date : {start_date}
             </Text>
             <Text size={'xs'} color="dimmed">
-              Ends Date {module_end_date}
+              Ends Date : {end_date}
             </Text>
           </Flex>
         </div>

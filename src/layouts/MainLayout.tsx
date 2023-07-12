@@ -1,10 +1,8 @@
-import { AppHeader } from '@/components/Dashboard/AppHeader'
+import { Header } from '@/components/Dashboard/Header'
+import { Navbar } from '@/components/Dashboard/Navbar'
 import { AppShell } from '@mantine/core'
-import React, { useState } from 'react'
 
 export const MainLayout = ({ children }: { children: React.ReactNode }) => {
-  const [opened, setOpened] = useState(false)
-
   return (
     <AppShell
       padding={0}
@@ -13,7 +11,8 @@ export const MainLayout = ({ children }: { children: React.ReactNode }) => {
           backgroundColor: theme.colors.gray[0],
         },
       })}
-      header={<AppHeader />}
+      header={<Header />}
+      navbar={<Navbar />}
     >
       {children}
     </AppShell>

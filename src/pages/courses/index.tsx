@@ -1,33 +1,39 @@
-import { CourseInfoCard } from '@/components/Course/CourseInfoCard'
-import { EnrollNewCourse } from '@/components/Course/EnrollNewCourse'
-import { useUser } from '@/hooks/useUser'
-import { MainLayout } from '@/layout/MainLayout'
-import { useFetchStudentCourses } from '@/service/courseService'
+import { InfoCard } from '@/components/Course/InfoCard'
+import { useUserAuth } from '@/hooks/userAuthContext'
+import { MainLayout } from '@/layouts/MainLayout'
 import { Flex } from '@mantine/core'
 import { useRouter } from 'next/router'
-import { useEffect } from 'react'
 
 export default function CoursesPage() {
-  const { user, loading } = useUser()
+  const { user, loading } = useUserAuth()
   const router = useRouter()
 
-  const { data } = useFetchStudentCourses()
+  const data = [
+    {
+      id: '973de53a-2078-11ee-be56-0242ac120002',
+      course_image:
+        'https://www.codelivly.com/wp-content/uploads/2022/11/Few-Data-Structures-That-Every-Developer-Should-Master.jpg',
+      learning_tags: ['Data Structures', 'Algorithms', 'C++'],
+      course_name: 'Data Structures and Algorithms',
+      course_description: 'ODD Semester | 2023 | 2nd Year | 3rd Semester | CSE',
+      course_code: 'CSE 201L',
+      course_professor: 'Dr. Sakkurthi Sashank',
+      course_validity: 30,
+    },
+  ]
 
-  useEffect(() => {
-    if (!loading && !user) {
-      router.push('/sign-in')
-    }
-  }, [user, loading])
+  if (!user && !loading) {
+    router.push('/login')
+  }
 
-  if (user) {
+  if (user && !loading) {
     return (
       <MainLayout>
-        <Flex wrap="wrap" gap="md" p={10}>
-          {data?.map((course) => (
-            <CourseInfoCard key={course.id} {...course} />
+        <Flex className="flex-wrap p-2">
+          {data.map((course) => (
+            <InfoCard {...course} key={course.id} />
           ))}
         </Flex>
-        <EnrollNewCourse />
       </MainLayout>
     )
   }

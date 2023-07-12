@@ -1,31 +1,35 @@
+import '@/styles/globals.css'
 import { MantineProvider } from '@mantine/core'
 import type { AppProps } from 'next/app'
 import { Inter } from 'next/font/google'
-import { useState } from 'react'
-import { QueryClient, QueryClientProvider } from 'react-query'
-import { ReactQueryDevtools } from 'react-query/devtools'
-import '../styles/globals.css'
+import Head from 'next/head'
+import { useRouter } from 'next/router'
 
-const inter = Inter({
-  subsets: ['latin'],
-})
+const inter = Inter({ subsets: ['latin'] })
 
 export default function App({ Component, pageProps }: AppProps) {
-  const [queryClient] = useState(() => new QueryClient())
+  const router = useRouter()
+
+  if (router.asPath.includes('access_token')) {
+    router.replace(router.pathname)
+  }
 
   return (
-    <QueryClientProvider client={queryClient}>
-      <MantineProvider
-        withGlobalStyles
-        withNormalizeCSS
-        theme={{
-          primaryColor: 'indigo',
-          fontFamily: inter.style.fontFamily,
-        }}
-      >
-        <Component {...pageProps} />
-        <ReactQueryDevtools initialIsOpen={false} />
-      </MantineProvider>
-    </QueryClientProvider>
+    <MantineProvider
+      withGlobalStyles
+      withNormalizeCSS
+      theme={{
+        colorScheme: 'light',
+        primaryColor: 'indigo',
+        fontFamily: inter.style.fontFamily,
+      }}
+    >
+      <Head>
+        <title>
+          Code Sapce
+        </title>
+      </Head>
+      <Component {...pageProps} />
+    </MantineProvider>
   )
 }

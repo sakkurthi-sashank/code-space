@@ -1,11 +1,9 @@
-// useUser.ts
-
-import { supabase } from '@/lib/supabase'
+import { supabase } from '@/libs/supabase'
 import { User } from '@supabase/supabase-js'
 import { useRouter } from 'next/router'
 import { useEffect, useState } from 'react'
 
-export function useUser() {
+export function useUserAuth() {
   const [user, setUser] = useState<User | null>(null)
   const [loading, setLoading] = useState(true)
   const router = useRouter()
@@ -19,7 +17,7 @@ export function useUser() {
 
         if (event === 'SIGNED_OUT') {
           sessionStorage.setItem('intendedPage', router.asPath)
-          router.push('/sign-in')
+          router.push('/login')
         }
       },
     )
