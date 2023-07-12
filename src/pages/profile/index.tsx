@@ -1,10 +1,13 @@
+import { UpdateUserProfile } from '@/components/Profile/UpdateUserProfile'
 import { MainLayout } from '@/layout/MainLayout'
 import { useUserProfileStore } from '@/store/userProfileStore'
 import { ActionIcon, Avatar, Image, Stack } from '@mantine/core'
+import { useDisclosure } from '@mantine/hooks'
 import { IconEdit } from '@tabler/icons-react'
 import { useEffect } from 'react'
 
 export default function Profile() {
+  const [opened, { open, close }] = useDisclosure(false)
   const { userProfile, fetch } = useUserProfileStore((state) => ({
     userProfile: state.userProfile,
     fetch: state.fetch,
@@ -13,6 +16,21 @@ export default function Profile() {
   useEffect(() => {
     fetch()
   }, [])
+
+  const DisplayBox = ({
+    title,
+    value,
+  }: {
+    title: string
+    value: string | number
+  }) => (
+    <div className="w-full">
+      <span className="font-semibold text-sm">{title}</span>
+      <div className="bg-gray-50 px-4 min-h-[40px] py-2 rounded-md">
+        {value}
+      </div>
+    </div>
+  )
 
   return (
     <MainLayout>
@@ -25,15 +43,6 @@ export default function Profile() {
               fit="cover"
               height={160}
             />
-            <ActionIcon
-              size="sm"
-              color="gray"
-              variant="light"
-              radius="xl"
-              className="absolute top-0 right-0 m-5"
-            >
-              <IconEdit size={'0.8rem'} stroke={1.5} />
-            </ActionIcon>
           </div>
           <div>
             <Avatar
@@ -52,73 +61,33 @@ export default function Profile() {
                 variant="light"
                 radius="xl"
                 className="-mt-5"
+                onClick={open}
               >
                 <IconEdit size={'1.2rem'} stroke={1.5} />
               </ActionIcon>
+              <UpdateUserProfile opened={opened} close={close} />
             </div>
           </div>
-
           <Stack py="xl" px={60} spacing="sm">
             <div className="flex w-full space-x-6">
-              <div className="w-full">
-                <span className="font-semibold  text-sm">First Name</span>
-                <div className="bg-gray-100 px-4 py-2 rounded-md">
-                  {userProfile?.first_name}
-                </div>
-              </div>
-
-              <div className="w-full">
-                <span className="font-semibold  text-sm">Last Name</span>
-                <div className="bg-gray-100 px-4 py-2 rounded-md">
-                  {userProfile?.last_name}
-                </div>
-              </div>
+              <DisplayBox title="First Name" value={userProfile?.first_name!} />
+              <DisplayBox title="Last Name" value={userProfile?.last_name!} />
             </div>
-
-            <div className="w-full">
-              <span className="font-semibold  text-sm">Email Address</span>
-              <div className="bg-gray-100 px-4 py-2 rounded-md">
-                {userProfile?.email}
-              </div>
-            </div>
-
-            <div className="w-full">
-              <span className="font-semibold  text-sm">Admission Number</span>
-              <div className="bg-gray-100 px-4 py-2 rounded-md">
-                {userProfile?.admission_number}
-              </div>
-            </div>
-
+            <DisplayBox title="Email Address" value={userProfile?.email!} />
+            <DisplayBox
+              title="Admission Number"
+              value={userProfile?.admission_number!}
+            />
             <div className="flex w-full space-x-6">
-              <div className="w-full">
-                <span className="font-semibold  text-sm">Gender</span>
-                <div className="bg-gray-100 px-4 py-2 rounded-md">
-                  {userProfile?.gender}
-                </div>
-              </div>
-
-              <div className="w-full">
-                <span className="font-semibold  text-sm">Phone Number</span>
-                <div className="bg-gray-100 px-4 py-2 rounded-md">
-                  {userProfile?.phone_number}
-                </div>
-              </div>
+              <DisplayBox title="Gender" value={userProfile?.gender!} />
+              <DisplayBox
+                title="Phone Number"
+                value={userProfile?.phone_number!}
+              />
             </div>
-
             <div className="flex w-full space-x-6">
-              <div className="w-full">
-                <span className="font-semibold  text-sm">Batch</span>
-                <div className="bg-gray-100 px-4 py-2 rounded-md">
-                  {userProfile?.batch}
-                </div>
-              </div>
-
-              <div className="w-full">
-                <span className="font-semibold  text-sm">Branch</span>
-                <div className="bg-gray-100 px-4 py-2 rounded-md">
-                  {userProfile?.branch}
-                </div>
-              </div>
+              <DisplayBox title="Batch" value={userProfile?.batch!} />
+              <DisplayBox title="Branch" value={userProfile?.branch!} />
             </div>
           </Stack>
         </div>

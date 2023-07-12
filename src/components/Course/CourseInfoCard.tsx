@@ -1,3 +1,4 @@
+import { StudentCourse } from '@/types/course'
 import {
   Badge,
   Card,
@@ -34,29 +35,15 @@ export const DateBadge: React.FC<DateBadgeProps> = ({
   )
 }
 
-interface Course {
-  course_id: string
-  course_name: string
-  learning_tags: string[]
-  course_code: string
-  course_end_date: string
-  course_start_date: string
-  course_description: string
-  professor_first_name: string
-  professor_last_name: string
-  validity: number
-}
-
-export const CourseInfoCard: React.FC<Course> = ({
-  course_id,
+export const CourseInfoCard: React.FC<StudentCourse> = ({
+  id,
   course_name,
   learning_tags,
   course_code,
-  course_end_date,
-  course_start_date,
+  end_date,
+  start_date,
   course_description,
-  professor_first_name,
-  professor_last_name,
+  professor_name,
   validity,
 }) => {
   const router = useRouter()
@@ -67,11 +54,11 @@ export const CourseInfoCard: React.FC<Course> = ({
 
   return (
     <Card
-      key={course_id}
+      key={id}
       radius={5}
       withBorder
       className="max-w-sm w-full px-5 pb-8 cursor-pointer hover:shadow-lg transition-shadow duration-300 ease-in-out"
-      onClick={() => handleCardClick(course_id)}
+      onClick={() => handleCardClick(id)}
     >
       <Stack spacing={4} mt={0}>
         <Title order={2} className="truncate font-semibold text-gray-700">
@@ -84,7 +71,7 @@ export const CourseInfoCard: React.FC<Course> = ({
           {course_description}
         </Text>
         <Text size="xs" color="dimmed">
-          Professor: {professor_first_name} {professor_last_name}
+          Professor: {professor_name}
         </Text>
       </Stack>
 
@@ -98,12 +85,12 @@ export const CourseInfoCard: React.FC<Course> = ({
 
       <Stack spacing={8} pt="md">
         <DateBadge
-          display_date={course_start_date}
+          display_date={start_date}
           display_title="Starts Date"
           iconColor="green"
         />
         <DateBadge
-          display_date={course_end_date}
+          display_date={end_date}
           display_title="Ends Date"
           iconColor="red"
         />

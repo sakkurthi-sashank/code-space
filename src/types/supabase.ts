@@ -51,8 +51,10 @@ export interface Database {
       }
       Course: {
         Row: {
+          course_code: string | null
           course_description: string | null
           course_name: string
+          course_unq_code: number
           created_at: string | null
           end_date: string
           id: string
@@ -61,8 +63,10 @@ export interface Database {
           start_date: string
         }
         Insert: {
+          course_code?: string | null
           course_description?: string | null
           course_name: string
+          course_unq_code?: number
           created_at?: string | null
           end_date: string
           id: string
@@ -71,8 +75,10 @@ export interface Database {
           start_date: string
         }
         Update: {
+          course_code?: string | null
           course_description?: string | null
           course_name?: string
+          course_unq_code?: number
           created_at?: string | null
           end_date?: string
           id?: string
@@ -180,40 +186,43 @@ export interface Database {
       }
       Profile: {
         Row: {
-          admission_number: string | null
-          batch: number | null
-          branch: string | null
-          created_at: string | null
-          date_of_birth: string | null
-          first_name: string | null
-          gender: string | null
+          admission_number: string
+          batch: string
+          branch: string
+          created_at: string
+          date_of_birth: string
+          first_name: string
+          gender: string
           id: string
-          last_name: string | null
-          phone_number: number | null
+          last_name: string
+          phone_number: string
+          profile_image: string | null
         }
         Insert: {
-          admission_number?: string | null
-          batch?: number | null
-          branch?: string | null
-          created_at?: string | null
-          date_of_birth?: string | null
-          first_name?: string | null
-          gender?: string | null
+          admission_number: string
+          batch: string
+          branch: string
+          created_at?: string
+          date_of_birth: string
+          first_name: string
+          gender: string
           id: string
-          last_name?: string | null
-          phone_number?: number | null
+          last_name: string
+          phone_number: string
+          profile_image?: string | null
         }
         Update: {
-          admission_number?: string | null
-          batch?: number | null
-          branch?: string | null
-          created_at?: string | null
-          date_of_birth?: string | null
-          first_name?: string | null
-          gender?: string | null
+          admission_number?: string
+          batch?: string
+          branch?: string
+          created_at?: string
+          date_of_birth?: string
+          first_name?: string
+          gender?: string
           id?: string
-          last_name?: string | null
-          phone_number?: number | null
+          last_name?: string
+          phone_number?: string
+          profile_image?: string | null
         }
         Relationships: [
           {
@@ -244,12 +253,6 @@ export interface Database {
           status?: boolean
         }
         Relationships: [
-          {
-            foreignKeyName: 'ProfileCompletedCourseModule_id_fkey'
-            columns: ['id']
-            referencedRelation: 'Profile'
-            referencedColumns: ['id']
-          },
           {
             foreignKeyName: 'ProfileCompletedCourseModule_module_id_fkey'
             columns: ['module_id']
@@ -410,20 +413,20 @@ export interface Database {
         Row: {
           course_id: string
           created_at: string | null
-          id: number
-          profile_id: string
+          id: string
+          user_id: string
         }
         Insert: {
           course_id: string
           created_at?: string | null
-          id?: number
-          profile_id: string
+          id?: string
+          user_id: string
         }
         Update: {
           course_id?: string
           created_at?: string | null
-          id?: number
-          profile_id?: string
+          id?: string
+          user_id?: string
         }
         Relationships: [
           {
@@ -433,8 +436,8 @@ export interface Database {
             referencedColumns: ['id']
           },
           {
-            foreignKeyName: 'UserEnrolledCourse_profile_id_fkey'
-            columns: ['profile_id']
+            foreignKeyName: 'UserEnrolledCourse_user_id_fkey'
+            columns: ['user_id']
             referencedRelation: 'Profile'
             referencedColumns: ['id']
           },

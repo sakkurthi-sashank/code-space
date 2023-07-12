@@ -27,7 +27,8 @@ export const useUserProfileStore = create<UserProfileStore>((set) => ({
         .from('Profile')
         .select('*')
         .eq('id', user?.data.user?.id)
-        .single()
+        .limit(1)
+        .maybeSingle()
 
       if (error) {
         throw error

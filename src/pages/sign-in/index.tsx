@@ -1,9 +1,7 @@
-import { GoogleIcon } from '@/components/SocialIcons/GoogleIcon'
 import { supabase } from '@/lib/supabase'
 import {
   Anchor,
   Button,
-  Divider,
   Flex,
   Paper,
   PasswordInput,
@@ -29,23 +27,31 @@ const SignIn = () => {
     },
   })
 
-  const handleSignIn = async () => {
-    form.setFieldValue('loading', true)
-    const { email, password } = form.values
-    const { data, error } = await supabase.auth.signInWithPassword({
-      email: email,
-      password: password,
-    })
+  const handleSignIn = async (event: React.FormEvent<HTMLFormElement>) => {
+    try {
+      event.preventDefault()
+      form.setFieldValue('loading', true)
+      const { email, password } = form.values
+      const { data, error } = await supabase.auth.signInWithPassword({
+        email: email,
+        password: password,
+      })
 
-    if (error) {
-      form.setErrors({ email: error.message })
+      if (error) {
+        form.setErrors({ email: error.message })
+        form.setFieldValue('loading', false)
+        return
+      }
+
+      if (data.user) {
+        router.push('/')
+      }
+
+      form.setFieldValue('loading', false)
+    } catch (error) {
+      console.error('An error occurred during sign-up:', error)
+      form.setFieldValue('loading', false)
     }
-
-    if (data.user) {
-      router.push('/')
-    }
-
-    form.setFieldValue('loading', false)
   }
 
   return (
@@ -69,46 +75,48 @@ const SignIn = () => {
           Sign In to your account
         </Title>
 
-        <Stack w={'100%'} mt={10} spacing={'lg'}>
-          <TextInput
-            placeholder="Enter your email"
-            {...form.getInputProps('email')}
-            error={form.errors.email}
-          />
+        <form onSubmit={handleSignIn} className="w-full">
+          <Stack w={'100%'} mt={10} spacing={'lg'}>
+            <TextInput
+              placeholder="Enter your email"
+              {...form.getInputProps('email')}
+              error={form.errors.email}
+            />
 
-          <PasswordInput
-            placeholder="Enter your password"
-            {...form.getInputProps('password')}
-          />
+            <PasswordInput
+              placeholder="Enter your password"
+              {...form.getInputProps('password')}
+            />
 
-          <Anchor align="end" component="a" size="sm">
-            Forgot password?
-          </Anchor>
-
-          <Button
-            fw={500}
-            loading={form.values.loading}
-            onClick={handleSignIn}
-            fullWidth
-          >
-            Sign In
-          </Button>
-
-          <Divider my={4} label="OR" labelPosition="center" />
-
-          <Button fw={500} leftIcon={<GoogleIcon />} variant="default">
-            Sign In with Google
-          </Button>
-
-          <Flex align={'center'} justify={'center'}>
-            <Text size="sm" color="gray">
-              Don&apos;t have an account?
-            </Text>
-            <Anchor component="a" size="sm" color="blue" ml={5} href="/sign-up">
-              Sign Up
+            <Anchor align="end" component="a" size="sm">
+              Forgot password?
             </Anchor>
-          </Flex>
-        </Stack>
+
+            <Button
+              fw={500}
+              loading={form.values.loading}
+              type="submit"
+              fullWidth
+            >
+              Sign In
+            </Button>
+
+            <Flex align={'center'} justify={'center'}>
+              <Text size="sm" color="gray">
+                Don&apos;t have an account?
+              </Text>
+              <Anchor
+                component="a"
+                size="sm"
+                color="blue"
+                ml={5}
+                href="/sign-up"
+              >
+                Sign Up
+              </Anchor>
+            </Flex>
+          </Stack>
+        </form>
 
         <Text align="center" mt={30} size={'xs'} color="gray">
           By continuing, you are indicating that you accept our Terms of Service

@@ -11,52 +11,58 @@ import {
   Title,
   useMantineTheme,
 } from '@mantine/core'
-import { useForm } from '@mantine/form'
 import Image from 'next/image'
 import { useRouter } from 'next/router'
+import { useState } from 'react'
 
 const SignUp = () => {
-  const form = useForm({
-    initialValues: {
-      email: '',
-      password: '',
-      loading: false,
-    },
-
-    validate: {
-      email: (value) =>
-        /^[\w.+-]+@srmap\.edu\.in$/.test(value)
-          ? null
-          : 'Email must be a valid SRM email',
-      password: (value) =>
-        value.length <= 6
-          ? 'Password must be at least 8 characters long'
-          : null,
-    },
-  })
-
   const router = useRouter()
   const theme = useMantineTheme()
+  const [email, setEmail] = useState('')
+  const [password, setPassword] = useState('')
+  const [loading, setLoading] = useState(false)
+  const [formErrors, setFormErrors] = useState({ email: '', password: '' })
 
-  const handleSignUp = async (event: any) => {
-    event.preventDefault()
-    form.setFieldValue('loading', true)
+  const validateEmail = (value: string) =>
+    /^[\w.+-]+@srmap\.edu\.in$/.test(value)
+      ? null
+      : 'Email must be a valid SRM email'
 
-    const { data, error } = await supabase.auth.signUp({
-      email: form.values.email,
-      password: form.values.password,
-    })
+  const validatePassword = (value: string) =>
+    value.length >= 8 ? null : 'Password must be at least 8 characters long'
 
-    if (error) {
-      form.setFieldValue('loading', false)
-      return
+  const handleUserSignUp = async (event: React.FormEvent<HTMLFormElement>) => {
+    try {
+      event.preventDefault()
+      setLoading(true)
+
+      const emailError = validateEmail(email)
+      const passwordError = validatePassword(password)
+
+      if (emailError || passwordError) {
+        setFormErrors({ email: emailError!, password: passwordError! })
+        setLoading(false)
+        return
+      }
+
+      const { data, error } = await supabase.auth.signUp({
+        email: email,
+        password: password,
+      })
+
+      if (error) {
+        throw new Error(error.message)
+      }
+
+      if (data.user) {
+        router.push('/sign-up/verify-email')
+      }
+
+      setLoading(false)
+    } catch (error) {
+      console.error('An error occurred during sign-up:', error)
+      setLoading(false)
     }
-
-    if (data.user) {
-      router.push('/sign-up/verify-email')
-    }
-
-    form.setFieldValue('loading', false)
   }
 
   return (
@@ -80,30 +86,27 @@ const SignUp = () => {
           Create an account
         </Title>
 
-        <form onSubmit={handleSignUp} className="w-full">
+        <form onSubmit={handleUserSignUp} className="w-full">
           <Stack w={'100%'} mt={10} spacing={'sm'}>
             <TextInput
               placeholder="Enter your email"
-              error={form.errors.email}
-              {...form.getInputProps('email')}
+              error={formErrors.email}
+              name="email"
+              onChange={(event) => setEmail(event.currentTarget.value)}
             />
 
             <PasswordInput
               placeholder="Enter your password"
-              error={form.errors.password}
-              {...form.getInputProps('password')}
+              error={formErrors.password}
+              name="password"
+              onChange={(event) => setPassword(event.currentTarget.value)}
             />
 
             <Anchor align="end" component="a" size="sm">
               Forgot password?
             </Anchor>
 
-            <Button
-              fw={500}
-              loading={form.values.loading}
-              type="submit"
-              fullWidth
-            >
+            <Button fw={500} loading={loading} type="submit" fullWidth>
               Sign Up
             </Button>
           </Stack>
