@@ -8,7 +8,7 @@ export const Navbar = () => {
   }
 
   return (
-    <AppNavbar p="md" width={{ base: 80 }}>
+    <AppNavbar p="md" width={{ base: 70 }}>
       <AppNavbar.Section>{}</AppNavbar.Section>
       <AppNavbar.Section grow>{}</AppNavbar.Section>
       <AppNavbar.Section className="flex items-center justify-center">

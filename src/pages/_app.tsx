@@ -1,5 +1,6 @@
 import '@/styles/globals.css'
 import { MantineProvider } from '@mantine/core'
+import { Notifications } from '@mantine/notifications'
 import type { AppProps } from 'next/app'
 import { Inter } from 'next/font/google'
 import Head from 'next/head'
@@ -25,10 +26,9 @@ export default function App({ Component, pageProps }: AppProps) {
       }}
     >
       <Head>
-        <title>
-          Code Sapce
-        </title>
+        <title>Code Sapce</title>
       </Head>
+      <Notifications position="top-right" limit={3} />
       <Component {...pageProps} />
     </MantineProvider>
   )

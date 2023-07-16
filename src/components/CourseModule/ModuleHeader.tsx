@@ -15,7 +15,7 @@ export const ModuleHeader = ({ courseId }: { courseId: string }) => {
     { title: 'Course Module', href: `/courses/module/${courseId}` },
   ].map((item, index) => (
     <UnstyledButton onClick={() => router.push(item.href)}>
-      <span className='text-gray-600 text-sm'>{item.title}</span>
+      <span className="text-gray-600 text-sm">{item.title}</span>
     </UnstyledButton>
   ))
 
@@ -26,9 +26,7 @@ export const ModuleHeader = ({ courseId }: { courseId: string }) => {
         borderBottom: `1px solid ${theme.colors.gray[2]}`,
       }}
     >
-      <Breadcrumbs separator="→">
-        {items}
-      </Breadcrumbs>
+      <Breadcrumbs separator="→">{items}</Breadcrumbs>
     </Box>
   )
 }
