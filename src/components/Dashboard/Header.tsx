@@ -5,12 +5,14 @@ import {
   Avatar,
   Flex,
   TextInput,
+  Title,
+  useMantineTheme,
 } from '@mantine/core'
 import { IconBell, IconSearch } from '@tabler/icons-react'
-import Image from 'next/image'
 
 export const Header = () => {
   const { user } = useUserAuth()
+  const theme = useMantineTheme()
 
   return (
     <AppHeader
@@ -18,13 +20,9 @@ export const Header = () => {
       className="px-4 flex items-center justify-between w-full"
     >
       <div className="w-full">
-        <Image
-          src="/images/brand-logo.svg"
-          priority={false}
-          alt="Logo"
-          width={28}
-          height={28}
-        />
+        <Title color={theme.colors.indigo[7]} order={4} mb={6} ff="Monaco">
+          codespace
+        </Title>
       </div>
 
       <Flex align="center" gap="lg" w={'100%'} justify={'end'}>

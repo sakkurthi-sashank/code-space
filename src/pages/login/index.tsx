@@ -128,7 +128,7 @@ export default function LoginPage() {
               autoClose: 10000,
               title: 'Reset Your Password',
               message:
-                'Sign in using your email address below and reset your password after.',
+                'login using your email address below and reset your password after login.',
             })
           }
         >

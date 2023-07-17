@@ -1,13 +1,4 @@
-import {
-  Badge,
-  Card,
-  Flex,
-  Image,
-  Progress,
-  Stack,
-  Text,
-  Title,
-} from '@mantine/core'
+import { Badge, Card, Flex, Image, Text, Title } from '@mantine/core'
 import { useRouter } from 'next/router'
 
 interface InfoCardProps {
@@ -17,8 +8,9 @@ interface InfoCardProps {
   course_name: string
   course_description: string
   course_code: string
-  course_professor: string
-  course_validity: number
+  profile: {
+    display_name: string
+  } | null
 }
 
 export const InfoCard = ({
@@ -28,8 +20,7 @@ export const InfoCard = ({
   course_name,
   course_description,
   course_code,
-  course_professor,
-  course_validity,
+  profile,
 }: InfoCardProps) => {
   const router = useRouter()
 
@@ -38,18 +29,18 @@ export const InfoCard = ({
       withBorder
       radius={'md'}
       onClick={() => router.push(`/courses/module/${id}`)}
-      className="max-w-xs max-h-[330px] h-full hover:shadow-lg cursor-pointer shadow-sm transition-all duration-200"
+      className="max-w-sm w-full min-h-[310px] h-full hover:shadow-lg cursor-pointer shadow-sm transition-all duration-200"
     >
       <Card.Section>
         <Image
           src={course_image}
           alt="Data Structures and Algorithms"
           width={'100%'}
-          height={100}
+          height={120}
         />
       </Card.Section>
 
-      <Card.Section className="p-2.5 space-y-1">
+      <Card.Section className="p-3 space-y-1.5">
         <Title order={3} fw={600} className="truncate text-gray-800">
           {course_name}
         </Title>
@@ -60,11 +51,11 @@ export const InfoCard = ({
           Course Code : {course_code}
         </Text>
         <Text size={'xs'} color="gray" className="truncate">
-          Professor : Dr. {course_professor}
+          Professor : Dr. {profile?.display_name}
         </Text>
       </Card.Section>
 
-      <Card.Section className="px-2.5">
+      <Card.Section className="px-2.5 pb-5">
         <Flex gap={10} mt={10} className="truncate">
           {learning_tags?.map((tag) => (
             <Badge color="indigo" key={tag} size="sm" variant="light">
@@ -72,14 +63,6 @@ export const InfoCard = ({
             </Badge>
           ))}
         </Flex>
-      </Card.Section>
-      <Card.Section className="px-2.5 pb-5">
-        <Stack spacing={4} mt="md">
-          <Text size={10} color="gray">
-            Validity
-          </Text>
-          <Progress color="gray" size="sm" value={course_validity} />
-        </Stack>
       </Card.Section>
     </Card>
   )

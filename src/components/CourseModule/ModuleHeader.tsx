@@ -14,7 +14,7 @@ export const ModuleHeader = ({ courseId }: { courseId: string }) => {
     { title: 'Courses', href: '/courses' },
     { title: 'Course Module', href: `/courses/module/${courseId}` },
   ].map((item, index) => (
-    <UnstyledButton onClick={() => router.push(item.href)}>
+    <UnstyledButton key={index} onClick={() => router.push(item.href)}>
       <span className="text-gray-600 text-sm">{item.title}</span>
     </UnstyledButton>
   ))

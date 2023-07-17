@@ -26,7 +26,7 @@ export default function App({ Component, pageProps }: AppProps) {
       }}
     >
       <Head>
-        <title>Code Sapce</title>
+        <title>codespace</title>
       </Head>
       <Notifications position="top-right" limit={3} />
       <Component {...pageProps} />
