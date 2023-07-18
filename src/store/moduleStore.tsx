@@ -42,19 +42,19 @@ export const useModuleStore = create<ModuleStore>((set) => ({
       .from('module')
       .select(
         `
+          id,
+          module_name,
+          start_date,
+          end_date,
+          duration,
+          coding_question (
             id,
-            module_name,
-            start_date,
-            end_date,
-            duration,
-            coding_question (
-              id,
-              marks
-            ),
-            mcq_question (
-              id,
-              marks
-            )
+            marks
+          ),
+          mcq_question (
+            id,
+            marks
+          )
           `,
       )
       .eq('id', currentSelectedModuleId)
