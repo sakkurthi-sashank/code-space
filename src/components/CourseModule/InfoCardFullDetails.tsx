@@ -1,4 +1,4 @@
-import { useModuleStore } from '@/store/moduleStore'
+import { useModuleStore } from '@/store/ModuleStore'
 import {
   Button,
   Flex,
@@ -12,19 +12,22 @@ import { useEffect } from 'react'
 export function InfoCardFullDetails() {
   const theme = useMantineTheme()
 
-  const { currentSelectedModuleId, fullModuleDetails, fetchFullModuleDetails } =
-    useModuleStore((state) => ({
-      currentSelectedModuleId: state.currentSelectedModuleId,
-      fullModuleDetails: state.fullModuleDetails,
-      fetchFullModuleDetails: state.fetchFullModuleDetails,
-    }))
+  const {
+    userSelectedModuleId,
+    userSelectedModuleFullData,
+    fetchUserSelectedModuleFullData,
+  } = useModuleStore((state) => ({
+    userSelectedModuleId: state.userSelectedModuleId,
+    userSelectedModuleFullData: state.userSelectedModuleFullData,
+    fetchUserSelectedModuleFullData: state.fetchUserSelectedModuleFullData,
+  }))
 
   useEffect(() => {
-    if (!currentSelectedModuleId) return
-    fetchFullModuleDetails(currentSelectedModuleId)
-  }, [currentSelectedModuleId, fetchFullModuleDetails])
+    if (!userSelectedModuleId) return
+    fetchUserSelectedModuleFullData(userSelectedModuleId)
+  }, [userSelectedModuleId, fetchUserSelectedModuleFullData])
 
-  if (!currentSelectedModuleId)
+  if (!userSelectedModuleId)
     return (
       <div className="flex items-center justify-center h-full w-full">
         <Title order={3} fw={500} color={theme.colors.gray[7]}>
@@ -36,17 +39,21 @@ export function InfoCardFullDetails() {
   return (
     <div className="p-4">
       <Title order={2} fw={600} color={theme.colors.gray[7]}>
-        {fullModuleDetails?.module_name}
+        {userSelectedModuleFullData?.module_name}
       </Title>
 
       <Flex align={'center'} gap={'md'} mt={2}>
         <Text size={'xs'} color="dimmed">
           Starts Date :
-          {new Date(fullModuleDetails?.start_date as string).toLocaleString()}
+          {new Date(
+            userSelectedModuleFullData?.start_date as string,
+          ).toLocaleString()}
         </Text>
         <Text size={'xs'} color="dimmed">
           Ends Date :{' '}
-          {new Date(fullModuleDetails?.end_date as string).toLocaleString()}
+          {new Date(
+            userSelectedModuleFullData?.end_date as string,
+          ).toLocaleString()}
         </Text>
       </Flex>
 
@@ -64,10 +71,10 @@ export function InfoCardFullDetails() {
           <tr>
             <td>1</td>
             <td>Section 1</td>
-            <td>{fullModuleDetails?.coding_question?.length}</td>
+            <td>{userSelectedModuleFullData?.coding_question?.length}</td>
             <td>Coding</td>
             <td>
-              {fullModuleDetails?.coding_question?.reduce(
+              {userSelectedModuleFullData?.coding_question?.reduce(
                 (prev, curr) => prev + curr.marks!,
                 0,
               )}
@@ -76,10 +83,10 @@ export function InfoCardFullDetails() {
           <tr>
             <td>2</td>
             <td>Section 2</td>
-            <td>{fullModuleDetails?.mcq_question?.length}</td>
+            <td>{userSelectedModuleFullData?.mcq_question?.length}</td>
             <td>MCQ</td>
             <td>
-              {fullModuleDetails?.mcq_question?.reduce(
+              {userSelectedModuleFullData?.mcq_question?.reduce(
                 (prev, curr) => prev + curr.marks!,
                 0,
               )}

@@ -2,12 +2,22 @@ import { InfoCardFullDetails } from '@/components/CourseModule/InfoCardFullDetai
 import { ModuleHeader } from '@/components/CourseModule/ModuleHeader'
 import { ModuleInfoCards } from '@/components/CourseModule/ModuleInfoCards'
 import { MainLayout } from '@/layouts/MainLayout'
+import { useModuleStore } from '@/store/ModuleStore'
 import { Divider, useMantineTheme } from '@mantine/core'
 import { useRouter } from 'next/router'
+import { useEffect } from 'react'
 
 export default function ModulePage() {
   const router = useRouter()
   const { courseId } = router.query
+
+  const { setUserSelectedModuleId } = useModuleStore((state) => ({
+    setUserSelectedModuleId: state.setUserSelectedModuleId,
+  }))
+
+  useEffect(() => {
+    setUserSelectedModuleId(null)
+  }, [courseId, setUserSelectedModuleId])
 
   const theme = useMantineTheme()
 

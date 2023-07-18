@@ -1,4 +1,4 @@
-import { useModuleStore } from '@/store/moduleStore'
+import { useModuleStore } from '@/store/ModuleStore'
 import {
   ActionIcon,
   Flex,
@@ -14,22 +14,22 @@ export const ModuleInfoCards = ({ courseId }: { courseId: string }) => {
   const theme = useMantineTheme()
 
   const {
-    previewModuleDetails,
-    setCurrentSelectedModuleId,
-    fetchPreviewModuleDetails,
+    previewModulesData,
+    setUserSelectedModuleId,
+    fetchPreviewModulesData,
   } = useModuleStore((state) => ({
-    previewModuleDetails: state.previewModuleDetails,
-    setCurrentSelectedModuleId: state.setCurrentSelectedModuleId,
-    fetchPreviewModuleDetails: state.fetchPreviewModuleDetails,
+    previewModulesData: state.previewModulesData,
+    setUserSelectedModuleId: state.setUserSelectedModuleId,
+    fetchPreviewModulesData: state.fetchPreviewModulesData,
   }))
 
   useEffect(() => {
-    fetchPreviewModuleDetails(courseId)
-  }, [courseId, fetchPreviewModuleDetails])
+    fetchPreviewModulesData(courseId)
+  }, [courseId, fetchPreviewModulesData])
 
   return (
     <>
-      {previewModuleDetails?.map((module) => (
+      {previewModulesData?.map((module) => (
         <Paper
           className="w-full px-4 py-3"
           radius={0}
@@ -58,7 +58,7 @@ export const ModuleInfoCards = ({ courseId }: { courseId: string }) => {
               variant="light"
               color="gray"
               onClick={() => {
-                setCurrentSelectedModuleId(module.id!)
+                setUserSelectedModuleId(module.id!)
               }}
             >
               <IconChevronRight size={20} stroke={1.5} />

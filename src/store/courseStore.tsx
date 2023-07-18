@@ -1,43 +1,57 @@
 import { supabase } from '@/libs/supabase'
-import { Course, Profile, ProfileEnrolledCourse } from '@/types/types'
 import { create } from 'zustand'
 
-interface CourseData extends Course {
-  profile: Profile | null
-  profile_enrolled_course: ProfileEnrolledCourse[]
+interface CourseInfoCardData {
+  id: string
+  course_image: string
+  course_name: string
+  course_description: string
+  course_code: string
+  learning_tags: string[] | undefined
+  profile: {
+    id: string
+    display_name: string
+  } | null
+  profile_enrolled_course: {
+    id: string
+    profile_id: string
+    is_achieved: boolean | null
+  }[]
 }
 
 interface CourseStore {
-  courseData: CourseData[] | null
-  fetchCourses: (userId: string) => Promise<void>
+  courseInfoCardsData: CourseInfoCardData[] | null
+  fetchCourseInfoCardsData: (userId: string) => Promise<void>
 }
 
 export const useCourseStore = create<CourseStore>((set) => ({
-  courseData: [],
-  fetchCourses: async (userId: string) => {
+  courseInfoCardsData: [],
+
+  fetchCourseInfoCardsData: async (userId: string) => {
     if (!userId) {
       return
     }
+
     const { data, error } = await supabase
       .from('course')
       .select(
         `
+        id,
+        course_image,
+        course_name,
+        course_description,
+        course_code,
+        learning_tags,
+        profile!inner(
           id,
-          course_image,
-          course_name,
-          course_description,
-          course_code,
-          learning_tags,
-          profile!inner(
-            id,
-            display_name
-          ),
-          profile_enrolled_course!inner(
-            id,
-            profile_id,
-            is_achieved
-          )
-        `,
+          display_name
+        ),
+        profile_enrolled_course!inner(
+          id,
+          profile_id,
+          is_achieved
+        )
+      `,
       )
       .filter('profile_enrolled_course.profile_id', 'eq', userId)
 
@@ -46,7 +60,7 @@ export const useCourseStore = create<CourseStore>((set) => ({
     }
 
     set({
-      courseData: data,
+      courseInfoCardsData: data,
     })
   },
 }))

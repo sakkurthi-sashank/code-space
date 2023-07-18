@@ -4,6 +4,7 @@ import { CodeEditorHeader } from '@/components/ModuleTest/CodeEditorHeader'
 import { CompileAndSubmit } from '@/components/ModuleTest/CompileAndSubmit'
 import { QuestionPanel } from '@/components/ModuleTest/QuestionPanel'
 import { TestCases } from '@/components/ModuleTest/TestCases'
+import { useTestStore } from '@/store/TestStore'
 import {
   Button,
   Divider,
@@ -15,10 +16,28 @@ import {
   useMantineTheme,
 } from '@mantine/core'
 import { useFullscreen } from '@mantine/hooks'
+import { useRouter } from 'next/router'
+import { useEffect } from 'react'
 
 export default function ModuleTestPage() {
   const theme = useMantineTheme()
   const { fullscreen, toggle } = useFullscreen()
+  const router = useRouter()
+
+  const { fetchCodingQuestions } = useTestStore((state) => ({
+    currentQuestion: state.currentQuestion,
+    setCurrentQuestion: state.setCurrentQuestion,
+    codingQuestions: state.codingQuestions,
+    fetchCodingQuestions: state.fetchCodingQuestions,
+  }))
+
+  const { moduleId } = router.query
+
+  useEffect(() => {
+    if (moduleId) {
+      fetchCodingQuestions(moduleId as string)
+    }
+  }, [moduleId])
 
   return (
     <Flex w={'100%'} h={'100vh'} p={'sm'}>
@@ -33,7 +52,7 @@ export default function ModuleTestPage() {
         <CodeEditor />
         <TestCases />
       </Stack>
-      <Modal opened={!fullscreen} onClose={toggle} withCloseButton={false}>
+      <Modal opened={false} onClose={toggle} withCloseButton={false}>
         <Paper
           shadow="md"
           radius="md"

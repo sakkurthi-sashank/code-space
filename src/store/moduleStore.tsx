@@ -1,27 +1,50 @@
 import { supabase } from '@/libs/supabase'
-import { CodingQuestion, MCQQuestion, Module } from '@/types/types'
 import { create } from 'zustand'
 
-interface ModuleData extends Module {
-  coding_question?: CodingQuestion[]
-  mcq_question?: MCQQuestion[]
+interface PreviewModulesData {
+  id: string
+  module_name: string
+  start_date: string
+  end_date: string
+  duration: number | null
+}
+
+interface UserSelectedModuleFullData {
+  id: string
+  module_name: string
+  start_date: string
+  end_date: string
+  duration: number | null
+  coding_question: {
+    id: string
+    marks: number | null
+  }[]
+  mcq_question: {
+    id: string
+    marks: number | null
+  }[]
 }
 
 interface ModuleStore {
-  currentSelectedModuleId: string | null
-  setCurrentSelectedModuleId: (id: string) => void
-  previewModuleDetails: Module[] | null
-  fetchPreviewModuleDetails: (courseId: string) => Promise<void>
-  fullModuleDetails: ModuleData | null
-  fetchFullModuleDetails: (currentSelectedModuleId: string) => Promise<void>
+  userSelectedModuleId: string | null
+  setUserSelectedModuleId: (id: string | null) => void
+  previewModulesData: PreviewModulesData[] | null
+  fetchPreviewModulesData: (courseId: string) => Promise<void>
+  userSelectedModuleFullData: UserSelectedModuleFullData | null
+  fetchUserSelectedModuleFullData: (
+    userSelectedModuleId: string,
+  ) => Promise<void>
 }
 
 export const useModuleStore = create<ModuleStore>((set) => ({
-  currentSelectedModuleId: null,
-  setCurrentSelectedModuleId: (id: string) =>
-    set({ currentSelectedModuleId: id }),
-  previewModuleDetails: null,
-  fetchPreviewModuleDetails: async (courseId: string) => {
+  userSelectedModuleId: null,
+
+  setUserSelectedModuleId: (id: string | null) =>
+    set({ userSelectedModuleId: id }),
+
+  previewModulesData: null,
+
+  fetchPreviewModulesData: async (courseId: string) => {
     if (!courseId) {
       return
     }
@@ -30,11 +53,13 @@ export const useModuleStore = create<ModuleStore>((set) => ({
       .select('*')
       .filter('course_id', 'eq', courseId)
 
-    set({ previewModuleDetails: data })
+    set({ previewModulesData: data })
   },
-  fullModuleDetails: null,
-  fetchFullModuleDetails: async (currentSelectedModuleId: string) => {
-    if (!currentSelectedModuleId) {
+
+  userSelectedModuleFullData: null,
+
+  fetchUserSelectedModuleFullData: async (userSelectedModuleId: string) => {
+    if (!userSelectedModuleId) {
       return
     }
 
@@ -42,27 +67,28 @@ export const useModuleStore = create<ModuleStore>((set) => ({
       .from('module')
       .select(
         `
+        id,
+        module_name,
+        start_date,
+        end_date,
+        duration,
+        coding_question (
           id,
-          module_name,
-          start_date,
-          end_date,
-          duration,
-          coding_question (
-            id,
-            marks
-          ),
-          mcq_question (
-            id,
-            marks
-          )
-          `,
+          marks
+        ),
+        mcq_question (
+          id,
+          marks
+        )
+      `,
       )
-      .eq('id', currentSelectedModuleId)
+      .eq('id', userSelectedModuleId)
       .single()
 
     if (error) {
       return
     }
-    set({ fullModuleDetails: data })
+
+    set({ userSelectedModuleFullData: data })
   },
 }))
