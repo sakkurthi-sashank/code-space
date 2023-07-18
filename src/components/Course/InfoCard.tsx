@@ -1,16 +1,9 @@
+import { Course, Profile } from '@/types/types'
 import { Badge, Card, Flex, Image, Text, Title } from '@mantine/core'
 import { useRouter } from 'next/router'
 
-interface InfoCardProps {
-  id: string
-  course_image: string
-  learning_tags: string[]
-  course_name: string
-  course_description: string
-  course_code: string
-  profile: {
-    display_name: string
-  } | null
+interface InfoCardProps extends Course {
+  profile: Profile | null
 }
 
 export const InfoCard = ({

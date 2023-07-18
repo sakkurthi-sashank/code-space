@@ -1,26 +1,25 @@
 import { InfoCard } from '@/components/Course/InfoCard'
 import { useUserAuth } from '@/hooks/userAuthContext'
 import { MainLayout } from '@/layouts/MainLayout'
-import { fetchCourses } from '@/service/fetchCourses'
-import { Course } from '@/types/course'
+import { useCourseStore } from '@/store/courseStore'
 import { Flex } from '@mantine/core'
 import { useRouter } from 'next/router'
-import { useEffect, useState } from 'react'
+import { useEffect } from 'react'
 
 export default function CoursesPage() {
   const { user, loading } = useUserAuth()
   const router = useRouter()
-  const [courseData, setCourseData] = useState<Course[] | null>([])
+
+  const { courseData, fetchCourses } = useCourseStore((state) => ({
+    courseData: state.courseData,
+    fetchCourses: state.fetchCourses,
+  }))
 
   useEffect(() => {
-    if (!user) return
-
-    fetchCourses(user.id).then((data) => {
-      setCourseData(data)
-    })
-
-    return () => {}
-  }, [user])
+    if (user) {
+      fetchCourses(user.id)
+    }
+  }, [user, fetchCourses])
 
   if (!user && !loading) {
     router.push('/login')
