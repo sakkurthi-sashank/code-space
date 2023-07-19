@@ -1,33 +1,56 @@
 import { supabase } from '@/libs/supabase'
-import { CodingQuestion } from '@/types/types'
+import { CodingQuestion, TestCase } from '@/types/types'
 import { create } from 'zustand'
 
-interface TestStore {
-  currentQuestionId: number
-  setCurrentQuestion: (currentQuestion: number) => void
-  codingQuestions: CodingQuestion[]
-  fetchCodingQuestions: (moduleId: string) => void
+interface CodingQuestionOnUserSelectedId extends CodingQuestion {
+  test_case: TestCase[]
 }
 
-export const useTestStore = create<TestStore>((set) => ({
-  currentQuestionId: 0,
+interface TestStore {
+  currentSelectedQuestionId: number
+  setCurrentSelectedQuestionId: (currentSelectedQuestionId: number) => void
+  codingQuestionIds: { id: string }[]
+  fetchCodingQuestionIds: (moduleId: string) => void
+  codingQuestionOnUserSelectedId: CodingQuestionOnUserSelectedId | null
+  fetchCodingQuestionOnUserSelectedId: (questionId: string) => void
+}
 
-  setCurrentQuestion: (currentQuestionId) => set({ currentQuestionId }),
+export const useTestStore = create<TestStore>((set, get) => ({
+  currentSelectedQuestionId: 0,
 
-  codingQuestions: [],
+  setCurrentSelectedQuestionId: (currentSelectedQuestionId) =>
+    set({ currentSelectedQuestionId }),
 
-  fetchCodingQuestions: async (moduleId) => {
-    console.log(moduleId)
+  codingQuestionIds: [],
 
-    const { data: codingQuestions, error } = await supabase
+  fetchCodingQuestionIds: async (moduleId) => {
+    const { data, error } = await supabase
       .from('coding_question')
-      .select(`*,test_case(*)`)
+      .select(`id`)
       .eq('module_id', moduleId)
-      .filter('test_case.is_sample_test_case', 'eq', true)
     if (error) {
-      console.log(error)
-    } else {
-      set({ codingQuestions: codingQuestions ?? [] })
+      return
     }
+    get().fetchCodingQuestionOnUserSelectedId(data ? data[0].id : '')
+    set({ codingQuestionIds: data ?? [] })
+  },
+
+  codingQuestionOnUserSelectedId: null,
+
+  fetchCodingQuestionOnUserSelectedId: async (questionId) => {
+    const { data, error } = await supabase
+      .from('coding_question')
+      .select(
+        `*, test_case (id, coding_question_id, input, output, is_sample_test_case)`,
+      )
+      .eq('id', questionId)
+      .filter('test_case.is_sample_test_case', 'eq', true)
+      .limit(1)
+
+    if (error) {
+      return
+    }
+
+    set({ codingQuestionOnUserSelectedId: data ? data[0] : null })
   },
 }))

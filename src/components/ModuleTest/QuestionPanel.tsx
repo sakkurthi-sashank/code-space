@@ -1,14 +1,12 @@
-import {
-  Code,
-  ScrollArea,
-  Stack,
-  Text,
-  Title,
-  useMantineTheme,
-} from '@mantine/core'
+import { useTestStore } from '@/store/TestStore'
+import { ScrollArea, Stack, Text, Title, useMantineTheme } from '@mantine/core'
 
 export const QuestionPanel = () => {
   const theme = useMantineTheme()
+
+  const { codingQuestionOnUserSelectedId } = useTestStore((state) => ({
+    codingQuestionOnUserSelectedId: state.codingQuestionOnUserSelectedId,
+  }))
 
   return (
     <ScrollArea
@@ -18,59 +16,50 @@ export const QuestionPanel = () => {
       }}
       h={'84vh'}
       type="never"
-      p={'md'}
+      p={'sm'}
     >
-      <Stack spacing={'xs'}>
-        <Title order={4}>Two Sum</Title>
-        <Text size={'sm'}>
-          Given an array of integers nums and an integer target, return indices
-          of the two numbers such that they add up to target.
-          <br />
-          You may assume that each input would have exactly one solution, and
-          you may not use the same element twice.
-          <br />
-          You can return the answer in any order.
+      <Stack spacing={'xs'} p={'md'}>
+        <Title order={4} fw={600}>
+          {codingQuestionOnUserSelectedId?.problem_name}
+        </Title>
+        <Text size={'sm'} color={theme.colors.gray[7]}>
+          {codingQuestionOnUserSelectedId?.problem_statement
+            ?.split('\n')
+            .map((text, index) => (
+              <span key={index}>
+                {text}
+                <br />
+              </span>
+            ))}
         </Text>
-        <Text size={'md'} weight={600}>
+        <Text size={'sm'} fw={500}>
           Input Format:
         </Text>
-        <Text size={'sm'}>
-          First line of input contains number of elements in array. Next line
-          contains array elements. Last line contains target.
+        <Text size={'sm'} color={theme.colors.gray[7]}>
+          {codingQuestionOnUserSelectedId?.input_formate}
         </Text>
-        <Text size={'md'} weight={600}>
+        <Text size={'sm'} fw={500}>
           Output Format:
         </Text>
-        <Text size={'sm'}>
-          For each testcase, in a new line, print the indices of two numbers
-          such that they add up to target.
+        <Text size={'sm'} color={theme.colors.gray[7]}>
+          {codingQuestionOnUserSelectedId?.output_formate}
         </Text>
-        <Text size={'md'} weight={600}>
-          Sample Input 1 :
-        </Text>
-        <Code p={'sm'}>
-          4
-          <br />
-          2 7 11 15
-          <br />9
-        </Code>
-        <Text size={'md'} weight={600}>
-          Sample Output 1 :
-        </Text>
-        <Code p={'sm'}>0 1</Code>
-        <Text size={'md'} weight={600}>
-          Sample Input 2 :
-        </Text>
-        <Code>
-          3
-          <br />
-          3 2 4
-          <br />6
-        </Code>
-        <Text size={'md'} weight={600}>
-          Sample Output 2 :
-        </Text>
-        <Code p={'sm'}>1 2</Code>
+        {codingQuestionOnUserSelectedId?.test_case.map((testCase, index) => (
+          <div key={testCase.id}>
+            <Text size={'sm'} weight={500}>
+              Sample Input {index + 1} :
+            </Text>
+            <pre className="font-mono text-sm text-gray-600 font-normal antialiased bg-gray-100 px-3 py-2 rounded-sm">
+              {testCase.input}
+            </pre>
+            <Text size={'sm'} weight={500}>
+              Sample Output {index + 1} :
+            </Text>
+            <pre className="font-mono text-sm text-gray-600 font-normal antialiased bg-gray-100 px-3 py-2 rounded-sm">
+              {testCase.output}
+            </pre>
+          </div>
+        ))}
       </Stack>
     </ScrollArea>
   )

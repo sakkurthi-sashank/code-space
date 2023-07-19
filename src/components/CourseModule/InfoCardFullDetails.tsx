@@ -7,10 +7,12 @@ import {
   Title,
   useMantineTheme,
 } from '@mantine/core'
+import { useRouter } from 'next/router'
 import { useEffect } from 'react'
 
 export function InfoCardFullDetails() {
   const theme = useMantineTheme()
+  const router = useRouter()
 
   const {
     userSelectedModuleId,
@@ -97,7 +99,14 @@ export function InfoCardFullDetails() {
 
       <div className="mt-10">
         <div className="mt-6 flex justify-end space-x-4">
-          <Button size="xs">Start Test</Button>
+          <Button
+            size="xs"
+            onClick={() =>
+              router.push(`/courses/module-test/${userSelectedModuleId}`)
+            }
+          >
+            Start Test
+          </Button>
           <Button size="xs" variant="outline">
             View Result
           </Button>

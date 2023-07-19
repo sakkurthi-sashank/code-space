@@ -24,18 +24,18 @@ export default function ModuleTestPage() {
   const { fullscreen, toggle } = useFullscreen()
   const router = useRouter()
 
-  const { fetchCodingQuestions } = useTestStore((state) => ({
-    currentQuestion: state.currentQuestion,
-    setCurrentQuestion: state.setCurrentQuestion,
-    codingQuestions: state.codingQuestions,
-    fetchCodingQuestions: state.fetchCodingQuestions,
-  }))
+  const { fetchCodingQuestionIds, codingQuestionIds } = useTestStore(
+    (state) => ({
+      fetchCodingQuestionIds: state.fetchCodingQuestionIds,
+      codingQuestionIds: state.codingQuestionIds,
+    }),
+  )
 
   const { moduleId } = router.query
 
   useEffect(() => {
     if (moduleId) {
-      fetchCodingQuestions(moduleId as string)
+      fetchCodingQuestionIds(moduleId as string)
     }
   }, [moduleId])
 
