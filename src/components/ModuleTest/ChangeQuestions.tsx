@@ -1,15 +1,45 @@
-import { useTestStore } from '@/store/TestStore'
+import { supabase } from '@/libs/supabase'
 import { Button, Paper, useMantineTheme } from '@mantine/core'
+import { useEffect, useState } from 'react'
 
-export const ChangeQuestions = () => {
+export const ChangeQuestions = ({
+  setCurrentUserSelectedQuestionId,
+  moduleId,
+}: {
+  setCurrentUserSelectedQuestionId: (
+    currentUserSelectedQuestionId: string | null,
+  ) => void
+  moduleId: string
+}) => {
   const theme = useMantineTheme()
 
-  const { codingQuestionIds, setCurrentSelectedQuestionId } = useTestStore(
-    (state) => ({
-      codingQuestionIds: state.codingQuestionIds,
-      setCurrentSelectedQuestionId: state.setCurrentSelectedQuestionId,
-    }),
+  const [codingQuestionIds, setCodingQuestionIds] = useState<{ id: string }[]>(
+    [],
   )
+  const [isFirstQuestionLoaded, setIsFirstQuestionIsLoaded] =
+    useState<boolean>(false)
+
+  useEffect(() => {
+    const fetchCodingQuestionIds = async (moduleId: string) => {
+      const { data, error } = await supabase
+        .from('coding_question')
+        .select(`id`)
+        .eq('module_id', moduleId)
+      if (error) {
+        return
+      }
+      setCodingQuestionIds(data ?? [])
+
+      if (!isFirstQuestionLoaded) {
+        setCurrentUserSelectedQuestionId(data ? data[0].id : '')
+        setIsFirstQuestionIsLoaded(true)
+      }
+    }
+
+    if (!moduleId) return
+
+    fetchCodingQuestionIds(moduleId)
+  }, [moduleId])
 
   return (
     <Paper
@@ -28,7 +58,7 @@ export const ChangeQuestions = () => {
           color="indigo"
           radius={'md'}
           size="xs"
-          onClick={() => setCurrentSelectedQuestionId(index)}
+          onClick={() => setCurrentUserSelectedQuestionId(questionId.id)}
         >
           {index + 1}
         </Button>

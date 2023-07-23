@@ -1,4 +1,4 @@
-import { useUserAuth } from '@/hooks/userAuthContext'
+import { useAuth } from '@/hooks/useAuth'
 import {
   ActionIcon,
   Header as AppHeader,
@@ -11,7 +11,7 @@ import {
 import { IconBell, IconSearch } from '@tabler/icons-react'
 
 export const Header = () => {
-  const { user } = useUserAuth()
+  const { user } = useAuth()
   const theme = useMantineTheme()
 
   return (

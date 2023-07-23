@@ -4,7 +4,6 @@ import { CodeEditorHeader } from '@/components/ModuleTest/CodeEditorHeader'
 import { CompileAndSubmit } from '@/components/ModuleTest/CompileAndSubmit'
 import { QuestionPanel } from '@/components/ModuleTest/QuestionPanel'
 import { TestCases } from '@/components/ModuleTest/TestCases'
-import { useTestStore } from '@/store/TestStore'
 import {
   Button,
   Divider,
@@ -17,33 +16,28 @@ import {
 } from '@mantine/core'
 import { useFullscreen } from '@mantine/hooks'
 import { useRouter } from 'next/router'
-import { useEffect } from 'react'
+import { useState } from 'react'
 
 export default function ModuleTestPage() {
   const theme = useMantineTheme()
   const { fullscreen, toggle } = useFullscreen()
   const router = useRouter()
 
-  const { fetchCodingQuestionIds, codingQuestionIds } = useTestStore(
-    (state) => ({
-      fetchCodingQuestionIds: state.fetchCodingQuestionIds,
-      codingQuestionIds: state.codingQuestionIds,
-    }),
-  )
+  const [currentUserSelectedQuestionId, setCurrentUserSelectedQuestionId] =
+    useState<string | null>(null)
 
   const { moduleId } = router.query
-
-  useEffect(() => {
-    if (moduleId) {
-      fetchCodingQuestionIds(moduleId as string)
-    }
-  }, [moduleId])
 
   return (
     <Flex w={'100%'} h={'100vh'} p={'sm'}>
       <Stack w={'50%'} spacing={6}>
-        <ChangeQuestions />
-        <QuestionPanel />
+        <ChangeQuestions
+          moduleId={moduleId as string}
+          setCurrentUserSelectedQuestionId={setCurrentUserSelectedQuestionId}
+        />
+        <QuestionPanel
+          currentUserSelectedQuestionId={currentUserSelectedQuestionId}
+        />
         <CompileAndSubmit />
       </Stack>
       <Divider color={theme.colors.gray[1]} mx={10} orientation="vertical" />

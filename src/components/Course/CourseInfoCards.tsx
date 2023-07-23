@@ -21,7 +21,7 @@ interface CourseInfoCardData {
   }[]
 }
 
-export const CourseInfoCards = ({ userId }: { userId: string }) => {
+export function CourseInfoCards({ userId }: { userId: string }) {
   const router = useRouter()
 
   const [courseInfoCardsData, setCourseInfoCardsData] = useState<
@@ -29,31 +29,32 @@ export const CourseInfoCards = ({ userId }: { userId: string }) => {
   >(null)
 
   useEffect(() => {
-    const fetchCourseInfoCardsData = async (userId: string) => {
+    async function fetchCourseInfoCardsData(userId: string) {
       if (!userId) return
 
       const { data, error } = await supabase
         .from('course')
         .select(
           `
-        id,
-        course_image,
-        course_name,
-        course_description,
-        course_code,
-        learning_tags,
-        professor:profile(
           id,
-          display_name
-        ),
-        profile_enrolled_course!inner(
-          id,
-          profile_id,
-          is_achieved
-        )
-      `,
+          course_image,
+          course_name,
+          course_description,
+          course_code,
+          learning_tags,
+          professor:profile(
+            id,
+            display_name
+          ),
+          profile_enrolled_course!inner(
+            id,
+            profile_id,
+            is_achieved
+          )
+        `,
         )
         .filter('profile_enrolled_course.profile_id', 'eq', userId)
+        .order('course_name', { ascending: false })
 
       if (error) return
 

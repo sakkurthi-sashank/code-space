@@ -10,7 +10,7 @@ import {
 import { useRouter } from 'next/router'
 import { useEffect, useState } from 'react'
 
-interface moduleInfoCardFullDetailsData {
+interface ModuleInfoCompleteDetailsData {
   id: string
   module_name: string
   start_date: string
@@ -26,7 +26,7 @@ interface moduleInfoCardFullDetailsData {
   }[]
 }
 
-export function ModuleInfoCardFullDetails({
+export function ModuleInfoCompleteDetails({
   currentUserSelectedModuleId,
 }: {
   currentUserSelectedModuleId: string | null
@@ -34,8 +34,8 @@ export function ModuleInfoCardFullDetails({
   const theme = useMantineTheme()
   const router = useRouter()
 
-  const [moduleInfoCardFullDetailsData, setModuleInfoCardFullDetailsData] =
-    useState<moduleInfoCardFullDetailsData | null>(null)
+  const [ModuleInfoCompleteDetailsData, setModuleInfoCompleteDetailsData] =
+    useState<ModuleInfoCompleteDetailsData | null>(null)
 
   useEffect(() => {
     if (!currentUserSelectedModuleId) return
@@ -67,7 +67,7 @@ export function ModuleInfoCardFullDetails({
 
       if (error) return
 
-      setModuleInfoCardFullDetailsData(data)
+      setModuleInfoCompleteDetailsData(data)
     }
 
     fetchUserSelectedModuleFullData(currentUserSelectedModuleId)
@@ -84,12 +84,12 @@ export function ModuleInfoCardFullDetails({
   }
 
   const totalCodingMarks =
-    moduleInfoCardFullDetailsData?.coding_question.reduce(
+    ModuleInfoCompleteDetailsData?.coding_question.reduce(
       (acc, curr) => acc + (curr.marks || 0),
       0,
     )
 
-  const totalMCQMarks = moduleInfoCardFullDetailsData?.mcq_question.reduce(
+  const totalMCQMarks = ModuleInfoCompleteDetailsData?.mcq_question.reduce(
     (acc, curr) => acc + (curr.marks || 0),
     0,
   )
@@ -97,19 +97,19 @@ export function ModuleInfoCardFullDetails({
   return (
     <div className="p-4">
       <Title order={2} fw={600} color={theme.colors.gray[7]}>
-        {moduleInfoCardFullDetailsData?.module_name}
+        {ModuleInfoCompleteDetailsData?.module_name}
       </Title>
 
       <Flex align={'center'} gap={'md'} mt={2}>
         <Text size={'xs'} color="dimmed">
           Starts Date:{' '}
           {new Date(
-            moduleInfoCardFullDetailsData?.start_date!,
+            ModuleInfoCompleteDetailsData?.start_date!,
           )?.toLocaleString()}
         </Text>
         <Text size={'xs'} color="dimmed">
           Ends Date:{' '}
-          {new Date(moduleInfoCardFullDetailsData?.end_date!)?.toLocaleString()}
+          {new Date(ModuleInfoCompleteDetailsData?.end_date!)?.toLocaleString()}
         </Text>
       </Flex>
 
@@ -127,14 +127,14 @@ export function ModuleInfoCardFullDetails({
           <tr>
             <td>1</td>
             <td>Section 1</td>
-            <td>{moduleInfoCardFullDetailsData?.coding_question?.length}</td>
+            <td>{ModuleInfoCompleteDetailsData?.coding_question?.length}</td>
             <td>Coding</td>
             <td>{totalCodingMarks}</td>
           </tr>
           <tr>
             <td>2</td>
             <td>Section 2</td>
-            <td>{moduleInfoCardFullDetailsData?.mcq_question?.length}</td>
+            <td>{ModuleInfoCompleteDetailsData?.mcq_question?.length}</td>
             <td>MCQ</td>
             <td>{totalMCQMarks}</td>
           </tr>
@@ -145,13 +145,11 @@ export function ModuleInfoCardFullDetails({
         <div className="mt-6 flex justify-end space-x-4">
           <Button
             size="xs"
-            onClick={() => {
-              if (currentUserSelectedModuleId) {
-                router.push(
-                  `/courses/module-test/${currentUserSelectedModuleId}`,
-                )
-              }
-            }}
+            onClick={() =>
+              router.push(
+                `/courses/module-test/validation/${currentUserSelectedModuleId}`,
+              )
+            }
           >
             Start Test
           </Button>

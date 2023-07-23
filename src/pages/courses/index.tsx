@@ -1,11 +1,11 @@
 import { CourseInfoCards } from '@/components/Course/CourseInfoCards'
-import { useUserAuth } from '@/hooks/userAuthContext'
+import { useAuth } from '@/hooks/useAuth'
 import { MainLayout } from '@/layouts/MainLayout'
 import { Flex } from '@mantine/core'
 import { useRouter } from 'next/router'
 
 export default function CoursesPage() {
-  const { user, loading } = useUserAuth()
+  const { user, loading } = useAuth()
 
   const router = useRouter()
 

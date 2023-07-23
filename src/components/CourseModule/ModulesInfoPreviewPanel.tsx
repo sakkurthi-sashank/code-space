@@ -10,7 +10,7 @@ import {
 import { IconChevronRight } from '@tabler/icons-react'
 import { useEffect, useState } from 'react'
 
-interface ModuleCardInfoData {
+interface ModulesInfoPreviewPanelData {
   id: string
   module_name: string
   start_date: string
@@ -23,7 +23,7 @@ interface ModuleCardInfoData {
   } | null
 }
 
-export const ModuleInfoCards = ({
+export function ModulesInfoPreviewPanel({
   userId,
   courseId,
   setUserSelectedModuleId,
@@ -31,17 +31,17 @@ export const ModuleInfoCards = ({
   userId: string
   courseId: string
   setUserSelectedModuleId: (id: string) => void
-}) => {
+}) {
   const theme = useMantineTheme()
 
-  const [moduleCardInfoData, setModuleCardInfoData] = useState<
-    ModuleCardInfoData[] | null
+  const [moduleInfoPreviewData, setModulesInfoPreviewPanelData] = useState<
+    ModulesInfoPreviewPanelData[] | null
   >(null)
 
   useEffect(() => {
     if (!courseId || !userId) return
 
-    const fetchModuleCardInfoData = async () => {
+    const fetchModuleInfoPreviewData = async () => {
       const { data, error } = await supabase
         .from('module')
         .select(
@@ -63,15 +63,17 @@ export const ModuleInfoCards = ({
 
       if (error) return
 
-      setModuleCardInfoData(data)
+      setModulesInfoPreviewPanelData(data)
     }
 
-    fetchModuleCardInfoData()
+    return () => {
+      fetchModuleInfoPreviewData()
+    }
   }, [courseId, userId])
 
   return (
     <>
-      {moduleCardInfoData?.map((module) => (
+      {moduleInfoPreviewData?.map((module) => (
         <Paper
           className="w-full px-4 py-3"
           radius={0}

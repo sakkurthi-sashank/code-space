@@ -1,12 +1,54 @@
-import { useTestStore } from '@/store/TestStore'
+import { supabase } from '@/libs/supabase'
 import { ScrollArea, Stack, Text, Title, useMantineTheme } from '@mantine/core'
+import { useEffect, useState } from 'react'
 
-export const QuestionPanel = () => {
+interface CodingQuestion {
+  id: string
+  problem_name: string
+  problem_statement: string
+  input_formate: string
+  output_formate: string
+  test_case: {
+    id: string
+    coding_question_id: string
+    input: string
+    output: string
+    is_sample_test_case: boolean
+  }[]
+}
+
+export const QuestionPanel = ({
+  currentUserSelectedQuestionId,
+}: {
+  currentUserSelectedQuestionId: string | null
+}) => {
   const theme = useMantineTheme()
 
-  const { codingQuestionOnUserSelectedId } = useTestStore((state) => ({
-    codingQuestionOnUserSelectedId: state.codingQuestionOnUserSelectedId,
-  }))
+  const [codingQuestionOnUserSelectedId, setCodingQuestionOnUserSelectedId] =
+    useState<CodingQuestion | null>(null)
+
+  useEffect(() => {
+    const fetchCodingQuestionOnUserSelectedId = async (questionId: string) => {
+      const { data, error } = await supabase
+        .from('coding_question')
+        .select(
+          `*, test_case (id, coding_question_id, input, output, is_sample_test_case)`,
+        )
+        .eq('id', questionId)
+        .filter('test_case.is_sample_test_case', 'eq', true)
+        .limit(1)
+
+      if (error) {
+        return
+      }
+
+      setCodingQuestionOnUserSelectedId(data ? data[0] : null)
+    }
+
+    if (!currentUserSelectedQuestionId) return
+
+    fetchCodingQuestionOnUserSelectedId(currentUserSelectedQuestionId)
+  }, [currentUserSelectedQuestionId])
 
   return (
     <ScrollArea

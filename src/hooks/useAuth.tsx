@@ -3,7 +3,7 @@ import { User } from '@supabase/supabase-js'
 import { useRouter } from 'next/router'
 import { useEffect, useState } from 'react'
 
-export function useUserAuth() {
+export function useAuth() {
   const [user, setUser] = useState<User | null>(null)
   const [loading, setLoading] = useState(true)
   const router = useRouter()
