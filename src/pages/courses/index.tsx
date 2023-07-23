@@ -1,6 +1,6 @@
-import { CourseInfoCards } from '@/components/Course/CourseInfoCards'
+import { CourseCards } from '@/components/Student/Course/CourseCards'
+import { Dashboard } from '@/components/Student/Dashboard'
 import { useAuth } from '@/hooks/useAuth'
-import { MainLayout } from '@/layouts/MainLayout'
 import { Flex } from '@mantine/core'
 import { useRouter } from 'next/router'
 
@@ -16,11 +16,12 @@ export default function CoursesPage() {
 
   if (user) {
     return (
-      <MainLayout>
+      <Dashboard>
         <Flex className="flex-wrap p-4 gap-4">
-          <CourseInfoCards userId={user.id} />
+          <CourseCards userId={user.id} />
         </Flex>
-      </MainLayout>
+        <div>{user.email}</div>
+      </Dashboard>
     )
   }
 

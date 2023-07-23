@@ -1,8 +1,8 @@
-import { Header } from '@/components/Dashboard/Header'
-import { Navbar } from '@/components/Dashboard/Navbar'
+import { Header } from '@/components/Student/Dashboard/Header'
+import { Navbar } from '@/components/Student/Dashboard/Navbar'
 import { AppShell } from '@mantine/core'
 
-export const MainLayout = ({ children }: { children: React.ReactNode }) => {
+export const Dashboard = ({ children }: { children: React.ReactNode }) => {
   return (
     <AppShell
       padding={0}

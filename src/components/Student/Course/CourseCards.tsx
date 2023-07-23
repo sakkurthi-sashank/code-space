@@ -21,15 +21,15 @@ interface CourseInfoCardData {
   }[]
 }
 
-export function CourseInfoCards({ userId }: { userId: string }) {
+export function CourseCards({ userId }: { userId: string }) {
   const router = useRouter()
 
-  const [courseInfoCardsData, setCourseInfoCardsData] = useState<
+  const [CourseCardsData, setCourseCardsData] = useState<
     CourseInfoCardData[] | null
   >(null)
 
   useEffect(() => {
-    async function fetchCourseInfoCardsData(userId: string) {
+    async function fetchCourseCardsData(userId: string) {
       if (!userId) return
 
       const { data, error } = await supabase
@@ -58,15 +58,15 @@ export function CourseInfoCards({ userId }: { userId: string }) {
 
       if (error) return
 
-      setCourseInfoCardsData(data)
+      setCourseCardsData(data)
     }
 
-    fetchCourseInfoCardsData(userId)
+    fetchCourseCardsData(userId)
   }, [userId])
 
   return (
     <>
-      {courseInfoCardsData?.map((course, _index) => (
+      {CourseCardsData?.map((course, _index) => (
         <Card
           withBorder
           key={course.id}

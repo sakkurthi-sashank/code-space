@@ -1,55 +1,114 @@
 > - folders
 + - files
+- - functions
 
 > code-space
   > src 
     > components
-      > course
-        + course-card.tsx
-        + enroll-course.tsx
-      > course-module
-        + modules-preview-panel.tsx
-        + module-selected-panel.tsx
-      > dashboard
-        + index.tsx
-        + header.tsx
-        + sidebar.tsx
-      > module-test
-        + code-editor.tsx
-        + change-question.tsx
-        + question-panel.tsx
-        + run-and-submit.tsx
-        + test-result.tsx
+      > common
+      > Admin
+        > Students
+          + AllStudents.tsx
+          + UpdateStudent.tsx
+          + AddStudent.tsx
+        > Courses
+          + AllCourses.tsx
+          + UpdateCourse.tsx
+          + AddCourse.tsx
+        > Modules
+          + AllModules.tsx
+          + UpdateModule.tsx
+          + AddModule.tsx
+        > ModuleTest
+          + AllModule-test.tsx
+          + UpdateModule-test.tsx
+          + AddModule-test.tsx
+        > Result 
+          + AllStudentResults.tsx
+          + StudentSpecificResult.tsx
+      > Student     
+        > Course
+          + CourseCards.tsx
+          + EnrollToCourse.tsx
+        > CourseModule
+          + ModuleHeader.tsx
+          + ModulesPreviewPanel.tsx
+          + ModuleSelectedPanel.tsx
+        > Dashboard
+          + index.tsx
+          + AppHeader.tsx
+          + AppSidebar.tsx
+        > ModuleTest
+          + CodeEditor.tsx
+          + ChangeQuestion.tsx
+          + QuestionPanel.tsx
+          + RunAndSubmit.tsx
+          + TestResults.tsx
+          + Header.tsx
+    > store
+      > student
+        + courseStore.tsx
+        + moduleStore.tsx
+        + moduleTestStore.tsx
+      > admin
+        + courseStore.tsx
+        + moduleStore.tsx
+        + moduleTestStore.tsx
+      > common 
+        + loginStore.tsx
     > service
-      > api
-        + course.ts
-          - fetchCoursesData.ts
-        + module.ts
-          - fetchModulesPreviewData.ts
-          - fetchUserSelectedModulesData.ts
-        + module-test.ts
-        + user.ts
+      > student
+        > api
+          + course.tsx
+            - fetchCoursesData
+          + module.tsx
+            - fetchModulesPreviewData
+            - fetchUserSelectedModulesData
+          + module-test.tsx
+            - fetchModuleTestData
+            - SubmitQuestion
+            - submitModuleTest
+            - runSampleTests
+            - updateDurationTime
+      > admin 
+        > api
     > libs
-      + supabase.ts
+      + supabase.tsx
     > utils
     > hooks
-      + useAuth.ts
+      + useAuth.tsx
     > types
-      + supabase.ts
+      + supabase.tsx
     > pages
       + index.tsx
+        - Home.tsx
       + _app.tsx
+        - App.tsx
       + _documents.tsx
       > courses
         + index.tsx
+          - Courses.tsx
         > module
           + [courseId].tsx
+            - CourseModule.tsx
         > module-test
           > validate
             + [moduleId].tsx
+              - ModuleTestValidate.tsx
           + [moduleId].tsx
+            - ModuleTest.tsx
+        > profile
+          + index.tsx
+        > admin
+          + index.tsx
+          > course
+            + index.tsx
+            + [courseId].tsx
+          > results
+            + index.tsx
+            + [studentId].tsx
         > login
           + index.tsx
+            - Login.tsx
       > styles
-        + styles.css
-
+        + globals.css

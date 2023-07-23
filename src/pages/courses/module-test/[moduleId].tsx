@@ -1,9 +1,9 @@
-import { ChangeQuestions } from '@/components/ModuleTest/ChangeQuestions'
-import { CodeEditor } from '@/components/ModuleTest/CodeEditor'
-import { CodeEditorHeader } from '@/components/ModuleTest/CodeEditorHeader'
-import { CompileAndSubmit } from '@/components/ModuleTest/CompileAndSubmit'
-import { QuestionPanel } from '@/components/ModuleTest/QuestionPanel'
-import { TestCases } from '@/components/ModuleTest/TestCases'
+import { ChangeQuestions } from '@/components/Student/ModuleTest/ChangeQuestion'
+import { CodeEditor } from '@/components/Student/ModuleTest/CodeEditor'
+import { CodeEditorHeader } from '@/components/Student/ModuleTest/Header'
+import { QuestionPanel } from '@/components/Student/ModuleTest/QuestionPanel'
+import { CompileAndSubmit } from '@/components/Student/ModuleTest/RunAndSubmit'
+import { TestCases } from '@/components/Student/ModuleTest/TestCaseResults'
 import {
   Button,
   Divider,

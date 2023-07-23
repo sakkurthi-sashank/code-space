@@ -1,4 +1,8 @@
 {
-  "cSpell.words": ["mantine", "supabase", "tailwindcss"],
+  "cSpell.words": [
+    "mantine",
+    "supabase",
+    "tailwindcss"
+  ],
   // "git.enabled": false
 }

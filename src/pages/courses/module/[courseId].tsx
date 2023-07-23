@@ -1,8 +1,8 @@
-import { ModuleHeader } from '@/components/CourseModule/ModuleHeader'
-import { ModuleInfoCompleteDetails } from '@/components/CourseModule/ModuleInfoCompleteDetails'
-import { ModulesInfoPreviewPanel } from '@/components/CourseModule/ModulesInfoPreviewPanel'
+import { ModuleHeader } from '@/components/Student/CourseModule/ModuleHeader'
+import { ModuleInfoCompleteDetails } from '@/components/Student/CourseModule/ModuleSelectedPanel'
+import { ModulesInfoPreviewPanel } from '@/components/Student/CourseModule/ModulesPreviewPanel'
+import { Dashboard } from '@/components/Student/Dashboard'
 import { useAuth } from '@/hooks/useAuth'
-import { MainLayout } from '@/layouts/MainLayout'
 import { Divider, useMantineTheme } from '@mantine/core'
 import { useRouter } from 'next/router'
 import { useState } from 'react'
@@ -26,7 +26,7 @@ export default function ModulePage() {
 
   if (user) {
     return (
-      <MainLayout>
+      <Dashboard>
         <ModuleHeader courseId={courseId as string} />
         <div className="h-full w-full flex bg-white">
           <div className="w-1/2">
@@ -43,7 +43,7 @@ export default function ModulePage() {
             />
           </div>
         </div>
-      </MainLayout>
+      </Dashboard>
     )
   }
 

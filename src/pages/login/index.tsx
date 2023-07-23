@@ -2,7 +2,6 @@ import { supabase } from '@/libs/supabase'
 import {
   Anchor,
   Button,
-  Divider,
   Paper,
   PasswordInput,
   Text,
@@ -12,76 +11,51 @@ import {
 } from '@mantine/core'
 import { notifications } from '@mantine/notifications'
 import { useRouter } from 'next/router'
-import { useState } from 'react'
+import { useReducer } from 'react'
+
+type State = {
+  email: string
+  password: string
+  emailError: string
+}
 
 export default function LoginPage() {
   const theme = useMantineTheme()
   const router = useRouter()
 
-  const [email, setEmail] = useState('')
-  const [magicLinkEmail, setMagicLinkEmail] = useState('')
-  const [password, setPassword] = useState('')
-  const [emailError, setEmailError] = useState('')
-  const [magicLinkError, setMagicLinkError] = useState('')
+  const [event, updateEvent] = useReducer(
+    (prev: State, next: Partial<State>): State => {
+      return { ...prev, ...next }
+    },
+    {
+      email: '',
+      password: '',
+      emailError: '',
+    },
+  )
 
   const onChangeEmail = (event: React.ChangeEvent<HTMLInputElement>) => {
-    setEmail(event.currentTarget.value)
-    setEmailError('')
+    updateEvent({ email: event.currentTarget.value, emailError: '' })
   }
 
   const onChangePassword = (event: React.ChangeEvent<HTMLInputElement>) => {
-    setPassword(event.currentTarget.value)
+    updateEvent({ password: event.currentTarget.value })
   }
 
-  const onChangeMagicLinkEmail = (
-    event: React.ChangeEvent<HTMLInputElement>,
-  ) => {
-    setMagicLinkEmail(event.currentTarget.value)
-    setMagicLinkError('')
-  }
-
-  const handleLogin = async () => {
+  const handleUserLogin = async () => {
     const { data, error } = await supabase.auth.signInWithPassword({
-      email,
-      password,
+      email: event.email,
+      password: event.password,
     })
 
     if (error) {
-      setEmailError('Please check your email and password.')
+      updateEvent({ emailError: 'Please check your email and password.' })
       return
     }
 
     if (data.user) {
       router.push('/courses')
     }
-  }
-
-  const handleMagicLinkSignIn = async () => {
-    if (magicLinkEmail === '') {
-      setMagicLinkError('Please enter your email address.')
-      return
-    }
-
-    const { error } = await supabase.auth.signInWithOtp({
-      email: magicLinkEmail,
-      options: {
-        emailRedirectTo: `${window.location.origin}/courses`,
-        shouldCreateUser: false,
-      },
-    })
-
-    if (error) {
-      setMagicLinkError(error.message)
-      return
-    }
-
-    notifications.show({
-      color: 'indigo',
-      withCloseButton: true,
-      autoClose: 10000,
-      title: 'Check your email',
-      message: `We've sent a magic link to ${magicLinkEmail}. Click the link to sign in.`,
-    })
   }
 
   return (
@@ -103,15 +77,13 @@ export default function LoginPage() {
         <TextInput
           placeholder="Email Address"
           onChange={onChangeEmail}
-          value={email}
           className="mb-4 w-full"
-          error={emailError}
+          error={event.emailError}
         />
 
         <PasswordInput
           placeholder="Password"
           onChange={onChangePassword}
-          value={password}
           className="mb-4 w-full"
         />
 
@@ -128,35 +100,15 @@ export default function LoginPage() {
               autoClose: 10000,
               title: 'Reset Your Password',
               message:
-                'login using your email address below and reset your password after login.',
+                'Please contact your administrator to reset your password.',
             })
           }
         >
           Forgot your password?
         </Anchor>
 
-        <Button fw={500} onClick={handleLogin}>
+        <Button fw={500} onClick={handleUserLogin}>
           Sign In
-        </Button>
-
-        <Divider my={20} label="OR" labelPosition="center" />
-
-        <TextInput
-          placeholder="Email Address"
-          onChange={onChangeMagicLinkEmail}
-          value={magicLinkEmail}
-          className="mb-4 w-full"
-          error={magicLinkError}
-        />
-
-        <Button
-          variant="outline"
-          color="indigo"
-          fw={500}
-          className="mb-4 w-full"
-          onClick={handleMagicLinkSignIn}
-        >
-          Continue with email
         </Button>
 
         <Text align="center" mt={30} size="xs" color="gray">
