@@ -1,3 +1,4 @@
+import { useAuth } from '@/hooks/useAuth'
 import { supabase } from '@/libs/supabase'
 import {
   ActionIcon,
@@ -24,11 +25,9 @@ interface ModulesInfoPreviewPanelData {
 }
 
 export function ModulesInfoPreviewPanel({
-  userId,
   courseId,
   setUserSelectedModuleId,
 }: {
-  userId: string
   courseId: string
   setUserSelectedModuleId: (id: string) => void
 }) {
@@ -38,8 +37,10 @@ export function ModulesInfoPreviewPanel({
     ModulesInfoPreviewPanelData[] | null
   >(null)
 
+  const { user } = useAuth()
+
   useEffect(() => {
-    if (!courseId || !userId) return
+    if (!courseId || !user) return
 
     const fetchModuleInfoPreviewData = async () => {
       const { data, error } = await supabase
@@ -59,17 +60,15 @@ export function ModulesInfoPreviewPanel({
         `,
         )
         .eq('course_id', courseId)
-        .eq('course.profile_enrolled_course.profile_id', userId)
+        .eq('course.profile_enrolled_course.profile_id', user?.id)
 
       if (error) return
 
       setModulesInfoPreviewPanelData(data)
     }
 
-    return () => {
-      fetchModuleInfoPreviewData()
-    }
-  }, [courseId, userId])
+    fetchModuleInfoPreviewData()
+  }, [courseId, user])
 
   return (
     <>

@@ -1,3 +1,4 @@
+import { useAuth } from '@/hooks/useAuth'
 import { supabase } from '@/libs/supabase'
 import { Badge, Card, Flex, Image, Stack, Text, Title } from '@mantine/core'
 import { useRouter } from 'next/router'
@@ -21,16 +22,17 @@ interface CourseInfoCardData {
   }[]
 }
 
-export function CourseCards({ userId }: { userId: string }) {
+export function CourseCards() {
   const router = useRouter()
+  const { user } = useAuth()
 
   const [CourseCardsData, setCourseCardsData] = useState<
     CourseInfoCardData[] | null
   >(null)
 
   useEffect(() => {
-    async function fetchCourseCardsData(userId: string) {
-      if (!userId) return
+    async function fetchCourseCardsData() {
+      if (!user) return
 
       const { data, error } = await supabase
         .from('course')
@@ -53,7 +55,7 @@ export function CourseCards({ userId }: { userId: string }) {
           )
         `,
         )
-        .filter('profile_enrolled_course.profile_id', 'eq', userId)
+        .filter('profile_enrolled_course.profile_id', 'eq', user?.id)
         .order('course_name', { ascending: false })
 
       if (error) return
@@ -61,8 +63,8 @@ export function CourseCards({ userId }: { userId: string }) {
       setCourseCardsData(data)
     }
 
-    fetchCourseCardsData(userId)
-  }, [userId])
+    fetchCourseCardsData()
+  }, [user])
 
   return (
     <>

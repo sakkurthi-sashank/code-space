@@ -9,6 +9,7 @@ import {
   Title,
   useMantineTheme,
 } from '@mantine/core'
+import { getHotkeyHandler } from '@mantine/hooks'
 import { notifications } from '@mantine/notifications'
 import { useRouter } from 'next/router'
 import { useReducer } from 'react'
@@ -85,6 +86,7 @@ export default function LoginPage() {
           placeholder="Password"
           onChange={onChangePassword}
           className="mb-4 w-full"
+          onKeyDown={getHotkeyHandler([['enter', () => handleUserLogin()]])}
         />
 
         <Anchor

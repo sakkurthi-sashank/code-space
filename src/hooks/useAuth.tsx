@@ -27,14 +27,5 @@ export function useAuth() {
     }
   }, [router])
 
-  useEffect(() => {
-    const intendedPage = sessionStorage.getItem('intendedPage')
-
-    if (user && intendedPage) {
-      sessionStorage.removeItem('intendedPage')
-      router.replace(intendedPage)
-    }
-  }, [user, router])
-
   return { user, loading }
 }
