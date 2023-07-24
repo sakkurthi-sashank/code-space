@@ -107,6 +107,8 @@
           > results
             + index.tsx
             + [studentId].tsx
+          > students
+            + [studentId].tsx
         > login
           + index.tsx
             - Login.tsx
