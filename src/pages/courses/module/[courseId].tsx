@@ -1,38 +1,51 @@
-import { InfoCardFullDetails } from '@/components/CourseModule/InfoCardFullDetails'
-import { ModuleHeader } from '@/components/CourseModule/ModuleHeader'
-import { ModuleInfoCards } from '@/components/CourseModule/ModuleInfoCards'
-import { MainLayout } from '@/layouts/MainLayout'
-import { useModuleStore } from '@/store/ModuleStore'
+import { ModuleHeader } from '@/components/Student/CourseModule/ModuleHeader'
+import { ModuleInfoCompleteDetails } from '@/components/Student/CourseModule/ModuleSelectedPanel'
+import { ModulesInfoPreviewPanel } from '@/components/Student/CourseModule/ModulesPreviewPanel'
+import { Dashboard } from '@/components/Student/Dashboard'
+import { useAuth } from '@/hooks/useAuth'
 import { Divider, useMantineTheme } from '@mantine/core'
 import { useRouter } from 'next/router'
-import { useEffect } from 'react'
+import { useState } from 'react'
 
 export default function ModulePage() {
   const router = useRouter()
+  const { user, loading } = useAuth()
+
   const { courseId } = router.query
 
-  const { setUserSelectedModuleId } = useModuleStore((state) => ({
-    setUserSelectedModuleId: state.setUserSelectedModuleId,
-  }))
-
-  useEffect(() => {
-    setUserSelectedModuleId(null)
-  }, [courseId, setUserSelectedModuleId])
+  const [currentUserSelectedModuleId, setUserSelectedModuleId] = useState<
+    string | null
+  >(null)
 
   const theme = useMantineTheme()
 
-  return (
-    <MainLayout>
-      <ModuleHeader courseId={courseId as string} />
-      <div className="h-full w-full flex bg-white">
-        <div className="w-1/2">
-          <ModuleInfoCards courseId={courseId as string} />
+  if (!user && !loading) {
+    router.push('/login')
+    return null
+  }
+
+  if (user) {
+    return (
+      <Dashboard>
+        <ModuleHeader courseId={courseId as string} />
+        <div className="h-full w-full flex bg-white">
+          <div className="w-1/2">
+            <ModulesInfoPreviewPanel
+              courseId={courseId as string}
+              userId={user?.id}
+              setUserSelectedModuleId={setUserSelectedModuleId}
+            />
+          </div>
+          <Divider orientation="vertical" color={theme.colors.gray[2]} />
+          <div className="w-1/2">
+            <ModuleInfoCompleteDetails
+              currentUserSelectedModuleId={currentUserSelectedModuleId}
+            />
+          </div>
         </div>
-        <Divider orientation="vertical" color={theme.colors.gray[2]} />
-        <div className="w-1/2">
-          <InfoCardFullDetails />
-        </div>
-      </div>
-    </MainLayout>
-  )
+      </Dashboard>
+    )
+  }
+
+  return null
 }

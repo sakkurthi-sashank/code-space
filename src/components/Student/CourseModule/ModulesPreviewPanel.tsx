@@ -1,4 +1,4 @@
-import { useModuleStore } from '@/store/ModuleStore'
+import { supabase } from '@/libs/supabase'
 import {
   ActionIcon,
   Flex,
@@ -8,28 +8,72 @@ import {
   useMantineTheme,
 } from '@mantine/core'
 import { IconChevronRight } from '@tabler/icons-react'
-import { useEffect } from 'react'
+import { useEffect, useState } from 'react'
 
-export const ModuleInfoCards = ({ courseId }: { courseId: string }) => {
+interface ModulesInfoPreviewPanelData {
+  id: string
+  module_name: string
+  start_date: string
+  end_date: string
+  course: {
+    id: string
+    profile_enrolled_course: {
+      profile_id: string
+    }[]
+  } | null
+}
+
+export function ModulesInfoPreviewPanel({
+  userId,
+  courseId,
+  setUserSelectedModuleId,
+}: {
+  userId: string
+  courseId: string
+  setUserSelectedModuleId: (id: string) => void
+}) {
   const theme = useMantineTheme()
 
-  const {
-    previewModulesData,
-    setUserSelectedModuleId,
-    fetchPreviewModulesData,
-  } = useModuleStore((state) => ({
-    previewModulesData: state.previewModulesData,
-    setUserSelectedModuleId: state.setUserSelectedModuleId,
-    fetchPreviewModulesData: state.fetchPreviewModulesData,
-  }))
+  const [moduleInfoPreviewData, setModulesInfoPreviewPanelData] = useState<
+    ModulesInfoPreviewPanelData[] | null
+  >(null)
 
   useEffect(() => {
-    fetchPreviewModulesData(courseId)
-  }, [courseId, fetchPreviewModulesData])
+    if (!courseId || !userId) return
+
+    const fetchModuleInfoPreviewData = async () => {
+      const { data, error } = await supabase
+        .from('module')
+        .select(
+          `
+          id,
+          module_name,
+          start_date,
+          end_date,
+          course(
+            id,
+            profile_enrolled_course(
+              profile_id
+            )
+          )
+        `,
+        )
+        .eq('course_id', courseId)
+        .eq('course.profile_enrolled_course.profile_id', userId)
+
+      if (error) return
+
+      setModulesInfoPreviewPanelData(data)
+    }
+
+    return () => {
+      fetchModuleInfoPreviewData()
+    }
+  }, [courseId, userId])
 
   return (
     <>
-      {previewModulesData?.map((module) => (
+      {moduleInfoPreviewData?.map((module) => (
         <Paper
           className="w-full px-4 py-3"
           radius={0}

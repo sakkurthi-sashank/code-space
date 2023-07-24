@@ -1,12 +1,7 @@
-import { useTestStore } from '@/store/TestStore'
 import { Box } from '@mantine/core'
 import MonacoEditor from '@monaco-editor/react'
 
 export const CodeEditor = () => {
-  const { codingQuestionOnUserSelectedId } = useTestStore((state) => ({
-    codingQuestionOnUserSelectedId: state.codingQuestionOnUserSelectedId,
-  }))
-
   return (
     <Box
       sx={{
@@ -16,7 +11,6 @@ export const CodeEditor = () => {
     >
       <MonacoEditor
         height="55vh"
-        value={codingQuestionOnUserSelectedId?.default_code ?? ''}
         language="cpp"
         options={{
           fontSize: 14,

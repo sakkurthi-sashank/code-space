@@ -1,41 +1,29 @@
-import { InfoCard } from '@/components/Course/InfoCard'
-import { useUserAuth } from '@/hooks/userAuthContext'
-import { MainLayout } from '@/layouts/MainLayout'
-import { useCourseStore } from '@/store/CourseStore'
+import { CourseCards } from '@/components/Student/Course/CourseCards'
+import { Dashboard } from '@/components/Student/Dashboard'
+import { useAuth } from '@/hooks/useAuth'
 import { Flex } from '@mantine/core'
 import { useRouter } from 'next/router'
-import { useEffect } from 'react'
 
 export default function CoursesPage() {
-  const { user, loading } = useUserAuth()
+  const { user, loading } = useAuth()
+
   const router = useRouter()
-
-  const { courseInfoCardsData, fetchCourseInfoCardsData } = useCourseStore(
-    (state) => ({
-      courseInfoCardsData: state.courseInfoCardsData,
-      fetchCourseInfoCardsData: state.fetchCourseInfoCardsData,
-    }),
-  )
-
-  useEffect(() => {
-    if (user) {
-      fetchCourseInfoCardsData(user.id)
-    }
-  }, [user, fetchCourseInfoCardsData])
 
   if (!user && !loading) {
     router.push('/login')
+    return null
   }
 
-  if (user && !loading) {
+  if (user) {
     return (
-      <MainLayout>
+      <Dashboard>
         <Flex className="flex-wrap p-4 gap-4">
-          {courseInfoCardsData?.map((course) => (
-            <InfoCard {...course} key={course.id} />
-          ))}
+          <CourseCards userId={user.id} />
         </Flex>
-      </MainLayout>
+        <div>{user.email}</div>
+      </Dashboard>
     )
   }
+
+  return null
 }
