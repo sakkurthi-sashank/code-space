@@ -3,12 +3,12 @@ import { Button, Modal, TextInput } from '@mantine/core'
 import { useDisclosure } from '@mantine/hooks'
 import { useState } from 'react'
 
-export const AddStudent = () => {
+export const AddProfile = () => {
   const [opened, { open, close }] = useDisclosure(false)
-  const [studentName, setStudentName] = useState('')
+  const [ProfileName, setProfileName] = useState('')
   const [emailAddress, setEmailAddress] = useState('')
 
-  const handleCreateStudent = async () => {
+  const handleCreateProfile = async () => {
     const { data } = await supabase.auth.admin.createUser({
       email: emailAddress,
       password: emailAddress.split('@')[0],
@@ -20,7 +20,7 @@ export const AddStudent = () => {
       .insert([
         {
           id: data.user?.id!,
-          display_name: studentName,
+          display_name: ProfileName,
           email_address: emailAddress,
         },
       ])
@@ -32,17 +32,17 @@ export const AddStudent = () => {
   return (
     <div className="flex justify-end items-center p-2">
       <Button size="xs" fw={500} variant="outline" onClick={open}>
-        Add Student
+        Add Profile
       </Button>
-      <Modal opened={opened} size={'xl'} onClose={close} title="Add Student">
+      <Modal opened={opened} size={'xl'} onClose={close} title="Add Profile">
         <div className="p-4">
           <TextInput
-            label="Student Name"
-            placeholder="Enter student name"
+            label="Profile Name"
+            placeholder="Enter Profile name"
             required
             variant="default"
             className="mb-4"
-            onChange={(e) => setStudentName(e.currentTarget.value)}
+            onChange={(e) => setProfileName(e.currentTarget.value)}
           />
           <TextInput
             label="Email Address"
@@ -58,9 +58,9 @@ export const AddStudent = () => {
               size="xs"
               fw={500}
               variant="filled"
-              onClick={handleCreateStudent}
+              onClick={handleCreateProfile}
             >
-              Create Student
+              Create Profile
             </Button>
           </div>
         </div>

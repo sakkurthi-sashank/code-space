@@ -32,7 +32,6 @@ export default function ModulePage() {
           <div className="w-1/2">
             <ModulesInfoPreviewPanel
               courseId={courseId as string}
-              userId={user?.id}
               setUserSelectedModuleId={setUserSelectedModuleId}
             />
           </div>

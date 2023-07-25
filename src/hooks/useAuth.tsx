@@ -16,7 +16,6 @@ export function useAuth() {
         setLoading(false)
 
         if (event === 'SIGNED_OUT') {
-          sessionStorage.setItem('intendedPage', router.asPath)
           router.push('/login')
         }
       },

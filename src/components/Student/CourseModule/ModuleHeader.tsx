@@ -26,7 +26,7 @@ export const ModuleHeader = ({ courseId }: { courseId: string }) => {
         borderBottom: `1px solid ${theme.colors.gray[2]}`,
       }}
     >
-      <Breadcrumbs separator="→">{items}</Breadcrumbs>
+      <Breadcrumbs separator="/">{items}</Breadcrumbs>
     </Box>
   )
 }

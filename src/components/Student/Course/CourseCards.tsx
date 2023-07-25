@@ -1,25 +1,13 @@
 import { useAuth } from '@/hooks/useAuth'
-import { supabase } from '@/libs/supabase'
+import { fetchCourseCardsData } from '@/service/course'
+import { Course, Profile, ProfileEnrolledCourse } from '@/types/types'
 import { Badge, Card, Flex, Image, Stack, Text, Title } from '@mantine/core'
 import { useRouter } from 'next/router'
 import { useEffect, useState } from 'react'
 
-interface CourseInfoCardData {
-  id: string
-  course_image: string
-  course_name: string
-  course_description: string
-  course_code: string
-  learning_tags: string[] | undefined
-  professor: {
-    id: string
-    display_name: string
-  } | null
-  profile_enrolled_course: {
-    id: string
-    profile_id: string
-    is_achieved: boolean | null
-  }[]
+type CourseCardsProps = Course & {
+  professor: Profile | null
+  profile_enrolled_course: ProfileEnrolledCourse[]
 }
 
 export function CourseCards() {
@@ -27,43 +15,12 @@ export function CourseCards() {
   const { user } = useAuth()
 
   const [CourseCardsData, setCourseCardsData] = useState<
-    CourseInfoCardData[] | null
+    CourseCardsProps[] | null
   >(null)
 
   useEffect(() => {
-    async function fetchCourseCardsData() {
-      if (!user) return
-
-      const { data, error } = await supabase
-        .from('course')
-        .select(
-          `
-          id,
-          course_image,
-          course_name,
-          course_description,
-          course_code,
-          learning_tags,
-          professor:profile(
-            id,
-            display_name
-          ),
-          profile_enrolled_course!inner(
-            id,
-            profile_id,
-            is_achieved
-          )
-        `,
-        )
-        .filter('profile_enrolled_course.profile_id', 'eq', user?.id)
-        .order('course_name', { ascending: false })
-
-      if (error) return
-
-      setCourseCardsData(data)
-    }
-
-    fetchCourseCardsData()
+    if (!user) return
+    fetchCourseCardsData(user?.id).then((data) => setCourseCardsData(data!))
   }, [user])
 
   return (
