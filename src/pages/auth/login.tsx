@@ -18,6 +18,7 @@ type State = {
   email: string
   password: string
   emailError: string
+  loading: boolean
 }
 
 export default function LoginPage() {
@@ -32,6 +33,7 @@ export default function LoginPage() {
       email: '',
       password: '',
       emailError: '',
+      loading: false,
     },
   )
 
@@ -44,6 +46,8 @@ export default function LoginPage() {
   }
 
   const handleUserLogin = async () => {
+    updateEvent({ loading: true })
+
     const { data, error } = await supabase.auth.signInWithPassword({
       email: event.email,
       password: event.password,
@@ -51,12 +55,33 @@ export default function LoginPage() {
 
     if (error) {
       updateEvent({ emailError: 'Please check your email and password.' })
+      updateEvent({ loading: false })
       return
     }
 
     if (data.user) {
+      updateEvent({ loading: false })
       router.push('/courses')
+      return
     }
+  }
+
+  const handleForgotPassword = async () => {
+    const { error } = await supabase.auth.resetPasswordForEmail(event.email)
+
+    if (error) {
+      updateEvent({ emailError: error.message })
+      return
+    }
+
+    notifications.show({
+      color: 'indigo',
+      withCloseButton: true,
+      autoClose: 10000,
+      title: 'Password Recovery Email Sent',
+      message:
+        'Please check your email for a link to reset your password. If it does not appear within a few minutes, check your spam folder.',
+    })
   }
 
   return (
@@ -96,22 +121,28 @@ export default function LoginPage() {
           size={'sm'}
           color={'indigo'}
           onClick={() =>
-            notifications.show({
-              color: 'red',
-              withCloseButton: true,
-              autoClose: 10000,
-              title: 'Reset Your Password',
-              message:
-                'Please contact your administrator to reset your password.',
-            })
+            event.email
+              ? handleForgotPassword()
+              : updateEvent({ emailError: 'Please enter your email.' })
           }
         >
           Forgot your password?
         </Anchor>
 
-        <Button fw={500} onClick={handleUserLogin}>
+        <Button fw={500} onClick={handleUserLogin} loading={event.loading}>
           Sign In
         </Button>
+
+        <Text align="center" mt={30} size="xs" color="gray">
+          Don&apos;t have an account?{' '}
+          <Anchor
+            component="a"
+            color="blue"
+            onClick={() => router.push('/auth/signup')}
+          >
+            signup
+          </Anchor>
+        </Text>
 
         <Text align="center" mt={30} size="xs" color="gray">
           By continuing, you are indicating that you accept our Terms of Service

@@ -10,7 +10,7 @@ export const AuthUserWrapper = ({
   const router = useRouter()
 
   if (!user && !loading) {
-    router.push('/login')
+    router.push('/auth/login')
     return null
   }
 

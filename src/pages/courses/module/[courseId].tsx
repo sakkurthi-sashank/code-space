@@ -20,7 +20,7 @@ export default function ModulePage() {
   const theme = useMantineTheme()
 
   if (!user && !loading) {
-    router.push('/login')
+    router.push('/auth/login')
     return null
   }
 

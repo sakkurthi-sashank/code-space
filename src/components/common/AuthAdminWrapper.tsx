@@ -10,7 +10,7 @@ export const AuthAdminWrapper = ({
   const router = useRouter()
 
   if (!user && !loading) {
-    router.push('/login')
+    router.push('/auth/login')
     return null
   }
 
