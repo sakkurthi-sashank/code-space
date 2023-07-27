@@ -10,7 +10,7 @@ export const supabase = createClient<Database>(supabaseUrl!, supabaseAnonKey!, {
   },
   auth: {
     autoRefreshToken: true,
-    persistSession: false,
+    persistSession: true,
     detectSessionInUrl: true,
   },
 })
