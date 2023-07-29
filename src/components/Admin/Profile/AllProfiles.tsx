@@ -1,90 +1,93 @@
-import { supabase } from '@/libs/supabase'
+import { useProfileQuery } from '@/service/Admin/Queries/useProfileQuery'
 import { Profile } from '@/types/types'
-import { ScrollArea, Table } from '@mantine/core'
-import { User } from '@supabase/supabase-js'
-import { useCallback, useEffect, useMemo, useState } from 'react'
+import {
+  MRT_ColumnDef,
+  MantineReactTable,
+  useMantineReactTable,
+} from 'mantine-react-table'
+import { useMemo } from 'react'
 import { DeleteProfile } from './DeleteProfile'
-import { UpdateAsAdmin } from './UpdateAsAdmin'
-import { UpdateProfile } from './UpdateProfile'
+import { EditProfile } from './EditProfile'
 
-export const AllProfiles = () => {
-  const [allProfiles, setAllProfiles] = useState<Profile[]>([])
-  const [userList, setUserList] = useState<User[]>([])
+export function AllProfiles() {
+  const { data } = useProfileQuery()
 
-  useEffect(() => {
-    const getAllProfiles = async () => {
-      const { data: allProfiles, error } = await supabase
-        .from('profile')
-        .select('*')
-      if (error) {
-        console.log(error)
-        return
-      }
-      setAllProfiles(allProfiles)
-    }
-    getAllProfiles()
-  }, [])
+  const columns = useMemo<MRT_ColumnDef<Profile>[]>(
+    () => [
+      {
+        accessorKey: 'id',
+        header: 'ID',
+        enableEditing: false,
+      },
+      {
+        accessorKey: 'is_admin',
+        header: 'Is Admin',
+        Cell: ({ renderedCellValue }) => {
+          return <div>{renderedCellValue ? 'Yes' : 'No'}</div>
+        },
+      },
+      {
+        accessorKey: 'admission_number',
+        header: 'Admission Number',
+      },
+      {
+        accessorKey: 'display_name',
+        header: 'Display Name',
+      },
+      {
+        accessorKey: 'email_address',
+        header: 'Email Address',
+      },
+      {
+        accessorKey: 'phone_number',
+        header: 'Phone Number',
+      },
+      {
+        accessorKey: 'branch',
+        header: 'Branch',
+      },
+      {
+        accessorKey: 'batch',
+        header: 'Batch',
+      },
+      {
+        accessorKey: 'section',
+        header: 'Section',
+      },
+      {
+        header: 'Edit Course',
+        Cell: ({ row }) => {
+          return (
+            <>
+              <EditProfile {...row.original} />
+            </>
+          )
+        },
+      },
+      {
+        header: 'Delete Course',
+        Cell: ({ row }) => {
+          return (
+            <>
+              <DeleteProfile userId={row.original.id!} />
+            </>
+          )
+        },
+      },
+    ],
+    [],
+  )
 
-  const fetchUserData = useCallback(async () => {
-    const { data: userList, error } = await supabase.auth.admin.listUsers()
-    if (error) {
-      console.log(error)
-      return
-    }
-    setUserList(userList.users)
-  }, [])
-
-  useEffect(() => {
-    fetchUserData()
-  }, [fetchUserData])
-
-  const userListCache = useMemo(() => userList, [userList])
+  const table = useMantineReactTable({
+    columns,
+    data,
+    enableFullScreenToggle: false,
+    columnFilterDisplayMode: 'popover',
+  })
 
   return (
-    <div className="flex p-3 mx-3 bg-white justify-between items-center">
-      <ScrollArea w={'100%'}>
-        <Table striped withBorder withColumnBorders>
-          <thead>
-            <tr>
-              <th>Admission Number</th>
-              <th>Display Name</th>
-              <th>Email Address</th>
-              <th>Phone Number</th>
-              <th>Branch</th>
-              <th>Batch</th>
-              <th>Section</th>
-              <th>isAdmin</th>
-              <th>Edit</th>
-              <th>Delete</th>
-            </tr>
-          </thead>
-          <tbody>
-            {allProfiles.map((profile) => (
-              <tr key={profile.id}>
-                <td>{profile.admission_number}</td>
-                <td>{profile.display_name}</td>
-                <td>{profile.email_address}</td>
-                <td>{profile.phone_number}</td>
-                <td>{profile.branch}</td>
-                <td>{profile.batch}</td>
-                <td>{profile.section}</td>
-                <td>
-                  <UpdateAsAdmin
-                    userId={profile.id!}
-                    userList={userListCache}
-                  />
-                </td>
-                <td>
-                  <UpdateProfile {...profile} />
-                </td>
-                <td>
-                  <DeleteProfile userId={profile.id!} />
-                </td>
-              </tr>
-            ))}
-          </tbody>
-        </Table>
-      </ScrollArea>
+    <div className="flex flex-col w-full p-3">
+      <MantineReactTable table={table} />
     </div>
   )
 }

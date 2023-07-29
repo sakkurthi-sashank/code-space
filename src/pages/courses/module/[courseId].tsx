@@ -1,3 +1,7 @@
+import { Dashboard } from '@/components/common/Dashboard'
+import { useAuth } from '@/hooks/useAuth'
+import { useModuleQuery } from '@/service/Student/Queries/useModuleQuery'
+import { Module } from '@/types/types'
 import { Badge, Button } from '@mantine/core'
 import {
   MantineReactTable,
@@ -5,12 +9,7 @@ import {
   type MRT_ColumnDef,
 } from 'mantine-react-table'
 import { useRouter } from 'next/router'
-import { useEffect, useMemo, useState } from 'react'
-
-import { Dashboard } from '@/components/common/Dashboard'
-import { useAuth } from '@/hooks/useAuth'
-import { supabase } from '@/libs/supabase'
-import { Module } from '@/types/types'
+import { useMemo } from 'react'
 
 interface ModuleData extends Module {
   coding_question: {
@@ -19,10 +18,10 @@ interface ModuleData extends Module {
 }
 
 export default function ModulePage() {
-  const [data, setData] = useState<ModuleData[]>([])
   const router = useRouter()
   const { user, loading } = useAuth()
   const { courseId } = router.query
+  const { data } = useModuleQuery({ courseId: courseId as string })
 
   const columns = useMemo<MRT_ColumnDef<ModuleData>[]>(
     () => [
@@ -120,24 +119,6 @@ export default function ModulePage() {
     ],
     [],
   )
-
-  useEffect(() => {
-    const fetchModules = async () => {
-      const { data, error } = await supabase
-        .from('module')
-        .select(`*, coding_question(id)`)
-        .eq('course_id', courseId)
-
-      if (error) {
-        console.log(error)
-        return
-      }
-
-      setData(data)
-    }
-
-    fetchModules()
-  }, [])
 
   const table = useMantineReactTable({
     columns,

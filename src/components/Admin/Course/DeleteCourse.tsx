@@ -1,9 +1,12 @@
-import { supabase } from '@/libs/supabase'
+import { Database } from '@/types/supabase'
 import { ActionIcon, Text } from '@mantine/core'
 import { modals } from '@mantine/modals'
+import { useSupabaseClient } from '@supabase/auth-helpers-react'
 import { IconTrash } from '@tabler/icons-react'
 
 export function DeleteCourse({ id }: { id: string }) {
+  const supabaseClient = useSupabaseClient<Database>()
+
   const handleDeleteCourse = async () => {
     modals.openConfirmModal({
       title: 'Delete Course',
@@ -16,7 +19,7 @@ export function DeleteCourse({ id }: { id: string }) {
       labels: { confirm: 'Delete', cancel: 'Cancel' },
       confirmProps: { color: 'red' },
       onConfirm: async () => {
-        const { data, error } = await supabase
+        const { data, error } = await supabaseClient
           .from('course')
           .delete()
           .eq('id', id)

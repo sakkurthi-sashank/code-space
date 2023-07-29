@@ -1,8 +1,9 @@
-import { supabase } from '@/libs/supabase'
+import { Database } from '@/types/supabase'
 import { Course } from '@/types/types'
 import { Button, Modal, Stack, TextInput, Textarea } from '@mantine/core'
 import { DateInput } from '@mantine/dates'
 import { useDisclosure } from '@mantine/hooks'
+import { useSupabaseClient } from '@supabase/auth-helpers-react'
 import { IconPlus } from '@tabler/icons-react'
 import { useReducer, useState } from 'react'
 
@@ -10,6 +11,7 @@ export function AddCourse() {
   const [opened, { open, close }] = useDisclosure(false)
   const [loading, setLoading] = useState(false)
   const [error, setError] = useState('')
+  const supabaseClient = useSupabaseClient<Database>()
 
   const [event, updateEvent] = useReducer(
     (prev: Course, next: Partial<Course>) => {
@@ -34,7 +36,7 @@ export function AddCourse() {
     }
 
     setLoading(true)
-    const { data, error } = await supabase.from('course').insert({
+    const { data, error } = await supabaseClient.from('course').insert({
       course_name: event.course_name,
       course_code: event.course_code,
       course_description: event.course_description!,

@@ -131,7 +131,7 @@ export interface Database {
           display_name: string | null
           email_address: string
           id: string
-          is_professor: boolean | null
+          is_admin: boolean | null
           phone_number: string | null
           section: string | null
         }
@@ -143,7 +143,7 @@ export interface Database {
           display_name?: string | null
           email_address: string
           id: string
-          is_professor?: boolean | null
+          is_admin?: boolean | null
           phone_number?: string | null
           section?: string | null
         }
@@ -155,7 +155,7 @@ export interface Database {
           display_name?: string | null
           email_address?: string
           id?: string
-          is_professor?: boolean | null
+          is_admin?: boolean | null
           phone_number?: string | null
           section?: string | null
         }

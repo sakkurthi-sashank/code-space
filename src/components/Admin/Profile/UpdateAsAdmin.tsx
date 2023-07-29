@@ -1,5 +1,5 @@
-import { supabase } from '@/libs/supabase'
 import { Switch } from '@mantine/core'
+import { useSupabaseClient } from '@supabase/auth-helpers-react'
 import { User } from '@supabase/supabase-js'
 import { useEffect, useState } from 'react'
 
@@ -11,6 +11,7 @@ export function UpdateAsAdmin({
   userList: User[]
 }) {
   const [isAdmin, setAdmin] = useState(false)
+  const supabaseClient = useSupabaseClient()
 
   useEffect(() => {
     const fetchUserData = async () => {
@@ -25,7 +26,7 @@ export function UpdateAsAdmin({
 
   async function updateUserRole() {
     const newRole = isAdmin ? '' : 'admin'
-    const { data } = await supabase.auth.admin.updateUserById(userId, {
+    const { data } = await supabaseClient.auth.admin.updateUserById(userId, {
       user_metadata: { role: newRole },
     })
 

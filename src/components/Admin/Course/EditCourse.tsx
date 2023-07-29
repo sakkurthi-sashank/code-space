@@ -1,4 +1,4 @@
-import { supabase } from '@/libs/supabase'
+import { Database } from '@/types/supabase'
 import { Course } from '@/types/types'
 import {
   ActionIcon,
@@ -10,6 +10,7 @@ import {
 } from '@mantine/core'
 import { DateInput } from '@mantine/dates'
 import { useDisclosure } from '@mantine/hooks'
+import { useSupabaseClient } from '@supabase/auth-helpers-react'
 import { IconEdit } from '@tabler/icons-react'
 import { useReducer, useState } from 'react'
 
@@ -17,6 +18,8 @@ export function EditCourse(props: Course) {
   const [opened, { open, close }] = useDisclosure(false)
   const [loading, setLoading] = useState(false)
   const [error, setError] = useState('')
+
+  const supabaseClient = useSupabaseClient<Database>()
 
   const [event, updateEvent] = useReducer(
     (prev: Course, next: Partial<Course>) => {
@@ -36,7 +39,7 @@ export function EditCourse(props: Course) {
     }
 
     setLoading(true)
-    const { data, error } = await supabase
+    const { data, error } = await supabaseClient
       .from('course')
       .update(event)
       .eq('id', props.id)

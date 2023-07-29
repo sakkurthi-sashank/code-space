@@ -1,4 +1,3 @@
-import { supabase } from '@/libs/supabase'
 import {
   Anchor,
   Button,
@@ -11,6 +10,7 @@ import {
 } from '@mantine/core'
 import { getHotkeyHandler } from '@mantine/hooks'
 import { notifications } from '@mantine/notifications'
+import { useSupabaseClient } from '@supabase/auth-helpers-react'
 import { useRouter } from 'next/router'
 import { useReducer } from 'react'
 
@@ -24,6 +24,7 @@ type State = {
 export default function LoginPage() {
   const theme = useMantineTheme()
   const router = useRouter()
+  const supabaseClient = useSupabaseClient()
 
   const [event, updateEvent] = useReducer(
     (prev: State, next: Partial<State>): State => {
@@ -48,7 +49,7 @@ export default function LoginPage() {
   const handleUserLogin = async () => {
     updateEvent({ loading: true })
 
-    const { data, error } = await supabase.auth.signInWithPassword({
+    const { data, error } = await supabaseClient.auth.signInWithPassword({
       email: event.email,
       password: event.password,
     })
@@ -67,7 +68,9 @@ export default function LoginPage() {
   }
 
   const handleForgotPassword = async () => {
-    const { error } = await supabase.auth.resetPasswordForEmail(event.email)
+    const { error } = await supabaseClient.auth.resetPasswordForEmail(
+      event.email,
+    )
 
     if (error) {
       updateEvent({ emailError: error.message })

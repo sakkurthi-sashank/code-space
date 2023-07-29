@@ -1,6 +1,7 @@
-import { supabase } from '@/libs/supabase'
+import { Database } from '@/types/supabase'
 import { Course } from '@/types/types'
 import { Image } from '@mantine/core'
+import { useSupabaseClient } from '@supabase/auth-helpers-react'
 import {
   MRT_ColumnDef,
   MantineReactTable,
@@ -12,9 +13,10 @@ import { EditCourse } from './EditCourse'
 
 export function AllCourses() {
   const [data, setData] = useState<Course[]>([])
+  const supabaseClient = useSupabaseClient<Database>()
 
   const fetchCourses = async () => {
-    const { data, error } = await supabase
+    const { data, error } = await supabaseClient
       .from('course')
       .select('*')
       .order('created_at', { ascending: false })

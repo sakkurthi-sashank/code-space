@@ -1,33 +1,15 @@
-import { useAuth } from '@/hooks/useAuth'
-import { fetchCourseCardsData } from '@/service/course'
-import { Course, ProfileEnrolledCourse } from '@/types/types'
+import { useCourseQuery } from '@/service/Student/Queries/useCourseQuery'
 import { Badge, Card, Group, Image, Text, Title } from '@mantine/core'
 import { useRouter } from 'next/router'
-import { useEffect, useState } from 'react'
-
-type CourseCardsProps = Course & {
-  profile_enrolled_course: ProfileEnrolledCourse[]
-  module: {
-    id: string
-  }[]
-}
 
 export function CourseCards() {
   const router = useRouter()
-  const { user } = useAuth()
 
-  const [CourseCardsData, setCourseCardsData] = useState<
-    CourseCardsProps[] | null
-  >(null)
-
-  useEffect(() => {
-    if (!user) return
-    fetchCourseCardsData(user?.id).then((data) => setCourseCardsData(data!))
-  }, [user])
+  const { data } = useCourseQuery()
 
   return (
     <>
-      {CourseCardsData?.map((course, _index) => (
+      {data?.map((course) => (
         <Card
           withBorder
           key={course.id}

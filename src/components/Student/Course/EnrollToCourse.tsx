@@ -1,7 +1,6 @@
-import { useAuth } from '@/hooks/useAuth'
-import { supabase } from '@/libs/supabase'
 import { ActionIcon, Button, Modal, TextInput } from '@mantine/core'
 import { useDisclosure } from '@mantine/hooks'
+import { useSession, useSupabaseClient } from '@supabase/auth-helpers-react'
 import { IconPlus } from '@tabler/icons-react'
 import { useState } from 'react'
 
@@ -9,7 +8,9 @@ export function EnrollToCourse() {
   const [opened, { open, close }] = useDisclosure(false)
   const [course_id, setCourseId] = useState<string>('')
   const [error, setError] = useState<string>('')
-  const { user } = useAuth()
+  const user = useSession()?.user
+
+  const supabaseClient = useSupabaseClient()
 
   const onChangeCourseId = (e: React.ChangeEvent<HTMLInputElement>) => {
     setError('')
@@ -22,11 +23,12 @@ export function EnrollToCourse() {
       return
     }
 
-    const { error: previousDataError, data: previousData } = await supabase
-      .from('profile_enrolled_course')
-      .select('*')
-      .eq('course_id', course_id)
-      .eq('profile_id', user?.id!)
+    const { error: previousDataError, data: previousData } =
+      await supabaseClient
+        .from('profile_enrolled_course')
+        .select('*')
+        .eq('course_id', course_id)
+        .eq('profile_id', user?.id!)
 
     if (previousDataError) {
       setError("Couldn't enroll to the course. Please try again.")
@@ -38,7 +40,7 @@ export function EnrollToCourse() {
       return
     }
 
-    const { data, error } = await supabase
+    const { data, error } = await supabaseClient
       .from('profile_enrolled_course')
       .insert({
         course_id: course_id,

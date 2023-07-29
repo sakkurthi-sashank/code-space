@@ -1,4 +1,3 @@
-import { supabase } from '@/libs/supabase'
 import {
   Anchor,
   Button,
@@ -10,6 +9,7 @@ import {
   useMantineTheme,
 } from '@mantine/core'
 import { getHotkeyHandler } from '@mantine/hooks'
+import { useSupabaseClient } from '@supabase/auth-helpers-react'
 import { useRouter } from 'next/router'
 import { useReducer } from 'react'
 
@@ -23,6 +23,7 @@ type State = {
 export default function SignUpPage() {
   const theme = useMantineTheme()
   const router = useRouter()
+  const supabaseClient = useSupabaseClient()
 
   const [event, updateEvent] = useReducer(
     (prev: State, next: Partial<State>): State => {
@@ -47,7 +48,7 @@ export default function SignUpPage() {
   const handleUserSignUp = async () => {
     updateEvent({ loading: true })
 
-    const { data, error } = await supabase.auth.signUp({
+    const { data, error } = await supabaseClient.auth.signUp({
       email: event.email,
       password: event.password,
     })

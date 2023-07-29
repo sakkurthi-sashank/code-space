@@ -1,5 +1,4 @@
 import { useAuth } from '@/hooks/useAuth'
-import { supabase } from '@/libs/supabase'
 import {
   Button,
   Paper,
@@ -9,6 +8,7 @@ import {
   useMantineTheme,
 } from '@mantine/core'
 import { getHotkeyHandler } from '@mantine/hooks'
+import { useSupabaseClient } from '@supabase/auth-helpers-react'
 import { useRouter } from 'next/router'
 import { useState } from 'react'
 
@@ -16,6 +16,7 @@ export default function ForgetPasswordPage() {
   const theme = useMantineTheme()
   const router = useRouter()
   const { user } = useAuth()
+  const supabaseClient = useSupabaseClient()
 
   const [password, setPassword] = useState('')
   const [error, setError] = useState('')
@@ -25,7 +26,7 @@ export default function ForgetPasswordPage() {
   }
 
   const handleUserForgetPassword = async () => {
-    const { data, error } = await supabase.auth.updateUser({
+    const { data, error } = await supabaseClient.auth.updateUser({
       password: password,
     })
 

@@ -1,8 +1,10 @@
-import { supabase } from '@/libs/supabase'
 import { ActionIcon, Navbar as AppNavbar, Tooltip } from '@mantine/core'
+import { useSupabaseClient } from '@supabase/auth-helpers-react'
 import { IconLogout } from '@tabler/icons-react'
 
 export const Navbar = () => {
+  const supabase = useSupabaseClient()
+
   const handleLogout = async () => {
     await supabase.auth.signOut()
   }
