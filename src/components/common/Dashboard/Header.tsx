@@ -9,10 +9,12 @@ import {
   useMantineTheme,
 } from '@mantine/core'
 import { IconBell, IconSearch } from '@tabler/icons-react'
+import { useRouter } from 'next/router'
 
 export const Header = () => {
   const { user } = useAuth()
   const theme = useMantineTheme()
+  const router = useRouter()
 
   return (
     <AppHeader
@@ -20,7 +22,14 @@ export const Header = () => {
       className="px-4 flex items-center justify-between w-full"
     >
       <div className="w-full">
-        <Title color={theme.colors.indigo[7]} order={4} mb={6} ff="Monaco">
+        <Title
+          color={theme.colors.indigo[7]}
+          order={4}
+          mb={6}
+          ff="Monaco"
+          onClick={() => router.push('/')}
+          style={{ cursor: 'pointer' }}
+        >
           codespace
         </Title>
       </div>

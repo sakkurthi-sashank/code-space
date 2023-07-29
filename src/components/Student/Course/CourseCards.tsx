@@ -1,13 +1,15 @@
 import { useAuth } from '@/hooks/useAuth'
 import { fetchCourseCardsData } from '@/service/course'
-import { Course, Profile, ProfileEnrolledCourse } from '@/types/types'
-import { Badge, Card, Flex, Image, Stack, Text, Title } from '@mantine/core'
+import { Course, ProfileEnrolledCourse } from '@/types/types'
+import { Badge, Card, Group, Image, Text, Title } from '@mantine/core'
 import { useRouter } from 'next/router'
 import { useEffect, useState } from 'react'
 
 type CourseCardsProps = Course & {
-  professor: Profile | null
   profile_enrolled_course: ProfileEnrolledCourse[]
+  module: {
+    id: string
+  }[]
 }
 
 export function CourseCards() {
@@ -31,7 +33,7 @@ export function CourseCards() {
           key={course.id}
           radius={'md'}
           onClick={() => router.push(`/courses/module/${course.id}`)}
-          className="max-w-sm w-full min-h-[310px] h-full hover:shadow-lg 
+          className="max-w-sm w-full h-full hover:shadow-lg 
                 cursor-pointer shadow-sm transition-all duration-200"
         >
           <Card.Section>
@@ -39,34 +41,33 @@ export function CourseCards() {
               src={course.course_image}
               alt="Data Structures and Algorithms"
               width={'100%'}
-              height={120}
+              height={100}
             />
           </Card.Section>
 
-          <Stack p={10} spacing={8}>
-            <Title order={3} fw={600} truncate={true}>
+          <Group p={10} spacing={'sm'}>
+            <Title order={2} fw={600}>
               {course.course_name}
             </Title>
-            <Text size={'xs'} color="gray" truncate={true}>
+            <Text color="gray" size={'xs'}>
               {course.course_description}
             </Text>
-            <Text size={'xs'} color="gray" truncate={true}>
-              Course Code : {course.course_code}
-            </Text>
-            <Text size={'xs'} color="gray" truncate={true}>
-              Professor : Dr. {course.professor?.display_name}
-            </Text>
-          </Stack>
 
-          <Stack px={10} spacing={8}>
-            <Flex gap={10} mt={10}>
-              {course.learning_tags?.map((tag) => (
-                <Badge color="indigo" key={tag} size="sm" variant="light">
-                  {tag}
-                </Badge>
-              ))}
-            </Flex>
-          </Stack>
+            <div className="grid grid-cols-2 gap-2">
+              <Badge color="indigo" size="xs" p={14} variant="outline">
+                Course Code : {course.course_code}
+              </Badge>
+              <Badge color="violet" size="xs" p={14} variant="outline">
+                No of Modules : {course.module.length}
+              </Badge>
+              <Badge color="cyan" size="xs" p={14} variant="outline" w={'100%'}>
+                Start : {new Date(course.start_date!).toDateString()}
+              </Badge>
+              <Badge color="red" size="xs" p={14} variant="outline" w={'100%'}>
+                End: {new Date(course.end_date!).toDateString()}
+              </Badge>
+            </div>
+          </Group>
         </Card>
       ))}
     </>

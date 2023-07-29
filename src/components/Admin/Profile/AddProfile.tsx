@@ -5,22 +5,26 @@ import { useState } from 'react'
 
 export const AddProfile = () => {
   const [opened, { open, close }] = useDisclosure(false)
-  const [ProfileName, setProfileName] = useState('')
   const [emailAddress, setEmailAddress] = useState('')
+  const [error, setError] = useState('')
 
   const handleCreateProfile = async () => {
-    const { data } = await supabase.auth.admin.createUser({
+    const { data, error } = await supabase.auth.admin.createUser({
       email: emailAddress,
       password: emailAddress.split('@')[0],
       email_confirm: true,
     })
+
+    if (error) {
+      setError(error.message)
+      return
+    }
 
     await supabase
       .from('profile')
       .insert([
         {
           id: data.user?.id!,
-          display_name: ProfileName,
           email_address: emailAddress,
         },
       ])
@@ -37,15 +41,8 @@ export const AddProfile = () => {
       <Modal opened={opened} size={'xl'} onClose={close} title="Add Profile">
         <div className="p-4">
           <TextInput
-            label="Profile Name"
-            placeholder="Enter Profile name"
-            required
-            variant="default"
-            className="mb-4"
-            onChange={(e) => setProfileName(e.currentTarget.value)}
-          />
-          <TextInput
             label="Email Address"
+            error={error}
             placeholder="Enter email address"
             required
             variant="default"

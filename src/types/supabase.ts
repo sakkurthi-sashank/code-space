@@ -59,9 +59,9 @@ export interface Database {
           course_image: string
           course_name: string
           created_at: string | null
+          end_date: string | null
           id: string
-          learning_tags: string[]
-          professor_id: string
+          start_date: string | null
         }
         Insert: {
           course_code: string
@@ -69,9 +69,9 @@ export interface Database {
           course_image: string
           course_name: string
           created_at?: string | null
+          end_date?: string | null
           id?: string
-          learning_tags: string[]
-          professor_id: string
+          start_date?: string | null
         }
         Update: {
           course_code?: string
@@ -79,67 +79,17 @@ export interface Database {
           course_image?: string
           course_name?: string
           created_at?: string | null
+          end_date?: string | null
           id?: string
-          learning_tags?: string[]
-          professor_id?: string
+          start_date?: string | null
         }
-        Relationships: [
-          {
-            foreignKeyName: 'course_professor_id_fkey'
-            columns: ['professor_id']
-            referencedRelation: 'profile'
-            referencedColumns: ['id']
-          },
-        ]
-      }
-      mcq_question: {
-        Row: {
-          code_snippet: string | null
-          correct_option: string | null
-          created_at: string | null
-          id: string
-          marks: number | null
-          module_id: string
-          options: string[]
-          options_type: string
-          question: string
-        }
-        Insert: {
-          code_snippet?: string | null
-          correct_option?: string | null
-          created_at?: string | null
-          id?: string
-          marks?: number | null
-          module_id: string
-          options: string[]
-          options_type: string
-          question: string
-        }
-        Update: {
-          code_snippet?: string | null
-          correct_option?: string | null
-          created_at?: string | null
-          id?: string
-          marks?: number | null
-          module_id?: string
-          options?: string[]
-          options_type?: string
-          question?: string
-        }
-        Relationships: [
-          {
-            foreignKeyName: 'mcq_question_module_id_fkey'
-            columns: ['module_id']
-            referencedRelation: 'module'
-            referencedColumns: ['id']
-          },
-        ]
+        Relationships: []
       }
       module: {
         Row: {
           course_id: string
           created_at: string | null
-          duration: number | null
+          duration: number
           end_date: string
           id: string
           module_name: string
@@ -148,7 +98,7 @@ export interface Database {
         Insert: {
           course_id: string
           created_at?: string | null
-          duration?: number | null
+          duration: number
           end_date: string
           id?: string
           module_name: string
@@ -157,7 +107,7 @@ export interface Database {
         Update: {
           course_id?: string
           created_at?: string | null
-          duration?: number | null
+          duration?: number
           end_date?: string
           id?: string
           module_name?: string
@@ -178,7 +128,7 @@ export interface Database {
           batch: number | null
           branch: string | null
           created_at: string | null
-          display_name: string
+          display_name: string | null
           email_address: string
           id: string
           is_professor: boolean | null
@@ -190,7 +140,7 @@ export interface Database {
           batch?: number | null
           branch?: string | null
           created_at?: string | null
-          display_name: string
+          display_name?: string | null
           email_address: string
           id: string
           is_professor?: boolean | null
@@ -202,7 +152,7 @@ export interface Database {
           batch?: number | null
           branch?: string | null
           created_at?: string | null
-          display_name?: string
+          display_name?: string | null
           email_address?: string
           id?: string
           is_professor?: boolean | null
@@ -249,43 +199,6 @@ export interface Database {
           },
           {
             foreignKeyName: 'profile_completed_coding_question_profile_id_fkey'
-            columns: ['profile_id']
-            referencedRelation: 'profile'
-            referencedColumns: ['id']
-          },
-        ]
-      }
-      profile_completed_mcq_question: {
-        Row: {
-          answer: string
-          created_at: string | null
-          id: string
-          mcq_question_id: string
-          profile_id: string
-        }
-        Insert: {
-          answer: string
-          created_at?: string | null
-          id: string
-          mcq_question_id: string
-          profile_id: string
-        }
-        Update: {
-          answer?: string
-          created_at?: string | null
-          id?: string
-          mcq_question_id?: string
-          profile_id?: string
-        }
-        Relationships: [
-          {
-            foreignKeyName: 'profile_completed_mcq_question_mcq_question_id_fkey'
-            columns: ['mcq_question_id']
-            referencedRelation: 'mcq_question'
-            referencedColumns: ['id']
-          },
-          {
-            foreignKeyName: 'profile_completed_mcq_question_profile_id_fkey'
             columns: ['profile_id']
             referencedRelation: 'profile'
             referencedColumns: ['id']

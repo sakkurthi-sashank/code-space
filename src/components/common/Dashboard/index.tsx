@@ -1,5 +1,5 @@
-import { Header } from '@/components/Student/Dashboard/Header'
-import { Navbar } from '@/components/Student/Dashboard/Navbar'
+import { Header } from '@/components/common/Dashboard/Header'
+import { Navbar } from '@/components/common/Dashboard/Navbar'
 import { AppShell } from '@mantine/core'
 
 export const Dashboard = ({ children }: { children: React.ReactNode }) => {

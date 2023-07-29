@@ -20,10 +20,6 @@ interface ModuleInfoCompleteDetailsData {
     id: string
     marks: number | null
   }[]
-  mcq_question: {
-    id: string
-    marks: number | null
-  }[]
 }
 
 export function ModuleInfoCompleteDetails({
@@ -55,10 +51,6 @@ export function ModuleInfoCompleteDetails({
           coding_question (
             id,
             marks
-          ),
-          mcq_question (
-            id,
-            marks
           )
           `,
         )
@@ -88,11 +80,6 @@ export function ModuleInfoCompleteDetails({
       (acc, curr) => acc + (curr.marks || 0),
       0,
     )
-
-  const totalMCQMarks = ModuleInfoCompleteDetailsData?.mcq_question.reduce(
-    (acc, curr) => acc + (curr.marks || 0),
-    0,
-  )
 
   return (
     <div className="p-4">
@@ -130,13 +117,6 @@ export function ModuleInfoCompleteDetails({
             <td>{ModuleInfoCompleteDetailsData?.coding_question?.length}</td>
             <td>Coding</td>
             <td>{totalCodingMarks}</td>
-          </tr>
-          <tr>
-            <td>2</td>
-            <td>Section 2</td>
-            <td>{ModuleInfoCompleteDetailsData?.mcq_question?.length}</td>
-            <td>MCQ</td>
-            <td>{totalMCQMarks}</td>
           </tr>
         </tbody>
       </Table>

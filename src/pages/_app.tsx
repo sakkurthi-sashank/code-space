@@ -1,5 +1,6 @@
 import '@/styles/globals.css'
 import { MantineProvider } from '@mantine/core'
+import { ModalsProvider } from '@mantine/modals'
 import { Notifications } from '@mantine/notifications'
 import type { AppProps } from 'next/app'
 import { Inter } from 'next/font/google'
@@ -22,7 +23,9 @@ export default function App({ Component, pageProps }: AppProps) {
         <title>codespace</title>
       </Head>
       <Notifications position="top-right" limit={3} />
-      <Component {...pageProps} />
+      <ModalsProvider>
+        <Component {...pageProps} />
+      </ModalsProvider>
     </MantineProvider>
   )
 }

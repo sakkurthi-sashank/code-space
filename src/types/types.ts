@@ -8,11 +8,8 @@ export type Profile = ExtractRowType<'profile'>
 export type Module = ExtractRowType<'module'>
 export type CodingQuestion = ExtractRowType<'coding_question'>
 export type TestCase = ExtractRowType<'test_case'>
-export type MCQQuestion = ExtractRowType<'mcq_question'>
 export type ProfileCompletedCodingQuestion =
   ExtractRowType<'profile_completed_coding_question'>
-export type ProfileCompletedMCQQuestion =
-  ExtractRowType<'profile_completed_mcq_question'>
 export type ProfileCompletedModule = ExtractRowType<'profile_completed_module'>
 export type ProfileEnrolledCourse = ExtractRowType<'profile_enrolled_course'>
 export type ProfileCompletedTestCases =

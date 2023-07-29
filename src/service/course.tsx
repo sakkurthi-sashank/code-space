@@ -10,15 +10,15 @@ export async function fetchCourseCardsData(userId: string) {
         course_name,
         course_description,
         course_code,
-        learning_tags,
-        professor:profile(
-          id,
-          display_name
-        ),
+        start_date,
+        end_date,
         profile_enrolled_course!inner(
           id,
           profile_id,
           is_achieved
+        ),
+        module(
+          id
         )
       `,
     )

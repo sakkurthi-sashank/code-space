@@ -1,23 +1,150 @@
-import { ModuleHeader } from '@/components/Student/CourseModule/ModuleHeader'
-import { ModuleInfoCompleteDetails } from '@/components/Student/CourseModule/ModuleSelectedPanel'
-import { ModulesInfoPreviewPanel } from '@/components/Student/CourseModule/ModulesPreviewPanel'
-import { Dashboard } from '@/components/Student/Dashboard'
-import { useAuth } from '@/hooks/useAuth'
-import { Divider, useMantineTheme } from '@mantine/core'
+import { Badge, Button } from '@mantine/core'
+import {
+  MantineReactTable,
+  useMantineReactTable,
+  type MRT_ColumnDef,
+} from 'mantine-react-table'
 import { useRouter } from 'next/router'
-import { useState } from 'react'
+import { useEffect, useMemo, useState } from 'react'
+
+import { Dashboard } from '@/components/common/Dashboard'
+import { useAuth } from '@/hooks/useAuth'
+import { supabase } from '@/libs/supabase'
+import { Module } from '@/types/types'
+
+interface ModuleData extends Module {
+  coding_question: {
+    id: string
+  }[]
+}
 
 export default function ModulePage() {
+  const [data, setData] = useState<ModuleData[]>([])
   const router = useRouter()
   const { user, loading } = useAuth()
-
   const { courseId } = router.query
 
-  const [currentUserSelectedModuleId, setUserSelectedModuleId] = useState<
-    string | null
-  >(null)
+  const columns = useMemo<MRT_ColumnDef<ModuleData>[]>(
+    () => [
+      {
+        accessorKey: 'module_name',
+        header: 'Module Name',
+      },
+      {
+        accessorKey: 'start_date',
+        header: 'Start Date',
+        Cell: ({ row }) => {
+          const { start_date } = row.original
+          return <div>{new Date(start_date!).toLocaleString()}</div>
+        },
+      },
+      {
+        accessorKey: 'end_date',
+        header: 'End Date',
+        Cell: ({ row }) => {
+          const { end_date } = row.original
+          return <div>{new Date(end_date!).toLocaleString()}</div>
+        },
+      },
+      {
+        accessorKey: 'duration',
+        header: 'Test Duration',
+        Cell: ({ row }) => {
+          const { duration } = row.original
+          return <div>{duration} minutes</div>
+        },
+      },
+      {
+        header: 'No of Questions',
+        Cell: ({ row }) => {
+          return <div>{row.original.coding_question.length}</div>
+        },
+      },
+      {
+        header: 'Status',
+        Cell: ({ row }) => {
+          const { start_date, end_date } = row.original
 
-  const theme = useMantineTheme()
+          if (start_date && end_date) {
+            const startDate = new Date(start_date)
+            const endDate = new Date(end_date)
+            const currentDate = new Date()
+
+            if (currentDate < startDate) {
+              return <Badge color="yellow">Upcoming</Badge>
+            } else if (currentDate > endDate) {
+              return <Badge color="red">Expired</Badge>
+            } else {
+              return <Badge color="green">Active</Badge>
+            }
+          }
+          return null
+        },
+      },
+      {
+        header: 'Start Test',
+        Cell: ({ row }) => {
+          const { id } = row.original
+          return (
+            <Button
+              onClick={() => {
+                router.push(`/courses/module-test/validation/${id}`)
+              }}
+              variant="filled"
+              color="indigo"
+              size="xs"
+            >
+              Start Test
+            </Button>
+          )
+        },
+      },
+      {
+        header: 'View Results',
+        Cell: ({ row }) => {
+          const { id } = row.original
+          return (
+            <Button
+              onClick={() => {
+                router.push(`/courses/module-test/results/${id}`)
+              }}
+              variant="outline"
+              color="indigo"
+              size="xs"
+            >
+              View Results
+            </Button>
+          )
+        },
+      },
+    ],
+    [],
+  )
+
+  useEffect(() => {
+    const fetchModules = async () => {
+      const { data, error } = await supabase
+        .from('module')
+        .select(`*, coding_question(id)`)
+        .eq('course_id', courseId)
+
+      if (error) {
+        console.log(error)
+        return
+      }
+
+      setData(data)
+    }
+
+    fetchModules()
+  }, [])
+
+  const table = useMantineReactTable({
+    columns,
+    data,
+    enableFullScreenToggle: false,
+    columnFilterDisplayMode: 'popover',
+  })
 
   if (!user && !loading) {
     router.push('/auth/login')
@@ -27,20 +154,8 @@ export default function ModulePage() {
   if (user) {
     return (
       <Dashboard>
-        <ModuleHeader courseId={courseId as string} />
-        <div className="h-full w-full flex bg-white">
-          <div className="w-1/2">
-            <ModulesInfoPreviewPanel
-              courseId={courseId as string}
-              setUserSelectedModuleId={setUserSelectedModuleId}
-            />
-          </div>
-          <Divider orientation="vertical" color={theme.colors.gray[2]} />
-          <div className="w-1/2">
-            <ModuleInfoCompleteDetails
-              currentUserSelectedModuleId={currentUserSelectedModuleId}
-            />
-          </div>
+        <div className="p-3">
+          <MantineReactTable table={table} />
         </div>
       </Dashboard>
     )

@@ -57,7 +57,7 @@ export const UpdateProfile = ({
 
           <TextInput
             placeholder="Display Name"
-            value={event.display_name}
+            value={event.display_name!}
             onChange={(event) =>
               handleChange('display_name', event.currentTarget.value)
             }
