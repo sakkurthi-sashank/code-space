@@ -4,39 +4,37 @@ import { useSupabaseClient } from '@supabase/auth-helpers-react'
 import { IconTrash } from '@tabler/icons-react'
 import { useQueryClient } from 'react-query'
 
-export const DeleteProfile = ({ userId }: { userId: string }) => {
+export function DeleteProfile({ userId }: { userId: string }) {
   const supabaseClient = useSupabaseClient()
   const queryClient = useQueryClient()
 
-  const handleDeleteProfile = async () => {
+  async function handleDeleteProfile() {
     modals.openConfirmModal({
       title: 'Delete Profile',
+
       children: (
         <Text size="sm" color="red" weight={400}>
           Are you sure you want to delete this profile? This action cannot be
           undone.
         </Text>
       ),
+
       labels: { confirm: 'Delete', cancel: 'Cancel' },
       confirmProps: { color: 'red' },
+
       onConfirm: async () => {
-        const { data, error } = await supabaseClient.auth.admin.deleteUser(
-          userId,
-        )
+        const { data } = await supabaseClient.auth.admin.deleteUser(userId)
 
-        queryClient.invalidateQueries('profiles')
-
-        !error && data && close()
+        if (data) {
+          queryClient.invalidateQueries('profiles')
+          close()
+        }
       },
     })
   }
 
   return (
-    <ActionIcon
-      variant="light"
-      color="red"
-      onClick={() => handleDeleteProfile()}
-    >
+    <ActionIcon variant="light" color="red" onClick={handleDeleteProfile}>
       <IconTrash size={18} stroke={1.5} />
     </ActionIcon>
   )

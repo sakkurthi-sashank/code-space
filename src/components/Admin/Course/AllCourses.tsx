@@ -1,34 +1,17 @@
-import { Database } from '@/types/supabase'
+import { useCourseQuery } from '@/service/Admin/Queries/useCourseQuery'
 import { Course } from '@/types/types'
 import { Image } from '@mantine/core'
-import { useSupabaseClient } from '@supabase/auth-helpers-react'
 import {
   MRT_ColumnDef,
   MantineReactTable,
   useMantineReactTable,
 } from 'mantine-react-table'
-import { useEffect, useMemo, useState } from 'react'
+import { useMemo } from 'react'
 import { DeleteCourse } from './DeleteCourse'
 import { EditCourse } from './EditCourse'
 
 export function AllCourses() {
-  const [data, setData] = useState<Course[]>([])
-  const supabaseClient = useSupabaseClient<Database>()
-
-  const fetchCourses = async () => {
-    const { data, error } = await supabaseClient
-      .from('course')
-      .select('*')
-      .order('created_at', { ascending: false })
-    if (error) {
-      throw error
-    }
-    setData(data)
-  }
-
-  useEffect(() => {
-    fetchCourses()
-  }, [])
+  const { data } = useCourseQuery()
 
   const columns = useMemo<MRT_ColumnDef<Course>[]>(
     () => [
@@ -99,7 +82,7 @@ export function AllCourses() {
         },
       },
     ],
-    [],
+    [data],
   )
 
   const table = useMantineReactTable({

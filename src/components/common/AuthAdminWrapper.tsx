@@ -1,5 +1,8 @@
 import { useAuth } from '@/hooks/useAuth'
-import { useRouter } from 'next/router'
+import { Database } from '@/types/supabase'
+import { useSupabaseClient } from '@supabase/auth-helpers-react'
+import { useEffect, useState } from 'react'
+import { CustomError } from './CustomError'
 
 export const AuthAdminWrapper = ({
   children,
@@ -7,19 +10,42 @@ export const AuthAdminWrapper = ({
   children: React.ReactNode
 }) => {
   const { user, loading } = useAuth()
-  const router = useRouter()
+  const [isAdmin, setIsAdmin] = useState(false)
+  const supabaseClient = useSupabaseClient<Database>()
 
-  if (!user && !loading) {
-    router.push('/auth/login')
-    return null
+  useEffect(() => {
+    if (!user) {
+      return
+    }
+
+    const checkAdmin = async () => {
+      const { data, error } = await supabaseClient
+        .from('profile')
+        .select('is_admin')
+        .eq('id', user?.id)
+        .limit(1)
+        .maybeSingle()
+
+      if (error) {
+        setIsAdmin(false)
+        return
+      }
+
+      if (data?.is_admin) {
+        setIsAdmin(data.is_admin!)
+      }
+    }
+
+    checkAdmin()
+  }, [user])
+
+  if (loading) {
+    return <></>
   }
 
-  if (user && !loading && user.user_metadata.role !== 'admin') {
-    router.push('/')
-    return null
+  if (user && !isAdmin && !loading) {
+    return <CustomError />
   }
 
-  if (user && !loading && user.user_metadata.role === 'admin') {
-    return <>{children}</>
-  }
+  return <>{children}</>
 }

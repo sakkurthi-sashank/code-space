@@ -1,23 +1,29 @@
 import { Database } from '@/types/supabase'
 import { Course } from '@/types/types'
-import { Button, Modal, Stack, TextInput, Textarea } from '@mantine/core'
+import { Button, Modal, TextInput, Textarea } from '@mantine/core'
 import { DateInput } from '@mantine/dates'
 import { useDisclosure } from '@mantine/hooks'
 import { useSupabaseClient } from '@supabase/auth-helpers-react'
 import { IconPlus } from '@tabler/icons-react'
-import { useReducer, useState } from 'react'
+import { useState } from 'react'
+import { useForm } from 'react-hook-form'
+import { useQueryClient } from 'react-query'
 
 export function AddCourse() {
   const [opened, { open, close }] = useDisclosure(false)
-  const [loading, setLoading] = useState(false)
-  const [error, setError] = useState('')
   const supabaseClient = useSupabaseClient<Database>()
+  const queryClient = useQueryClient()
+  const [loading, setLoading] = useState(false)
 
-  const [event, updateEvent] = useReducer(
-    (prev: Course, next: Partial<Course>) => {
-      return { ...prev, ...next }
-    },
-    {
+  const {
+    register,
+    handleSubmit,
+    setValue,
+    reset,
+    setError,
+    formState: { errors },
+  } = useForm<Course>({
+    defaultValues: {
       course_name: '',
       course_code: '',
       course_description: '',
@@ -25,35 +31,34 @@ export function AddCourse() {
       start_date: '',
       end_date: '',
     },
-  )
+  })
 
-  const handleEditCourse = async () => {
-    setError('')
-
-    if (!event.course_name || !event.course_code) {
-      setError('Course Name and Course Code are required.')
-      return
-    }
-
+  const createCourse = async (values: Course) => {
     setLoading(true)
-    const { data, error } = await supabaseClient.from('course').insert({
-      course_name: event.course_name,
-      course_code: event.course_code,
-      course_description: event.course_description!,
-      course_image: event.course_image!,
-      start_date: event.start_date,
-      end_date: event.end_date,
-    })
+
+    const { data, error } = await supabaseClient
+      .from('course')
+      .insert({
+        course_name: values.course_name!,
+        course_code: values.course_code!,
+        course_description: values.course_description!,
+        course_image: values.course_image!,
+        start_date: values.start_date!,
+        end_date: values.end_date!,
+      })
+      .select('*')
 
     if (error) {
-      setError('Something went wrong while updating the course.')
+      setLoading(false)
+      setError('root', { message: error.message })
     }
 
     if (data) {
+      setLoading(false)
+      reset()
+      queryClient.invalidateQueries('courses')
       close()
     }
-
-    setLoading(false)
   }
 
   return (
@@ -67,17 +72,15 @@ export function AddCourse() {
       >
         Add Course
       </Button>
-      <Modal opened={opened} size={'lg'} onClose={close} title={'Add Course'}>
-        <Stack spacing={8} p={'md'}>
+      <Modal opened={opened} size={'lg'} title={'Add Course'} onClose={close}>
+        <form onSubmit={handleSubmit(createCourse)} className="space-y-1.5 p-3">
           <TextInput
-            required
             label="Course Name"
             size="xs"
             placeholder="Course Name"
-            value={event.course_name}
-            onChange={(event) =>
-              updateEvent({ course_name: event.currentTarget.value })
-            }
+            required
+            error={errors.course_name?.message}
+            {...register('course_name')}
           />
 
           <TextInput
@@ -85,10 +88,8 @@ export function AddCourse() {
             label="Course Code"
             size="xs"
             placeholder="Course Code"
-            value={event.course_code}
-            onChange={(event) =>
-              updateEvent({ course_code: event.currentTarget.value })
-            }
+            error={errors.course_code?.message}
+            {...register('course_code')}
           />
 
           <Textarea
@@ -97,10 +98,8 @@ export function AddCourse() {
             placeholder="Course Description"
             size="xs"
             autosize
-            value={event.course_description}
-            onChange={(event) =>
-              updateEvent({ course_description: event.currentTarget.value })
-            }
+            error={errors.course_description?.message}
+            {...register('course_description')}
           />
 
           <TextInput
@@ -108,10 +107,8 @@ export function AddCourse() {
             label="Course Image"
             placeholder="Course Image"
             size="xs"
-            value={event.course_image}
-            onChange={(event) =>
-              updateEvent({ course_image: event.currentTarget.value })
-            }
+            error={errors.course_image?.message}
+            {...register('course_image')}
           />
 
           <DateInput
@@ -119,9 +116,8 @@ export function AddCourse() {
             required
             size="xs"
             placeholder="Start Date"
-            onChange={(value) =>
-              updateEvent({ start_date: value?.toISOString() })
-            }
+            error={errors.start_date?.message}
+            onChange={(value) => setValue('start_date', value?.toISOString()!)}
           />
 
           <DateInput
@@ -129,28 +125,31 @@ export function AddCourse() {
             label="End Date"
             placeholder="End Date"
             size="xs"
-            onChange={(value) =>
-              updateEvent({ end_date: value?.toISOString() })
-            }
+            error={errors.end_date?.message}
+            onChange={(value) => setValue('end_date', value?.toISOString()!)}
           />
-        </Stack>
 
-        {error && <div className="text-red-500">{error}</div>}
+          {errors.root && (
+            <div className="text-red-500 text-sm mt-2">
+              {errors.root.message}
+            </div>
+          )}
 
-        <div className="flex justify-end">
-          <Button onClick={close} fw={500} variant="light" size="xs">
-            Cancel
-          </Button>
-          <Button
-            size="xs"
-            onClick={handleEditCourse}
-            className="ml-2"
-            loading={loading}
-            fw={500}
-          >
-            Edit Course
-          </Button>
-        </div>
+          <div className="flex justify-end pt-4">
+            <Button onClick={close} fw={500} variant="light" size="xs">
+              Cancel
+            </Button>
+            <Button
+              size="xs"
+              type="submit"
+              className="ml-2"
+              loading={loading}
+              fw={500}
+            >
+              Add Course
+            </Button>
+          </div>
+        </form>
       </Modal>
     </>
   )

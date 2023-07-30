@@ -1,61 +1,57 @@
 import { Profile } from '@/types/types'
-import {
-  ActionIcon,
-  Button,
-  Modal,
-  Stack,
-  Switch,
-  TextInput,
-} from '@mantine/core'
+import { ActionIcon, Button, Modal, Switch, TextInput } from '@mantine/core'
 import { useDisclosure } from '@mantine/hooks'
 import { useSupabaseClient } from '@supabase/auth-helpers-react'
 import { IconEdit } from '@tabler/icons-react'
-import { useState } from 'react'
+import { useEffect, useState } from 'react'
+import { useForm } from 'react-hook-form'
 import { useQueryClient } from 'react-query'
 
-export function EditProfile({
-  id,
-  admission_number,
-  display_name,
-  email_address,
-  phone_number,
-  branch,
-  batch,
-  section,
-  is_admin,
-}: Profile) {
+export function EditProfile(props: Profile) {
   const [opened, { open, close }] = useDisclosure(false)
   const queryClient = useQueryClient()
-
-  const handleChange = (key: string, value: string) => {
-    setEvent((prevEvent) => ({
-      ...prevEvent,
-      [key]: value,
-    }))
-  }
-
   const supabaseClient = useSupabaseClient()
+  const [loading, setLoading] = useState(false)
 
-  const [event, setEvent] = useState({
-    admission_number,
-    display_name,
-    email_address,
-    phone_number,
-    branch,
-    batch,
-    section,
-    is_admin,
+  const {
+    register,
+    handleSubmit,
+    setValue,
+    reset,
+    setError,
+    formState: { errors },
+  } = useForm<Profile>({
+    defaultValues: {
+      ...props,
+    },
   })
 
-  const handleSubmit = async () => {
-    const { error } = await supabaseClient
+  useEffect(() => {
+    reset({
+      ...props,
+    })
+  }, [props, reset])
+
+  async function handleEditProfile(values: Profile) {
+    setLoading(true)
+
+    const { error, data } = await supabaseClient
       .from('profile')
-      .update(event)
-      .eq('id', id)
+      .update(values)
+      .eq('id', props.id)
+      .select('*')
 
-    queryClient.invalidateQueries('profiles')
+    if (error) {
+      setLoading(false)
+      setError('root', { message: error.message })
+      return
+    }
 
-    !error && close()
+    if (data) {
+      setLoading(false)
+      queryClient.invalidateQueries('profiles')
+      close()
+    }
   }
 
   return (
@@ -64,81 +60,90 @@ export function EditProfile({
         <IconEdit size={18} stroke={1.5} />
       </ActionIcon>
       <Modal title="Update Profile" opened={opened} size={'xl'} onClose={close}>
-        <Stack spacing="md" p={'md'}>
+        <form
+          onSubmit={handleSubmit(handleEditProfile)}
+          className="space-y-1.5 p-3"
+        >
           <TextInput
             placeholder="Admission Number"
-            value={event.admission_number || ''}
-            onChange={(event) =>
-              handleChange('admission_number', event.currentTarget.value)
-            }
+            label="Admission Number"
+            size="xs"
+            {...register('admission_number')}
           />
 
           <TextInput
             placeholder="Display Name"
-            value={event.display_name || ''}
-            onChange={(event) =>
-              handleChange('display_name', event.currentTarget.value)
-            }
+            label="Display Name"
+            size="xs"
+            {...register('display_name')}
           />
 
           <TextInput
             placeholder="Email Address"
-            value={event.email_address}
             disabled
-            onChange={(event) =>
-              handleChange('email_address', event.currentTarget.value)
-            }
+            label="Email Address"
+            size="xs"
+            {...register('email_address')}
           />
 
           <Switch
             label="Is Admin"
-            checked={event.is_admin === true ? true : false}
+            defaultChecked={props.is_admin!}
             onChange={(event) =>
-              handleChange(
-                'is_admin',
-                event.currentTarget.checked ? 'true' : 'false',
-              )
+              setValue('is_admin', event.currentTarget.checked)
             }
+            size="xs"
           />
 
           <TextInput
             placeholder="Phone Number"
-            value={event.phone_number || ''}
-            onChange={(event) =>
-              handleChange('phone_number', event.currentTarget.value)
-            }
+            label="Phone Number"
+            size="xs"
+            {...register('phone_number')}
           />
 
           <TextInput
             placeholder="Branch"
-            value={event.branch || ''}
-            onChange={(event) =>
-              handleChange('branch', event.currentTarget.value)
-            }
+            label="Branch"
+            size="xs"
+            {...register('branch')}
           />
 
           <TextInput
             placeholder="Batch"
-            value={event.batch || ''}
-            onChange={(event) =>
-              handleChange('batch', event.currentTarget.value)
-            }
+            label="Batch"
+            size="xs"
+            {...register('batch')}
           />
 
           <TextInput
             placeholder="Section"
-            value={event.section ? event.section : ''}
-            onChange={(event) =>
-              handleChange('section', event.currentTarget.value)
-            }
+            label="Section"
+            size="xs"
+            {...register('section')}
           />
 
+          {errors.root && (
+            <div className="text-red-500 text-sm mt-2">
+              {errors.root.message}
+            </div>
+          )}
+
           <div className="flex justify-end">
-            <Button variant="filled" size="xs" fw={500} onClick={handleSubmit}>
+            <Button onClick={close} fw={500} variant="light" size="xs">
+              Cancel
+            </Button>
+            <Button
+              variant="filled"
+              size="xs"
+              fw={500}
+              type="submit"
+              loading={loading}
+            >
               Update
             </Button>
           </div>
-        </Stack>
+        </form>
       </Modal>
     </>
   )

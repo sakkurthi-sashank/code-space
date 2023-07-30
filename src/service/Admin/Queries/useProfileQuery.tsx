@@ -14,6 +14,7 @@ export function useProfileQuery() {
       return error ? [] : data || []
     },
     {
+      refetchOnWindowFocus: false,
       enabled: !!user?.id,
     },
   )

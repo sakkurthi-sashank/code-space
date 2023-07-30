@@ -3,41 +3,62 @@ import { useDisclosure } from '@mantine/hooks'
 import { useSupabaseClient } from '@supabase/auth-helpers-react'
 import { IconPlus } from '@tabler/icons-react'
 import { useState } from 'react'
+import { useForm } from 'react-hook-form'
 import { useQueryClient } from 'react-query'
 
 export const CreateProfile = () => {
   const [opened, { open, close }] = useDisclosure(false)
-  const [emailAddress, setEmailAddress] = useState('')
-  const [error, setError] = useState('')
-
+  const [loading, setLoading] = useState(false)
   const queryClient = useQueryClient()
-
   const supabaseClient = useSupabaseClient()
 
-  const handleCreateProfile = async () => {
-    if (!emailAddress) {
-      setError('Email address is required')
-      return
-    }
+  const {
+    handleSubmit,
+    register,
+    setError,
+    reset,
+    formState: { errors },
+  } = useForm<{
+    email_address: string
+  }>()
+
+  async function handleCreateProfile(values: { email_address: string }) {
+    setLoading(true)
 
     const { data: existingUser } = await supabaseClient
       .from('profile')
       .select('id')
-      .eq('email_address', emailAddress)
+      .eq('email_address', values.email_address)
       .maybeSingle()
 
     if (existingUser) {
-      setError('User already exists with this email address')
+      setError('email_address', {
+        message: 'Email address already exists',
+      })
+      setLoading(false)
       return
     }
 
     const { data, error } = await supabaseClient.auth.admin.createUser({
-      email: emailAddress,
-      password: emailAddress.split('@')[0],
+      email: values.email_address,
+      password: values.email_address.split('@')[0],
       email_confirm: true,
     })
 
-    queryClient.invalidateQueries('profiles')
+    if (error) {
+      setError('email_address', {
+        message: "Couldn't create user account with this email address",
+      })
+      setLoading(false)
+      return
+    }
+
+    if (data.user) {
+      queryClient.invalidateQueries('profiles')
+      setLoading(false)
+      reset()
+      close()
+    }
 
     !error && data && close()
   }
@@ -54,31 +75,30 @@ export const CreateProfile = () => {
         Add Profile
       </Button>
       <Modal opened={opened} size={'xl'} onClose={close} title="Add Profile">
-        <div className="p-4">
+        <form
+          className="space-y-1.5 p-3"
+          onSubmit={handleSubmit(handleCreateProfile)}
+        >
           <TextInput
             label="Email Address"
-            error={error}
+            error={errors.email_address?.message}
             placeholder="Enter email address"
             required
-            variant="default"
-            className="mb-4"
-            onChange={(e) => {
-              setError('')
-              setEmailAddress(e.currentTarget.value)
-            }}
+            {...register('email_address')}
           />
 
-          <div className="flex justify-end mt-5">
+          <div className="flex justify-end pt-5">
             <Button
+              type="submit"
+              loading={loading}
               size="xs"
               fw={500}
               variant="filled"
-              onClick={handleCreateProfile}
             >
               Create Profile
             </Button>
           </div>
-        </div>
+        </form>
       </Modal>
     </div>
   )

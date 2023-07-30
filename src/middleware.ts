@@ -16,11 +16,11 @@ export async function middleware(req: NextRequest) {
   }
 
   const redirectUrl = req.nextUrl.clone()
-  redirectUrl.pathname = '/'
+  redirectUrl.pathname = '/auth/login'
   redirectUrl.searchParams.set(`redirectedFrom`, req.nextUrl.pathname)
   return NextResponse.redirect(redirectUrl)
 }
 
 export const config = {
-  matcher: ['/admin/:path*', '/student/:path*'],
+  matcher: ['/admin/:path*', '/', '/courses/:path*'],
 }

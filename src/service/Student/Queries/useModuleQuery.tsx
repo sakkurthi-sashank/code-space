@@ -28,6 +28,7 @@ export function useModuleQuery({ courseId }: { courseId: string }) {
       return error ? [] : data || []
     },
     {
+      refetchOnWindowFocus: false,
       enabled: !!user?.id,
     },
   )

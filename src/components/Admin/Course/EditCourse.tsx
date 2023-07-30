@@ -1,58 +1,60 @@
 import { Database } from '@/types/supabase'
 import { Course } from '@/types/types'
-import {
-  ActionIcon,
-  Button,
-  Modal,
-  Stack,
-  TextInput,
-  Textarea,
-} from '@mantine/core'
+import { ActionIcon, Button, Modal, TextInput, Textarea } from '@mantine/core'
 import { DateInput } from '@mantine/dates'
 import { useDisclosure } from '@mantine/hooks'
 import { useSupabaseClient } from '@supabase/auth-helpers-react'
 import { IconEdit } from '@tabler/icons-react'
-import { useReducer, useState } from 'react'
+import { useEffect, useState } from 'react'
+import { useForm } from 'react-hook-form'
+import { useQueryClient } from 'react-query'
 
 export function EditCourse(props: Course) {
   const [opened, { open, close }] = useDisclosure(false)
   const [loading, setLoading] = useState(false)
-  const [error, setError] = useState('')
-
+  const queryClient = useQueryClient()
   const supabaseClient = useSupabaseClient<Database>()
 
-  const [event, updateEvent] = useReducer(
-    (prev: Course, next: Partial<Course>) => {
-      return { ...prev, ...next }
-    },
-    {
+  const {
+    register,
+    handleSubmit,
+    setValue,
+    getValues,
+    reset,
+    setError,
+    formState: { errors },
+  } = useForm<Course>({
+    defaultValues: {
       ...props,
     },
-  )
+  })
 
-  const handleEditCourse = async () => {
-    setError('')
+  useEffect(() => {
+    reset({
+      ...props,
+    })
+  }, [props, reset])
 
-    if (!event.course_name || !event.course_code) {
-      setError('Course Name and Course Code are required.')
+  const handleEditCourse = async (values: Course) => {
+    setLoading(true)
+
+    const { data, error } = await supabaseClient
+      .from('course')
+      .update(values)
+      .eq('id', props.id)
+      .select('*')
+
+    if (error) {
+      setLoading(false)
+      setError('root', { message: error.message })
       return
     }
 
-    setLoading(true)
-    const { data, error } = await supabaseClient
-      .from('course')
-      .update(event)
-      .eq('id', props.id)
-
-    if (error) {
-      setError('Something went wrong while updating the course.')
-    }
-
     if (data) {
+      setLoading(false)
+      queryClient.invalidateQueries('courses')
       close()
     }
-
-    setLoading(false)
   }
 
   return (
@@ -61,25 +63,23 @@ export function EditCourse(props: Course) {
         <IconEdit size={18} stroke={1.5} />
       </ActionIcon>
       <Modal opened={opened} size={'lg'} onClose={close} title={'Edit Course'}>
-        <Stack spacing={8} p={'md'}>
+        <form
+          onSubmit={handleSubmit(handleEditCourse)}
+          className="space-y-1.5 p-3"
+        >
           <TextInput
             label="Course Name"
             size="xs"
+            required
             placeholder="Course Name"
-            value={event.course_name}
-            onChange={(event) =>
-              updateEvent({ course_name: event.currentTarget.value })
-            }
+            {...register('course_name')}
           />
 
           <TextInput
             label="Course Code"
             size="xs"
             placeholder="Course Code"
-            value={event.course_code}
-            onChange={(event) =>
-              updateEvent({ course_code: event.currentTarget.value })
-            }
+            {...register('course_code')}
           />
 
           <Textarea
@@ -87,60 +87,54 @@ export function EditCourse(props: Course) {
             placeholder="Course Description"
             size="xs"
             autosize
-            value={event.course_description}
-            onChange={(event) =>
-              updateEvent({ course_description: event.currentTarget.value })
-            }
+            {...register('course_description')}
           />
 
           <TextInput
             label="Course Image"
             placeholder="Course Image"
             size="xs"
-            value={event.course_image}
-            onChange={(event) =>
-              updateEvent({ course_image: event.currentTarget.value })
-            }
+            {...register('course_image')}
           />
 
           <DateInput
             label="Start Date"
             required
+            defaultValue={new Date(getValues('start_date')!)}
             size="xs"
             placeholder="Start Date"
-            value={new Date(event.start_date!)}
-            onChange={(value) =>
-              updateEvent({ start_date: value?.toISOString() })
-            }
+            onChange={(value) => setValue('start_date', value?.toISOString()!)}
           />
 
           <DateInput
             label="End Date"
             placeholder="End Date"
+            defaultValue={new Date(getValues('end_date')!)}
             size="xs"
-            value={new Date(event.end_date!)}
-            onChange={(value) =>
-              updateEvent({ end_date: value?.toISOString() })
-            }
+            onChange={(value) => setValue('end_date', value?.toISOString()!)}
           />
-        </Stack>
 
-        {error && <div className="text-red-500">{error}</div>}
+          {errors.root && (
+            <div className="text-red-500 text-sm mt-2">
+              {errors.root.message}
+            </div>
+          )}
 
-        <div className="flex justify-end">
-          <Button onClick={close} fw={500} variant="light" size="xs">
-            Cancel
-          </Button>
-          <Button
-            size="xs"
-            onClick={handleEditCourse}
-            className="ml-2"
-            loading={loading}
-            fw={500}
-          >
-            Edit Course
-          </Button>
-        </div>
+          <div className="flex justify-end">
+            <Button onClick={close} fw={500} variant="light" size="xs">
+              Cancel
+            </Button>
+            <Button
+              size="xs"
+              type="submit"
+              className="ml-2"
+              fw={500}
+              loading={loading}
+            >
+              Edit Course
+            </Button>
+          </div>
+        </form>
       </Modal>
     </>
   )
