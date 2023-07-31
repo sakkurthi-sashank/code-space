@@ -1,5 +1,5 @@
-import { supabase } from '@/libs/supabase'
 import { Button, Paper, useMantineTheme } from '@mantine/core'
+import { useSupabaseClient } from '@supabase/auth-helpers-react'
 import { useEffect, useState } from 'react'
 
 export const ChangeQuestions = ({
@@ -12,6 +12,7 @@ export const ChangeQuestions = ({
   moduleId: string
 }) => {
   const theme = useMantineTheme()
+  const supabaseClient = useSupabaseClient()
 
   const [codingQuestionIds, setCodingQuestionIds] = useState<{ id: string }[]>(
     [],
@@ -21,7 +22,7 @@ export const ChangeQuestions = ({
 
   useEffect(() => {
     const fetchCodingQuestionIds = async (moduleId: string) => {
-      const { data, error } = await supabase
+      const { data, error } = await supabaseClient
         .from('coding_question')
         .select(`id`)
         .eq('module_id', moduleId)
@@ -39,7 +40,12 @@ export const ChangeQuestions = ({
     if (!moduleId) return
 
     fetchCodingQuestionIds(moduleId)
-  }, [moduleId])
+  }, [
+    moduleId,
+    isFirstQuestionLoaded,
+    setCurrentUserSelectedQuestionId,
+    supabaseClient,
+  ])
 
   return (
     <Paper

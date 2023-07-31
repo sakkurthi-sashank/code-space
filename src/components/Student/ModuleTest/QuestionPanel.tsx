@@ -1,5 +1,5 @@
-import { supabase } from '@/libs/supabase'
 import { ScrollArea, Stack, Text, Title, useMantineTheme } from '@mantine/core'
+import { useSupabaseClient } from '@supabase/auth-helpers-react'
 import { useEffect, useState } from 'react'
 
 interface CodingQuestion {
@@ -26,10 +26,11 @@ export const QuestionPanel = ({
 
   const [codingQuestionOnUserSelectedId, setCodingQuestionOnUserSelectedId] =
     useState<CodingQuestion | null>(null)
+  const supabaseClient = useSupabaseClient()
 
   useEffect(() => {
     const fetchCodingQuestionOnUserSelectedId = async (questionId: string) => {
-      const { data, error } = await supabase
+      const { data, error } = await supabaseClient
         .from('coding_question')
         .select(
           `*, test_case (id, coding_question_id, input, output, is_sample_test_case)`,
@@ -48,7 +49,7 @@ export const QuestionPanel = ({
     if (!currentUserSelectedQuestionId) return
 
     fetchCodingQuestionOnUserSelectedId(currentUserSelectedQuestionId)
-  }, [currentUserSelectedQuestionId])
+  }, [currentUserSelectedQuestionId, supabaseClient])
 
   return (
     <ScrollArea

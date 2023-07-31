@@ -82,7 +82,7 @@ export function AllCourses() {
         },
       },
     ],
-    [data],
+    [],
   )
 
   const table = useMantineReactTable({

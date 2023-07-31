@@ -20,7 +20,7 @@ export function useAuth() {
     return () => {
       authListener?.subscription?.unsubscribe()
     }
-  }, [router])
+  }, [router, supabaseClient])
 
   useEffect(() => {
     const fetchUser = async () => {
@@ -29,7 +29,7 @@ export function useAuth() {
       setLoading(false)
     }
     fetchUser()
-  }, [router])
+  }, [router, supabaseClient])
 
   return { user, loading }
 }

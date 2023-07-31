@@ -117,7 +117,7 @@ export default function ModulePage() {
         },
       },
     ],
-    [],
+    [router],
   )
 
   const table = useMantineReactTable({

@@ -37,7 +37,7 @@ export const AuthAdminWrapper = ({
     }
 
     checkAdmin()
-  }, [user])
+  }, [user, supabaseClient])
 
   if (loading) {
     return <></>
