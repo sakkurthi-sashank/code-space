@@ -1,5 +1,4 @@
 import { Dashboard } from '@/components/common/Dashboard'
-import { useAuth } from '@/hooks/useAuth'
 import { useModuleQuery } from '@/service/Student/Queries/useModuleQuery'
 import { Module } from '@/types/types'
 import { Badge, Button } from '@mantine/core'
@@ -19,7 +18,6 @@ interface ModuleData extends Module {
 
 export default function ModulePage() {
   const router = useRouter()
-  const { user, loading } = useAuth()
   const { courseId } = router.query
   const { data } = useModuleQuery({ courseId: courseId as string })
 
@@ -30,20 +28,16 @@ export default function ModulePage() {
         header: 'Module Name',
       },
       {
+        accessorFn: (originalRow) => new Date(originalRow.start_date!),
         accessorKey: 'start_date',
         header: 'Start Date',
-        Cell: ({ row }) => {
-          const { start_date } = row.original
-          return <div>{new Date(start_date!).toLocaleString()}</div>
-        },
+        Cell: ({ cell }) => cell.getValue<Date>().toLocaleDateString(),
       },
       {
+        accessorFn: (originalRow) => new Date(originalRow.end_date!),
         accessorKey: 'end_date',
         header: 'End Date',
-        Cell: ({ row }) => {
-          const { end_date } = row.original
-          return <div>{new Date(end_date!).toLocaleString()}</div>
-        },
+        Cell: ({ cell }) => cell.getValue<Date>().toLocaleDateString(),
       },
       {
         accessorKey: 'duration',
@@ -127,20 +121,11 @@ export default function ModulePage() {
     columnFilterDisplayMode: 'popover',
   })
 
-  if (!user && !loading) {
-    router.push('/auth/login')
-    return null
-  }
-
-  if (user) {
-    return (
-      <Dashboard>
-        <div className="p-3">
-          <MantineReactTable table={table} />
-        </div>
-      </Dashboard>
-    )
-  }
-
-  return null
+  return (
+    <Dashboard>
+      <div className="p-3">
+        <MantineReactTable table={table} />
+      </div>
+    </Dashboard>
+  )
 }

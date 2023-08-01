@@ -1,7 +1,13 @@
 import { Database } from '@/types/supabase'
-import { Course } from '@/types/types'
-import { ActionIcon, Button, Modal, TextInput, Textarea } from '@mantine/core'
-import { DateInput } from '@mantine/dates'
+import { Module } from '@/types/types'
+import {
+  ActionIcon,
+  Button,
+  Modal,
+  NumberInput,
+  TextInput,
+} from '@mantine/core'
+import { DatePickerInput } from '@mantine/dates'
 import { useDisclosure } from '@mantine/hooks'
 import { useSupabaseClient } from '@supabase/auth-helpers-react'
 import { IconEdit } from '@tabler/icons-react'
@@ -9,7 +15,7 @@ import { useEffect, useState } from 'react'
 import { useForm } from 'react-hook-form'
 import { useQueryClient } from 'react-query'
 
-export function EditCourse(props: Course) {
+export function EditCourseModule(props: Module) {
   const [opened, { open, close }] = useDisclosure(false)
   const [loading, setLoading] = useState(false)
   const queryClient = useQueryClient()
@@ -23,7 +29,7 @@ export function EditCourse(props: Course) {
     reset,
     setError,
     formState: { errors },
-  } = useForm<Course>({
+  } = useForm<Module>({
     defaultValues: {
       ...props,
     },
@@ -35,11 +41,11 @@ export function EditCourse(props: Course) {
     })
   }, [props, reset])
 
-  const handleEditCourse = async (values: Course) => {
+  const handleEditCourse = async (values: Module) => {
     setLoading(true)
 
     const { data, error } = await supabaseClient
-      .from('course')
+      .from('module')
       .update(values)
       .eq('id', props.id)
       .select('*')
@@ -52,7 +58,7 @@ export function EditCourse(props: Course) {
 
     if (data) {
       setLoading(false)
-      queryClient.invalidateQueries('courses')
+      queryClient.invalidateQueries('modules')
       close()
     }
   }
@@ -68,46 +74,35 @@ export function EditCourse(props: Course) {
           className="space-y-1.5 p-3"
         >
           <TextInput
-            label="Course Name"
+            label="Module Name"
             size="xs"
             required
-            placeholder="Course Name"
-            {...register('course_name')}
+            placeholder="Module Name"
+            {...register('module_name')}
           />
 
-          <TextInput
-            label="Course Code"
+          <NumberInput
+            label="Duration"
             size="xs"
-            placeholder="Course Code"
-            {...register('course_code')}
+            required
+            placeholder="Duration"
+            defaultValue={getValues('duration')!}
+            onChange={(value) => setValue('duration', Number(value))}
           />
 
-          <Textarea
-            label="Course Description"
-            placeholder="Course Description"
-            size="xs"
-            autosize
-            {...register('course_description')}
-          />
-
-          <TextInput
-            label="Course Image"
-            placeholder="Course Image"
-            size="xs"
-            {...register('course_image')}
-          />
-
-          <DateInput
+          <DatePickerInput
             label="Start Date"
             required
+            dropdownType="modal"
             defaultValue={new Date(getValues('start_date')!)}
             size="xs"
             placeholder="Start Date"
             onChange={(value) => setValue('start_date', value?.toISOString()!)}
           />
 
-          <DateInput
+          <DatePickerInput
             label="End Date"
+            dropdownType="modal"
             placeholder="End Date"
             defaultValue={new Date(getValues('end_date')!)}
             size="xs"

@@ -57,21 +57,13 @@ export function AllProfiles() {
       {
         header: 'Edit Course',
         Cell: ({ row }) => {
-          return (
-            <>
-              <EditProfile {...row.original} />
-            </>
-          )
+          return <EditProfile {...row.original} />
         },
       },
       {
         header: 'Delete Course',
         Cell: ({ row }) => {
-          return (
-            <>
-              <DeleteProfile userId={row.original.id!} />
-            </>
-          )
+          return <DeleteProfile userId={row.original.id!} />
         },
       },
     ],

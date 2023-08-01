@@ -129,7 +129,7 @@ export function EditProfile(props: Profile) {
             </div>
           )}
 
-          <div className="flex justify-end">
+          <div className="flex justify-end pt-4">
             <Button onClick={close} fw={500} variant="light" size="xs">
               Cancel
             </Button>

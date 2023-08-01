@@ -1,17 +1,20 @@
 import { useCourseQuery } from '@/service/Admin/Queries/useCourseQuery'
 import { Course } from '@/types/types'
-import { Image } from '@mantine/core'
+import { ActionIcon, Image } from '@mantine/core'
+import { IconArrowNarrowRight } from '@tabler/icons-react'
 import {
   MRT_ColumnDef,
   MantineReactTable,
   useMantineReactTable,
 } from 'mantine-react-table'
+import { useRouter } from 'next/router'
 import { useMemo } from 'react'
 import { DeleteCourse } from './DeleteCourse'
 import { EditCourse } from './EditCourse'
 
 export function AllCourses() {
   const { data } = useCourseQuery()
+  const router = useRouter()
 
   const columns = useMemo<MRT_ColumnDef<Course>[]>(
     () => [
@@ -48,21 +51,34 @@ export function AllCourses() {
         header: 'Course Description',
       },
       {
+        accessorFn: (originalRow) => new Date(originalRow.start_date!),
         accessorKey: 'start_date',
         header: 'Start Date',
         filterVariant: 'date-range',
-        sortingFn: 'datetime',
-        Cell: ({ row }) => {
-          return <>{new Date(row.original.start_date!).toLocaleDateString()}</>
-        },
+        Cell: ({ cell }) => cell.getValue<Date>().toLocaleDateString(),
       },
       {
+        accessorFn: (originalRow) => new Date(originalRow.end_date!),
         accessorKey: 'end_date',
         header: 'End Date',
         filterVariant: 'date-range',
         sortingFn: 'datetime',
+        Cell: ({ cell }) => cell.getValue<Date>().toLocaleDateString(),
+      },
+      {
+        header: 'View Modules',
         Cell: ({ row }) => {
-          return <>{new Date(row.original.end_date!).toLocaleDateString()}</>
+          return (
+            <ActionIcon
+              color="indigo"
+              variant="light"
+              onClick={() => {
+                router.push(`/admin/courses/module/${row.original.id}`)
+              }}
+            >
+              <IconArrowNarrowRight size={18} stroke={1.5} />
+            </ActionIcon>
+          )
         },
       },
       {
@@ -74,11 +90,7 @@ export function AllCourses() {
       {
         header: 'Delete Course',
         Cell: ({ row }) => {
-          return (
-            <>
-              <DeleteCourse id={row.original.id!} />
-            </>
-          )
+          return <DeleteCourse id={row.original.id!} />
         },
       },
     ],
@@ -89,7 +101,7 @@ export function AllCourses() {
     columns,
     data,
     enableFullScreenToggle: false,
-    columnFilterDisplayMode: 'popover',
+    columnFilterDisplayMode: 'subheader',
   })
 
   return (
