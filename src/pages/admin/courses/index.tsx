@@ -1,5 +1,5 @@
-import { AllCourses } from '@/components/Admin/Course/AllCourses'
-import { AddCourse } from '@/components/Admin/Course/CreateCourse'
+import { AllCourses } from '@/components/Admin/Courses/AllCourses'
+import { AddCourse } from '@/components/Admin/Courses/CreateCourse'
 import { AuthAdminWrapper } from '@/components/common/AuthAdminWrapper'
 import { Dashboard } from '@/components/common/Dashboard'
 

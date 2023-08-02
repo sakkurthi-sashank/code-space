@@ -3,6 +3,7 @@ import { Database } from '@/types/supabase'
 import { useSupabaseClient } from '@supabase/auth-helpers-react'
 import { useEffect, useState } from 'react'
 import { CustomError } from './CustomError'
+import { RouterLoading } from './RouterLoading'
 
 export const AuthAdminWrapper = ({
   children,
@@ -39,8 +40,12 @@ export const AuthAdminWrapper = ({
     checkAdmin()
   }, [user, supabaseClient])
 
-  if (loading) {
-    return <></>
+  if (loading && user) {
+    return (
+      <div className="h-screen flex items-center justify-center">
+        <RouterLoading />
+      </div>
+    )
   }
 
   if (user && !isAdmin && !loading) {

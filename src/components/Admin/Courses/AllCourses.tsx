@@ -94,7 +94,7 @@ export function AllCourses() {
         },
       },
     ],
-    [],
+    [router],
   )
 
   const table = useMantineReactTable({

@@ -1,16 +1,13 @@
-import { Paper, useMantineTheme } from '@mantine/core'
+import { Header } from '@mantine/core'
+import { ChangeQuestions } from './ChangeQuestion'
 
-export const CodeEditorHeader = () => {
-  const theme = useMantineTheme()
-
+export const ModuleTestHeader = () => {
   return (
-    <Paper
-      bg={'white'}
-      h={'7vh'}
-      sx={{
-        border: `1px solid ${theme.colors.gray[2]}`,
-      }}
-      radius={'sm'}
-    ></Paper>
+    <Header height={50}>
+      <ChangeQuestions
+        moduleId="48e56e62-42d2-40f8-9b59-1034d7c14b15"
+        setCurrentUserSelectedQuestionId={() => {}}
+      />
+    </Header>
   )
 }

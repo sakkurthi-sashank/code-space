@@ -1,4 +1,4 @@
-import { Button, Paper, useMantineTheme } from '@mantine/core'
+import { ActionIcon, useMantineTheme } from '@mantine/core'
 import { useSupabaseClient } from '@supabase/auth-helpers-react'
 import { useEffect, useState } from 'react'
 
@@ -48,27 +48,17 @@ export const ChangeQuestions = ({
   ])
 
   return (
-    <Paper
-      bg={'white'}
-      h={'7vh'}
-      sx={{
-        border: `1px solid ${theme.colors.gray[2]}`,
-      }}
-      radius={'sm'}
-      className="flex items-center gap-2 px-2"
-    >
+    <div className="flex space-x-2 h-full items-center justify-start px-3">
       {codingQuestionIds.map((questionId, index) => (
-        <Button
+        <ActionIcon
           key={questionId.id}
           variant="light"
           color="indigo"
-          radius={'md'}
-          size="xs"
           onClick={() => setCurrentUserSelectedQuestionId(questionId.id)}
         >
-          {index + 1}
-        </Button>
+          <span className="text-sm">{index + 1}</span>
+        </ActionIcon>
       ))}
-    </Paper>
+    </div>
   )
 }

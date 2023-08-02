@@ -1,3 +1,4 @@
+import { RouterTransition } from '@/components/common/RouterTransition'
 import '@/styles/globals.css'
 import { MantineProvider } from '@mantine/core'
 import { ModalsProvider } from '@mantine/modals'
@@ -41,6 +42,7 @@ export default function App({
             <title>codespace</title>
           </Head>
           <Notifications position="top-right" limit={3} />
+          <RouterTransition />
           <ModalsProvider>
             <Component {...pageProps} />
           </ModalsProvider>

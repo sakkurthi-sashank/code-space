@@ -5,7 +5,7 @@ export const CodeEditor = () => {
   return (
     <Box
       sx={{
-        borderRadius: '5px',
+        borderRadius: '2px',
         overflow: 'hidden',
       }}
     >

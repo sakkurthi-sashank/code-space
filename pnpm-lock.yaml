@@ -32,6 +32,9 @@ dependencies:
   '@mantine/notifications':
     specifier: ^6.0.17
     version: 6.0.17(@mantine/core@6.0.17)(@mantine/hooks@6.0.17)(react-dom@18.2.0)(react@18.2.0)
+  '@mantine/nprogress':
+    specifier: ^6.0.17
+    version: 6.0.17(@mantine/core@6.0.17)(@mantine/hooks@6.0.17)(react-dom@18.2.0)(react@18.2.0)
   '@monaco-editor/react':
     specifier: ^4.5.1
     version: 4.5.1(monaco-editor@0.40.0)(react-dom@18.2.0)(react@18.2.0)
@@ -511,6 +514,21 @@ packages:
       react: 18.2.0
       react-dom: 18.2.0(react@18.2.0)
       react-transition-group: 4.4.2(react-dom@18.2.0)(react@18.2.0)
+    dev: false
+
+  /@mantine/nprogress@6.0.17(@mantine/core@6.0.17)(@mantine/hooks@6.0.17)(react-dom@18.2.0)(react@18.2.0):
+    resolution: {integrity: sha512-SDi7FPLqimfWelEEzMT+cHgntR7YqPtffTkrouItyWYTm1Dw9Qy4LRftJBQVfx/0+s7qYJZygJI4ts8aWEul4Q==}
+    peerDependencies:
+      '@mantine/core': 6.0.17
+      '@mantine/hooks': 6.0.17
+      react: '>=16.8.0'
+      react-dom: '>=16.8.0'
+    dependencies:
+      '@mantine/core': 6.0.17(@emotion/react@11.11.1)(@mantine/hooks@6.0.17)(@types/react@18.2.14)(react-dom@18.2.0)(react@18.2.0)
+      '@mantine/hooks': 6.0.17(react@18.2.0)
+      '@mantine/utils': 6.0.17(react@18.2.0)
+      react: 18.2.0
+      react-dom: 18.2.0(react@18.2.0)
     dev: false
 
   /@mantine/ssr@6.0.17(@emotion/react@11.11.1)(@emotion/server@11.11.0)(react-dom@18.2.0)(react@18.2.0):

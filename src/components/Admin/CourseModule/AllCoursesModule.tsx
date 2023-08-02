@@ -1,16 +1,20 @@
 import { useCourseModuleQuery } from '@/service/Admin/Queries/useCourseModuleQuery'
 import { Module } from '@/types/types'
+import { ActionIcon } from '@mantine/core'
+import { IconArrowNarrowRight } from '@tabler/icons-react'
 import {
   MRT_ColumnDef,
   MantineReactTable,
   useMantineReactTable,
 } from 'mantine-react-table'
+import { useRouter } from 'next/router'
 import { useMemo } from 'react'
 import { DeleteCourseModule } from './DeleteCourseModule'
 import { EditCourseModule } from './EditCourseModule'
 
 export function AllCoursesModule({ courseId }: { courseId: string }) {
   const { data } = useCourseModuleQuery(courseId)
+  const router = useRouter()
 
   const columns = useMemo<MRT_ColumnDef<Module>[]>(
     () => [
@@ -41,6 +45,22 @@ export function AllCoursesModule({ courseId }: { courseId: string }) {
         filterVariant: 'date-range',
         sortingFn: 'datetime',
         Cell: ({ cell }) => cell.getValue<Date>().toLocaleDateString(),
+      },
+      {
+        header: 'View Modules',
+        Cell: ({ row }) => {
+          return (
+            <ActionIcon
+              color="indigo"
+              variant="light"
+              onClick={() => {
+                router.push(`/admin/courses/module-test/${row.original.id}`)
+              }}
+            >
+              <IconArrowNarrowRight size={18} stroke={1.5} />
+            </ActionIcon>
+          )
+        },
       },
       {
         header: 'Edit Module',
