@@ -215,7 +215,7 @@ export interface Database {
         }
         Insert: {
           created_at?: string | null
-          id: string
+          id?: string
           is_submitted?: boolean | null
           module_id: string
           profile_id: string

@@ -1,27 +1,25 @@
 import { Database } from '@/types/supabase'
-import { Module } from '@/types/types'
+import { CodingQuestion } from '@/types/types'
 import { useSession, useSupabaseClient } from '@supabase/auth-helpers-react'
 import { useQuery } from 'react-query'
 
-export function useCourseModuleQuery(courseId: string) {
+export function useModuleTestsQuery(moduleId: string) {
   const user = useSession()?.user
   const supabaseClient = useSupabaseClient<Database>()
 
-  const { data, error, isLoading } = useQuery<Module[], Error>(
-    'modules',
+  const { data, error, isLoading } = useQuery<CodingQuestion[], Error>(
+    'module-test',
     async () => {
       const { data, error } = await supabaseClient
-        .from('module')
+        .from('coding_question')
         .select('*')
-        .eq('course_id', courseId)
+        .eq('module_id', moduleId)
         .order('created_at', { ascending: false })
       return error ? [] : data || []
     },
     {
-      refetchOnWindowFocus: false,
       enabled: !!user?.id,
     },
   )
-
   return { data: data || [], error, isLoading }
 }

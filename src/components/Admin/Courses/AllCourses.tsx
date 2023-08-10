@@ -1,4 +1,4 @@
-import { useCourseQuery } from '@/service/Admin/Queries/useCourseQuery'
+import { useCoursesQuery } from '@/service/queries/admin/useCoursesQuery'
 import { Course } from '@/types/types'
 import { ActionIcon, Image } from '@mantine/core'
 import { IconArrowNarrowRight } from '@tabler/icons-react'
@@ -13,7 +13,7 @@ import { DeleteCourse } from './DeleteCourse'
 import { EditCourse } from './EditCourse'
 
 export function AllCourses() {
-  const { data } = useCourseQuery()
+  const { data } = useCoursesQuery()
   const router = useRouter()
 
   const columns = useMemo<MRT_ColumnDef<Course>[]>(

@@ -10,26 +10,27 @@ type CourseCards = Course & {
   }[]
 }
 
-export function useCourseQuery() {
+export function useCoursesQuery(): {
+  data: CourseCards[]
+  error: Error | null
+} {
   const user = useSession()?.user
   const supabaseClient = useSupabaseClient<Database>()
 
   const { data, error } = useQuery<CourseCards[], Error>(
-    'courses',
+    'student-courses',
     async () => {
       const { data, error } = await supabaseClient
         .from('course')
         .select(`*, profile_enrolled_course!inner(*), module(id)`)
-        .filter('profile_enrolled_course.profile_id', 'eq', user?.id)
+        .eq('profile_enrolled_course.profile_id', user?.id)
         .order('created_at', { ascending: false })
 
       return error ? [] : data || []
     },
     {
-      refetchOnWindowFocus: false,
       enabled: !!user?.id,
     },
   )
-
   return { data: data || [], error }
 }

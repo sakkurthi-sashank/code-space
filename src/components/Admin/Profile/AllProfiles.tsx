@@ -1,4 +1,4 @@
-import { useProfileQuery } from '@/service/Admin/Queries/useProfileQuery'
+import { useProfilesQuery } from '@/service/Admin/Queries/useProfilesQuery'
 import { Profile } from '@/types/types'
 import {
   MRT_ColumnDef,
@@ -10,7 +10,7 @@ import { DeleteProfile } from './DeleteProfile'
 import { EditProfile } from './EditProfile'
 
 export function AllProfiles() {
-  const { data } = useProfileQuery()
+  const { data } = useProfilesQuery()
 
   const columns = useMemo<MRT_ColumnDef<Profile>[]>(
     () => [

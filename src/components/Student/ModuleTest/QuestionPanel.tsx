@@ -17,11 +17,11 @@ interface CodingQuestion {
   }[]
 }
 
-export const QuestionPanel = ({
+export function QuestionPanel({
   currentUserSelectedQuestionId,
 }: {
   currentUserSelectedQuestionId: string | null
-}) => {
+}) {
   const theme = useMantineTheme()
 
   const [codingQuestionOnUserSelectedId, setCodingQuestionOnUserSelectedId] =
@@ -66,16 +66,12 @@ export const QuestionPanel = ({
             </span>
           ))}
       </Text>
-      <Text size={'sm'} fw={500}>
-        Input Format:
-      </Text>
       <Text size={'sm'} color={theme.colors.gray[7]}>
+        <span className="font-medium text-gray-800">Input Format:</span> <br />
         {codingQuestionOnUserSelectedId?.input_formate}
       </Text>
-      <Text size={'sm'} fw={500}>
-        Output Format:
-      </Text>
       <Text size={'sm'} color={theme.colors.gray[7]}>
+        <span className="font-medium text-gray-800">Output Format:</span> <br />
         {codingQuestionOnUserSelectedId?.output_formate}
       </Text>
       {codingQuestionOnUserSelectedId?.test_case.map((testCase, index) => (

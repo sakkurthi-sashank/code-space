@@ -1,17 +1,12 @@
-import { CourseCards } from '@/components/Student/Course/CourseCards'
-import { EnrollToCourse } from '@/components/Student/Course/EnrollToCourse'
 import { Dashboard } from '@/components/common/Dashboard'
-import { Flex } from '@mantine/core'
+import { CourseCards } from '@/components/student/Course/CourseCards'
+import { EnrollToCourse } from '@/components/student/Course/EnrollToCourse'
 
-export default function CoursesPage() {
+export default function StudentCoursesPage() {
   return (
-    <>
-      <Dashboard>
-        <Flex className="flex-wrap p-4 gap-4">
-          <CourseCards />
-        </Flex>
-        <EnrollToCourse />
-      </Dashboard>
-    </>
+    <Dashboard>
+      <CourseCards />
+      <EnrollToCourse />
+    </Dashboard>
   )
 }

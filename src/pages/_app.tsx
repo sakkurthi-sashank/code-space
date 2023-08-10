@@ -7,13 +7,18 @@ import { createPagesBrowserClient } from '@supabase/auth-helpers-nextjs'
 import { Session, SessionContextProvider } from '@supabase/auth-helpers-react'
 import type { AppProps } from 'next/app'
 import { Inter } from 'next/font/google'
-import Head from 'next/head'
 import { useState } from 'react'
 import { QueryClient, QueryClientProvider } from 'react-query'
 
 const inter = Inter({ subsets: ['latin'] })
 
-const queryClient = new QueryClient()
+const queryClient = new QueryClient({
+  defaultOptions: {
+    queries: {
+      refetchOnWindowFocus: false,
+    },
+  },
+})
 
 export default function App({
   Component,
@@ -38,14 +43,9 @@ export default function App({
             fontFamily: inter.style.fontFamily,
           }}
         >
-          <Head>
-            <title>codespace</title>
-          </Head>
           <Notifications position="top-right" limit={3} />
           <RouterTransition />
-          <ModalsProvider>
-            <Component {...pageProps} />
-          </ModalsProvider>
+          <ModalsProvider children={<Component {...pageProps} />} />
         </MantineProvider>
       </SessionContextProvider>
     </QueryClientProvider>

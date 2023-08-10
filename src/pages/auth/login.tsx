@@ -8,72 +8,65 @@ import {
   Title,
   useMantineTheme,
 } from '@mantine/core'
-import { getHotkeyHandler } from '@mantine/hooks'
 import { notifications } from '@mantine/notifications'
 import { useSupabaseClient } from '@supabase/auth-helpers-react'
 import { useRouter } from 'next/router'
-import { useReducer } from 'react'
-
-type State = {
-  email: string
-  password: string
-  emailError: string
-  loading: boolean
-}
+import { useState } from 'react'
+import { useForm } from 'react-hook-form'
 
 export default function LoginPage() {
   const theme = useMantineTheme()
   const router = useRouter()
   const supabaseClient = useSupabaseClient()
+  const [loading, setLoading] = useState(false)
 
-  const [event, updateEvent] = useReducer(
-    (prev: State, next: Partial<State>): State => {
-      return { ...prev, ...next }
-    },
-    {
+  const {
+    register,
+    reset,
+    formState: { errors },
+    setError,
+    getValues,
+    handleSubmit,
+  } = useForm({
+    defaultValues: {
       email: '',
       password: '',
-      emailError: '',
-      loading: false,
     },
-  )
+  })
 
-  const onChangeEmail = (event: React.ChangeEvent<HTMLInputElement>) => {
-    updateEvent({ email: event.currentTarget.value, emailError: '' })
-  }
-
-  const onChangePassword = (event: React.ChangeEvent<HTMLInputElement>) => {
-    updateEvent({ password: event.currentTarget.value })
-  }
-
-  const handleUserLogin = async () => {
-    updateEvent({ loading: true })
+  async function handleUserLogin(values: { email: string; password: string }) {
+    setLoading(true)
 
     const { data, error } = await supabaseClient.auth.signInWithPassword({
-      email: event.email,
-      password: event.password,
+      email: values.email,
+      password: values.password,
     })
 
     if (error) {
-      updateEvent({ emailError: 'Please check your email and password.' })
-      updateEvent({ loading: false })
+      setLoading(false)
+      setError('email', { message: 'Invalid email or password' })
       return
     }
 
-    if (data.user) {
-      updateEvent({ loading: false })
-      router.push('/courses')
-      return
+    if (data) {
+      setLoading(false)
+      reset()
+      router.push('/')
     }
   }
 
-  const handleForgotPassword = async () => {
+  async function handleForgotPassword() {
+    if (!getValues('email')) {
+      setError('email', { message: 'Please enter your email address' })
+      return
+    }
+
     const { error } = await supabaseClient.auth.resetPasswordForEmail(
-      event.email,
+      getValues('email'),
     )
 
     if (error) {
-      updateEvent({ emailError: error.message })
+      setError('email', { message: error.message })
       return
     }
 
@@ -81,9 +74,9 @@ export default function LoginPage() {
       color: 'indigo',
       withCloseButton: true,
       autoClose: 10000,
-      title: 'Password Recovery Email Sent',
+      title: 'Password Reset',
       message:
-        'Please check your email for a link to reset your password. If it does not appear within a few minutes, check your spam folder.',
+        'If your email address is registered with us, you will receive a password reset link shortly. Please check your inbox and spam folder.',
     })
   }
 
@@ -99,48 +92,47 @@ export default function LoginPage() {
           codespace
         </Title>
 
-        <Title order={3} mb={40} align="left" color={theme.colors.gray[7]}>
+        <Title order={3} mb={30} align="left" color={theme.colors.gray[7]}>
           Sign In to your account
         </Title>
 
-        <TextInput
-          placeholder="Email Address"
-          onChange={onChangeEmail}
-          className="mb-4 w-full"
-          error={event.emailError}
-        />
+        <form onSubmit={handleSubmit(handleUserLogin)} className="w-full">
+          <TextInput
+            placeholder="Email Address"
+            className="mb-4 w-full"
+            radius={'md'}
+            error={errors.email?.message}
+            {...register('email')}
+          />
 
-        <PasswordInput
-          placeholder="Password"
-          onChange={onChangePassword}
-          className="mb-4 w-full"
-          onKeyDown={getHotkeyHandler([['enter', () => handleUserLogin()]])}
-        />
+          <PasswordInput
+            placeholder="Password"
+            radius={'md'}
+            {...register('password')}
+            className="mb-4 w-full"
+          />
 
-        <Anchor
-          className="mb-3 w-full"
-          align="right"
-          component="button"
-          size={'sm'}
-          color={'indigo'}
-          onClick={() =>
-            event.email
-              ? handleForgotPassword()
-              : updateEvent({ emailError: 'Please enter your email.' })
-          }
-        >
-          Forgot your password?
-        </Anchor>
+          <Anchor
+            className="mb-3 w-full"
+            align="right"
+            component="button"
+            size={'sm'}
+            color={'indigo'}
+            onClick={handleForgotPassword}
+          >
+            Forgot your password?
+          </Anchor>
 
-        <Button fw={500} onClick={handleUserLogin} loading={event.loading}>
-          Sign In
-        </Button>
+          <Button fw={500} loading={loading} type="submit" fullWidth>
+            Sign In
+          </Button>
+        </form>
 
         <Text align="center" mt={30} size="xs" color="gray">
           Don&apos;t have an account?{' '}
           <Anchor
             component="a"
-            color="blue"
+            color="indigo"
             onClick={() => router.push('/auth/signup')}
           >
             signup

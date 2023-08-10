@@ -8,60 +8,53 @@ import {
   Title,
   useMantineTheme,
 } from '@mantine/core'
-import { getHotkeyHandler } from '@mantine/hooks'
 import { useSupabaseClient } from '@supabase/auth-helpers-react'
 import { useRouter } from 'next/router'
-import { useReducer } from 'react'
-
-type State = {
-  email: string
-  password: string
-  emailError: string
-  loading: boolean
-}
+import { useState } from 'react'
+import { useForm } from 'react-hook-form'
 
 export default function SignUpPage() {
   const theme = useMantineTheme()
   const router = useRouter()
   const supabaseClient = useSupabaseClient()
+  const [loading, setLoading] = useState(false)
 
-  const [event, updateEvent] = useReducer(
-    (prev: State, next: Partial<State>): State => {
-      return { ...prev, ...next }
-    },
-    {
+  const {
+    register,
+    reset,
+    formState: { errors },
+    setError,
+    handleSubmit,
+  } = useForm({
+    defaultValues: {
       email: '',
       password: '',
-      emailError: '',
-      loading: false,
     },
-  )
+  })
 
-  const onChangeEmail = (event: React.ChangeEvent<HTMLInputElement>) => {
-    updateEvent({ email: event.currentTarget.value, emailError: '' })
-  }
+  const handleUserSignUp = async (values: {
+    email: string
+    password: string
+  }) => {
+    setLoading(true)
 
-  const onChangePassword = (event: React.ChangeEvent<HTMLInputElement>) => {
-    updateEvent({ password: event.currentTarget.value })
-  }
-
-  const handleUserSignUp = async () => {
-    updateEvent({ loading: true })
+    console.log(values)
 
     const { data, error } = await supabaseClient.auth.signUp({
-      email: event.email,
-      password: event.password,
+      email: values.email,
+      password: values.password,
     })
 
     if (error) {
-      updateEvent({ emailError: 'Please check your email and password.' })
-      updateEvent({ loading: false })
+      setLoading(false)
+      setError('email', { message: 'Invalid email or password' })
       return
     }
 
     if (data.user) {
-      router.push('/auth/verify')
-      updateEvent({ loading: false })
+      setLoading(false)
+      reset()
+      router.push('/auth/verify-email')
     }
   }
 
@@ -81,29 +74,38 @@ export default function SignUpPage() {
           Create your account
         </Title>
 
-        <TextInput
-          placeholder="Email Address"
-          onChange={onChangeEmail}
-          className="mb-4 w-full"
-          error={event.emailError}
-        />
+        <form onSubmit={handleSubmit(handleUserSignUp)} className="w-full">
+          <TextInput
+            placeholder="Email Address"
+            className="mb-4 w-full"
+            radius={'md'}
+            error={errors.email?.message}
+            {...register('email')}
+          />
 
-        <PasswordInput
-          placeholder="Password"
-          onChange={onChangePassword}
-          className="mb-4 w-full"
-          onKeyDown={getHotkeyHandler([['enter', () => handleUserSignUp()]])}
-        />
+          <PasswordInput
+            placeholder="Password"
+            className="mb-4 w-full"
+            radius={'md'}
+            {...register('password')}
+          />
 
-        <Button fw={500} onClick={handleUserSignUp} loading={event.loading}>
-          Sign Up
-        </Button>
+          <Button
+            fw={500}
+            radius="md"
+            type="submit"
+            loading={loading}
+            className="mb-4 w-full"
+          >
+            Sign Up
+          </Button>
+        </form>
 
         <Text align="center" mt={30} size="xs" color="gray">
           Already have an account?{' '}
           <Anchor
             component="a"
-            color="blue"
+            color="indigo"
             onClick={() => router.push('/auth/login')}
           >
             Login

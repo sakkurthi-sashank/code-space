@@ -1,25 +1,40 @@
+import { Database } from '@/types/supabase'
 import { ActionIcon, Button, Modal, TextInput } from '@mantine/core'
 import { useDisclosure } from '@mantine/hooks'
 import { useSession, useSupabaseClient } from '@supabase/auth-helpers-react'
 import { IconPlus } from '@tabler/icons-react'
 import { useState } from 'react'
+import { useQueryClient } from 'react-query'
 
 export function EnrollToCourse() {
   const [opened, { open, close }] = useDisclosure(false)
-  const [course_id, setCourseId] = useState<string>('')
+  const [courseCode, setCourseCode] = useState<string>('')
   const [error, setError] = useState<string>('')
   const user = useSession()?.user
+  const queryClient = useQueryClient()
 
-  const supabaseClient = useSupabaseClient()
+  const supabaseClient = useSupabaseClient<Database>()
 
   const onChangeCourseId = (e: React.ChangeEvent<HTMLInputElement>) => {
     setError('')
-    setCourseId(e.currentTarget.value)
+    setCourseCode(e.target.value)
   }
 
   const handleEnrollCourse = async () => {
-    if (!course_id) {
+    if (!courseCode) {
       setError('Course code is required.')
+      return
+    }
+
+    const { error: courseError, data: courseData } = await supabaseClient
+      .from('course')
+      .select('*')
+      .eq('enroll_code', courseCode)
+      .limit(1)
+      .maybeSingle()
+
+    if (courseError) {
+      setError("Couldn't enroll to the course. Please try again.")
       return
     }
 
@@ -27,7 +42,7 @@ export function EnrollToCourse() {
       await supabaseClient
         .from('profile_enrolled_course')
         .select('*')
-        .eq('course_id', course_id)
+        .eq('course_id', courseData?.id)
         .eq('profile_id', user?.id!)
 
     if (previousDataError) {
@@ -43,7 +58,7 @@ export function EnrollToCourse() {
     const { data, error } = await supabaseClient
       .from('profile_enrolled_course')
       .insert({
-        course_id: course_id,
+        course_id: courseData?.id!,
         profile_id: user?.id!,
       })
       .select('*')
@@ -54,14 +69,15 @@ export function EnrollToCourse() {
     }
 
     if (data) {
+      queryClient.invalidateQueries('student-courses')
       close()
-      setCourseId('')
+      setCourseCode('')
       setError('')
     }
   }
 
   return (
-    <>
+    <div>
       <div className="fixed bottom-10 right-10">
         <ActionIcon
           variant="light"
@@ -76,27 +92,24 @@ export function EnrollToCourse() {
       <Modal
         opened={opened}
         onClose={close}
-        size={'lg'}
+        size={'md'}
         title="Enroll to Course"
       >
-        <div className="p-4 space-y-6">
-          <TextInput
-            label="Course Code"
-            radius={'md'}
-            error={error}
-            onChange={onChangeCourseId}
-            size="sm"
-            description="Enter the course code provided by your professor"
-            placeholder="Enter Course Code"
-          />
+        <TextInput
+          radius={'md'}
+          error={error}
+          onChange={onChangeCourseId}
+          size="sm"
+          description="Enter the course code provided by your professor"
+          placeholder="Enter Course Code"
+        />
 
-          <div className="flex items-center justify-end">
-            <Button fw={500} size="xs" onClick={handleEnrollCourse}>
-              Enroll
-            </Button>
-          </div>
+        <div className="flex mt-4 items-center justify-end">
+          <Button fw={500} size="xs" onClick={handleEnrollCourse}>
+            Enroll
+          </Button>
         </div>
       </Modal>
-    </>
+    </div>
   )
 }

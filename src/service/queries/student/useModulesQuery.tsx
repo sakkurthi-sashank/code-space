@@ -1,19 +1,21 @@
+import { Database } from '@/types/supabase'
+import { Module, ProfileCompletedModule } from '@/types/types'
 import { useSession, useSupabaseClient } from '@supabase/auth-helpers-react'
-import Module from 'module'
 import { useQuery } from 'react-query'
 
-interface ModuleData extends Module {
+type ModuleData = Module & {
   coding_question: {
     id: string
   }[]
+  profile_completed_module: ProfileCompletedModule[]
 }
 
-export function useModuleQuery({ courseId }: { courseId: string }) {
+export function useModulesQuery({ courseId }: { courseId: string }) {
   const user = useSession()?.user
-  const supabaseClient = useSupabaseClient()
+  const supabaseClient = useSupabaseClient<Database>()
 
   const { data, error, isLoading } = useQuery<ModuleData[], Error>(
-    ['courses', courseId],
+    ['student-modules', courseId],
     async () => {
       if (!user?.id || !courseId) {
         return []
@@ -21,17 +23,16 @@ export function useModuleQuery({ courseId }: { courseId: string }) {
 
       const { data, error } = await supabaseClient
         .from('module')
-        .select(`*, coding_question(id)`)
+        .select(`*, coding_question(id),profile_completed_module(*)`)
         .eq('course_id', courseId)
+        .eq('profile_completed_module.profile_id', user.id)
         .order('module_name', { ascending: false })
 
       return error ? [] : data || []
     },
     {
-      refetchOnWindowFocus: false,
       enabled: !!user?.id,
     },
   )
-
   return { data: data || [], error, isLoading }
 }

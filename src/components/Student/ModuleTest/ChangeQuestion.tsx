@@ -2,7 +2,7 @@ import { ActionIcon, useMantineTheme } from '@mantine/core'
 import { useSupabaseClient } from '@supabase/auth-helpers-react'
 import { useEffect, useState } from 'react'
 
-export const ChangeQuestions = ({
+export function ChangeQuestions({
   setCurrentUserSelectedQuestionId,
   moduleId,
 }: {
@@ -10,7 +10,7 @@ export const ChangeQuestions = ({
     currentUserSelectedQuestionId: string | null,
   ) => void
   moduleId: string
-}) => {
+}) {
   const theme = useMantineTheme()
   const supabaseClient = useSupabaseClient()
 
@@ -48,7 +48,7 @@ export const ChangeQuestions = ({
   ])
 
   return (
-    <div className="flex space-x-2 h-full items-center justify-start px-3">
+    <div className="flex space-x-2 h-full items-start justify-start border-b p-2">
       {codingQuestionIds.map((questionId, index) => (
         <ActionIcon
           key={questionId.id}

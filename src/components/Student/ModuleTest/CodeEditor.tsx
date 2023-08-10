@@ -1,14 +1,9 @@
 import { Box } from '@mantine/core'
 import MonacoEditor from '@monaco-editor/react'
 
-export const CodeEditor = () => {
+export function CodeEditor() {
   return (
-    <Box
-      sx={{
-        borderRadius: '2px',
-        overflow: 'hidden',
-      }}
-    >
+    <Box className="w-full">
       <MonacoEditor
         height="55vh"
         language="cpp"

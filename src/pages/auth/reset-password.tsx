@@ -36,7 +36,7 @@ export default function ForgetPasswordPage() {
     }
 
     if (data.user) {
-      router.push('/courses')
+      router.push('/')
     }
   }
 

@@ -1,4 +1,4 @@
-import { useCourseModuleQuery } from '@/service/Admin/Queries/useCourseModuleQuery'
+import { useModulesQuery } from '@/service/Admin/Queries/useModulesQuery'
 import { Module } from '@/types/types'
 import { ActionIcon } from '@mantine/core'
 import { IconArrowNarrowRight } from '@tabler/icons-react'
@@ -13,7 +13,7 @@ import { DeleteCourseModule } from './DeleteCourseModule'
 import { EditCourseModule } from './EditCourseModule'
 
 export function AllCoursesModule({ courseId }: { courseId: string }) {
-  const { data } = useCourseModuleQuery(courseId)
+  const { data } = useModulesQuery(courseId)
   const router = useRouter()
 
   const columns = useMemo<MRT_ColumnDef<Module>[]>(
