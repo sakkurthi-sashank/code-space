@@ -16,7 +16,7 @@ export function ModuleTestHeader() {
   useEffect(() => {
     interval.start()
     return interval.stop
-  }, [])
+  }, [interval])
 
   // Calculate minutes and remaining seconds
   const minutes = Math.floor(seconds / 60)

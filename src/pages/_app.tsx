@@ -45,7 +45,9 @@ export default function App({
         >
           <Notifications position="top-right" limit={3} />
           <RouterTransition />
-          <ModalsProvider children={<Component {...pageProps} />} />
+          <ModalsProvider>
+            <Component {...pageProps} />
+          </ModalsProvider>
         </MantineProvider>
       </SessionContextProvider>
     </QueryClientProvider>

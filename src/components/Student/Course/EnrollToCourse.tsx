@@ -4,37 +4,46 @@ import { useDisclosure } from '@mantine/hooks'
 import { useSession, useSupabaseClient } from '@supabase/auth-helpers-react'
 import { IconPlus } from '@tabler/icons-react'
 import { useState } from 'react'
+import { useForm } from 'react-hook-form'
 import { useQueryClient } from 'react-query'
 
 export function EnrollToCourse() {
   const [opened, { open, close }] = useDisclosure(false)
-  const [courseCode, setCourseCode] = useState<string>('')
-  const [error, setError] = useState<string>('')
+  const [loading, setLoading] = useState(false)
   const user = useSession()?.user
   const queryClient = useQueryClient()
 
+  const {
+    register,
+    formState: { errors },
+    setError,
+    reset,
+    handleSubmit,
+  } = useForm<{
+    courseCode: string
+  }>({
+    defaultValues: {
+      courseCode: '',
+    },
+  })
+
   const supabaseClient = useSupabaseClient<Database>()
 
-  const onChangeCourseId = (e: React.ChangeEvent<HTMLInputElement>) => {
-    setError('')
-    setCourseCode(e.target.value)
-  }
-
-  const handleEnrollCourse = async () => {
-    if (!courseCode) {
-      setError('Course code is required.')
-      return
-    }
+  const handleEnrollCourse = async (values: { courseCode: string }) => {
+    setLoading(true)
 
     const { error: courseError, data: courseData } = await supabaseClient
       .from('course')
-      .select('*')
-      .eq('enroll_code', courseCode)
+      .select('id')
+      .eq('enroll_code', values.courseCode)
       .limit(1)
       .maybeSingle()
 
-    if (courseError) {
-      setError("Couldn't enroll to the course. Please try again.")
+    if (courseData === null || courseError) {
+      setError('courseCode', {
+        message: "Couldn't enroll to the course. Please try again.",
+      })
+      setLoading(false)
       return
     }
 
@@ -44,14 +53,22 @@ export function EnrollToCourse() {
         .select('*')
         .eq('course_id', courseData?.id)
         .eq('profile_id', user?.id!)
+        .limit(1)
+        .maybeSingle()
 
     if (previousDataError) {
-      setError("Couldn't enroll to the course. Please try again.")
+      setError('courseCode', {
+        message: "Couldn't enroll to the course. Please try again.",
+      })
+      setLoading(false)
       return
     }
 
-    if (previousData?.length) {
-      setError('You are already enrolled to this course.')
+    if (previousData !== null) {
+      setError('courseCode', {
+        message: 'You are already enrolled to this course.',
+      })
+      setLoading(false)
       return
     }
 
@@ -64,23 +81,31 @@ export function EnrollToCourse() {
       .select('*')
 
     if (error) {
-      setError("Couldn't enroll to the course. Please try again.")
+      setError('courseCode', {
+        message: "Couldn't enroll to the course. Please try again.",
+      })
+      setLoading(false)
       return
     }
 
     if (data) {
-      queryClient.invalidateQueries('student-courses')
+      queryClient.invalidateQueries('user-courses')
+      reset()
       close()
-      setCourseCode('')
-      setError('')
     }
+    setLoading(false)
+  }
+
+  const handleCloseButton = () => {
+    reset()
+    close()
   }
 
   return (
-    <div>
+    <>
       <div className="fixed bottom-10 right-10">
         <ActionIcon
-          variant="light"
+          variant="filled"
           color="indigo"
           radius="xl"
           size="xl"
@@ -91,25 +116,36 @@ export function EnrollToCourse() {
       </div>
       <Modal
         opened={opened}
-        onClose={close}
-        size={'md'}
+        onClose={handleCloseButton}
+        fullScreen
         title="Enroll to Course"
       >
-        <TextInput
-          radius={'md'}
-          error={error}
-          onChange={onChangeCourseId}
-          size="sm"
-          description="Enter the course code provided by your professor"
-          placeholder="Enter Course Code"
-        />
+        <form className="p-2" onSubmit={handleSubmit(handleEnrollCourse)}>
+          <TextInput
+            size="sm"
+            radius={'md'}
+            error={errors.courseCode?.message}
+            description="Enter the course code provided by your professor"
+            placeholder="Enter Course Code"
+            {...register('courseCode', { required: 'Course Code is required' })}
+          />
 
-        <div className="flex mt-4 items-center justify-end">
-          <Button fw={500} size="xs" onClick={handleEnrollCourse}>
-            Enroll
-          </Button>
-        </div>
+          <div className="flex mt-4 items-center justify-end space-x-2">
+            <Button
+              fw={500}
+              size="xs"
+              variant="outline"
+              color="red"
+              onClick={handleCloseButton}
+            >
+              Cancel
+            </Button>
+            <Button fw={500} size="xs" type="submit" loading={loading}>
+              Enroll
+            </Button>
+          </div>
+        </form>
       </Modal>
-    </div>
+    </>
   )
 }

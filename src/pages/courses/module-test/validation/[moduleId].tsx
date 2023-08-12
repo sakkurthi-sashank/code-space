@@ -58,7 +58,7 @@ export default function TestValidation() {
         router.push(`/courses/module-test/${moduleId}`)
       }
     }, 25000)
-  }, [fullscreen])
+  }, [fullscreen, moduleId, router, supabaseClient, user])
 
   return (
     <>
@@ -98,8 +98,9 @@ export default function TestValidation() {
               <Loader variant="oval" size={'xl'} />
               <Alert color="red">
                 <Text color="red" className="max-w-md mx-auto text-center">
-                  Please don't minimize the window. you will be automatically
-                  redirected to the test after verification is complete.
+                  Please don&apos;t minimize the window. you will be
+                  automatically redirected to the test after verification is
+                  complete.
                 </Text>
               </Alert>
               <div className="flex justify-end w-full">

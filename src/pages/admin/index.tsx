@@ -1,5 +1,5 @@
-import { AllProfiles } from '@/components/admin/Profile/AllProfiles'
-import { CreateProfile } from '@/components/admin/Profile/CreateProfile'
+import { AllProfiles } from '@/components/Admin/Profile/AllProfiles'
+import { CreateProfile } from '@/components/Admin/Profile/CreateProfile'
 import { AuthAdminWrapper } from '@/components/common/AuthAdminWrapper'
 import { Dashboard } from '@/components/common/Dashboard'
 

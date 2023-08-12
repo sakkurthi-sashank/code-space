@@ -10,24 +10,41 @@ type ModuleData = Module & {
   profile_completed_module: ProfileCompletedModule[]
 }
 
-export function useModulesQuery({ courseId }: { courseId: string }) {
+export function useFetchUserModulesFromSupabase(courseId: string) {
   const user = useSession()?.user
   const supabaseClient = useSupabaseClient<Database>()
 
   const { data, error, isLoading } = useQuery<ModuleData[], Error>(
-    ['student-modules', courseId],
+    ['user-modules', courseId],
     async () => {
-      if (!user?.id || !courseId) {
-        return []
-      }
-
       const { data, error } = await supabaseClient
         .from('module')
         .select(`*, coding_question(id),profile_completed_module(*)`)
         .eq('course_id', courseId)
-        .eq('profile_completed_module.profile_id', user.id)
+        .eq('profile_completed_module.profile_id', user?.id)
         .order('module_name', { ascending: false })
 
+      return error ? [] : data || []
+    },
+    {
+      enabled: !!user?.id && !!courseId,
+    },
+  )
+  return { data: data || [], error, isLoading }
+}
+
+export function useFetchAdminModulesFromSupabase(courseId: string) {
+  const user = useSession()?.user
+  const supabaseClient = useSupabaseClient<Database>()
+
+  const { data, error, isLoading } = useQuery<Module[], Error>(
+    'admin-modules',
+    async () => {
+      const { data, error } = await supabaseClient
+        .from('module')
+        .select('*')
+        .eq('course_id', courseId)
+        .order('created_at', { ascending: false })
       return error ? [] : data || []
     },
     {

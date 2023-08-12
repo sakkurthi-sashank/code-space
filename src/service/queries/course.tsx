@@ -3,6 +3,27 @@ import { Course, ProfileEnrolledCourse } from '@/types/types'
 import { useSession, useSupabaseClient } from '@supabase/auth-helpers-react'
 import { useQuery } from 'react-query'
 
+export function useFetchAdminCoursesFromSupabase() {
+  const user = useSession()?.user
+  const supabaseClient = useSupabaseClient<Database>()
+
+  const { data, error, isLoading } = useQuery<Course[], Error>(
+    'admin-courses',
+    async () => {
+      const { data, error } = await supabaseClient
+        .from('course')
+        .select('*')
+        .order('created_at', { ascending: false })
+      return error ? [] : data || []
+    },
+    {
+      enabled: !!user?.id,
+    },
+  )
+
+  return { data: data || [], error, isLoading }
+}
+
 type CourseCards = Course & {
   profile_enrolled_course: ProfileEnrolledCourse[]
   module: {
@@ -10,15 +31,12 @@ type CourseCards = Course & {
   }[]
 }
 
-export function useCoursesQuery(): {
-  data: CourseCards[]
-  error: Error | null
-} {
+export function useFetchUserCoursesFromSupabase() {
   const user = useSession()?.user
   const supabaseClient = useSupabaseClient<Database>()
 
-  const { data, error } = useQuery<CourseCards[], Error>(
-    'student-courses',
+  const { data, error, isLoading } = useQuery<CourseCards[], Error>(
+    'user-courses',
     async () => {
       const { data, error } = await supabaseClient
         .from('course')
@@ -32,5 +50,5 @@ export function useCoursesQuery(): {
       enabled: !!user?.id,
     },
   )
-  return { data: data || [], error }
+  return { data: data || [], error, isLoading }
 }

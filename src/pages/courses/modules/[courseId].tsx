@@ -1,14 +1,14 @@
+import { TestButton } from '@/components/Student/Module/TestButton'
 import { Dashboard } from '@/components/common/Dashboard'
-import { TestButton } from '@/components/student/Module/TestButton'
-import { useModulesQuery } from '@/service/queries/student/useModulesQuery'
-import { dateFormatter } from '@/utils/dateFormatter'
+import { useFetchUserModulesFromSupabase } from '@/service/queries/course-module'
+import { formatCustomDate } from '@/utils/formatCustomDate'
 import { Button, Title, useMantineTheme } from '@mantine/core'
 import { useRouter } from 'next/router'
 
 export default function ModulePage() {
   const router = useRouter()
   const { courseId } = router.query
-  const { data } = useModulesQuery({ courseId: courseId as string })
+  const { data } = useFetchUserModulesFromSupabase(courseId as string)
   const theme = useMantineTheme()
 
   return (
@@ -27,9 +27,9 @@ export default function ModulePage() {
               <div className="text-xs gap-2 grid grid-cols-2 text-gray-600">
                 <span>
                   Start Date:
-                  {dateFormatter(module.start_date!)}
+                  {formatCustomDate(module.start_date!)}
                 </span>
-                <span>End Date: {dateFormatter(module.end_date!)}</span>
+                <span>End Date: {formatCustomDate(module.end_date!)}</span>
                 <span>Duration: {module.duration} minutes</span>
                 <span>No of Questions: {module.coding_question.length}</span>
               </div>

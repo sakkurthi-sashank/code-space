@@ -1,10 +1,11 @@
-import { useCoursesQuery } from '@/service/queries/student/useCoursesQuery'
+import { useFetchUserCoursesFromSupabase } from '@/service/queries/course'
+import { formatCustomDateWithOutTime } from '@/utils/formatCustomDate'
 import { Badge, Card, Group, Image, Text, Title } from '@mantine/core'
 import { useRouter } from 'next/router'
 
-export function CourseCards() {
+export function CourseCards(): JSX.Element {
   const router = useRouter()
-  const { data } = useCoursesQuery()
+  const { data } = useFetchUserCoursesFromSupabase()
 
   return (
     <div className="flex-wrap flex p-4 gap-4">
@@ -12,7 +13,7 @@ export function CourseCards() {
         <Card
           withBorder
           key={course.id}
-          radius={'md'}
+          radius={'5px'}
           onClick={() => router.push(`/courses/modules/${course.id}`)}
           className="max-w-sm w-full h-full hover:shadow-lg 
                 cursor-pointer shadow-sm transition-all duration-200"
@@ -41,10 +42,10 @@ export function CourseCards() {
                 No of Modules : {course.module.length}
               </Badge>
               <Badge color="cyan" size="xs" p={14} variant="outline" w={'100%'}>
-                Start : {new Date(course.start_date!).toDateString()}
+                Start At: {formatCustomDateWithOutTime(course.start_date!)}
               </Badge>
               <Badge color="red" size="xs" p={14} variant="outline" w={'100%'}>
-                End: {new Date(course.end_date!).toDateString()}
+                End At: {formatCustomDateWithOutTime(course.end_date!)}
               </Badge>
             </div>
           </Group>

@@ -1,5 +1,5 @@
-import { AllCoursesModule } from '@/components/admin/CourseModule/AllCoursesModule'
-import { AddCourseModule } from '@/components/admin/CourseModule/CreateCourseModule'
+import { AllCoursesModule } from '@/components/Admin/CourseModule/AllCoursesModule'
+import { AddCourseModule } from '@/components/Admin/CourseModule/CreateCourseModule'
 import { AuthAdminWrapper } from '@/components/common/AuthAdminWrapper'
 import { Dashboard } from '@/components/common/Dashboard'
 import { useRouter } from 'next/router'

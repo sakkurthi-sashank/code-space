@@ -1,4 +1,4 @@
-import { useModuleTestsQuery } from '@/service/Admin/Queries/useModuleTestsQuery'
+import { useFetchAdminModulesFromSupabase } from '@/service/queries/course-module'
 import { CodingQuestion } from '@/types/types'
 import {
   MRT_ColumnDef,
@@ -10,7 +10,7 @@ import { DeleteCourseModule } from './DeleteQuestion'
 import { EditCourseModule } from './EditQuestion'
 
 export function AllModuleTest({ moduleId }: { moduleId: string }) {
-  const { data } = useModuleTestsQuery(moduleId)
+  const { data } = useFetchAdminModulesFromSupabase(moduleId)
 
   const columns = useMemo<MRT_ColumnDef<CodingQuestion>[]>(
     () => [
