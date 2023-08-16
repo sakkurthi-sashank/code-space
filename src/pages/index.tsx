@@ -7,10 +7,12 @@ export default function Home() {
   const theme = useMantineTheme()
 
   useEffect(() => {
-    // Redirect to /courses after 1 seconds
-    setTimeout(() => {
-      router.push('/courses')
-    }, 1000)
+    return () => {
+      // Redirect to /courses after 1 seconds
+      setTimeout(() => {
+        router.push('/courses')
+      }, 1000)
+    }
   }, [router])
 
   return (

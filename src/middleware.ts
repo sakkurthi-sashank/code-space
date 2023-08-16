@@ -16,9 +16,9 @@ export async function middleware(req: NextRequest) {
     return res
   }
 
-  // If there is no user, redirect to login
+  // If there is no user, redirect to signin
   const redirectUrl = req.nextUrl.clone()
-  redirectUrl.pathname = '/auth/login'
+  redirectUrl.pathname = '/auth/signin'
   redirectUrl.searchParams.set(`redirectedFrom`, req.nextUrl.pathname)
   return NextResponse.redirect(redirectUrl)
 }

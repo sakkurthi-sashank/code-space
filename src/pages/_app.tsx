@@ -7,6 +7,7 @@ import { createPagesBrowserClient } from '@supabase/auth-helpers-nextjs'
 import { Session, SessionContextProvider } from '@supabase/auth-helpers-react'
 import type { AppProps } from 'next/app'
 import { Inter } from 'next/font/google'
+import { useRouter } from 'next/router'
 import { useState } from 'react'
 import { QueryClient, QueryClientProvider } from 'react-query'
 
@@ -27,6 +28,13 @@ export default function App({
   initialSession: Session
 }>) {
   const [supabaseClient] = useState(() => createPagesBrowserClient())
+  const router = useRouter()
+
+  supabaseClient.auth.onAuthStateChange((event, session) => {
+    if (event === 'SIGNED_OUT') {
+      router.push('/auth/signin')
+    }
+  })
 
   return (
     <QueryClientProvider client={queryClient}>

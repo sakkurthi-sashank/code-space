@@ -1,4 +1,3 @@
-import { useAuth } from '@/hooks/useAuth'
 import {
   Button,
   Paper,
@@ -8,14 +7,14 @@ import {
   useMantineTheme,
 } from '@mantine/core'
 import { getHotkeyHandler } from '@mantine/hooks'
-import { useSupabaseClient } from '@supabase/auth-helpers-react'
+import { useSession, useSupabaseClient } from '@supabase/auth-helpers-react'
 import { useRouter } from 'next/router'
 import { useState } from 'react'
 
 export default function ForgetPasswordPage() {
   const theme = useMantineTheme()
   const router = useRouter()
-  const { user } = useAuth()
+  const user = useSession()
   const supabaseClient = useSupabaseClient()
 
   const [password, setPassword] = useState('')
@@ -59,7 +58,7 @@ export default function ForgetPasswordPage() {
         <TextInput
           placeholder="Email Address"
           disabled={true}
-          defaultValue={user?.email}
+          defaultValue={user?.user?.email}
           className="mb-4 w-full"
         />
 

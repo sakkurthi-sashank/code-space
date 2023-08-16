@@ -1,17 +1,17 @@
-import { AllCourses } from '@/components/Admin/Courses/AllCourses'
-import { AddCourse } from '@/components/Admin/Courses/CreateCourse'
-import { AuthAdminWrapper } from '@/components/common/AuthAdminWrapper'
-import { Dashboard } from '@/components/common/Dashboard'
+import { AuthMiddleware } from '@/components/admin/AuthMiddleware'
+import { AllCourses } from '@/components/admin/course/AllCourses'
+import { AddCourse } from '@/components/admin/course/CreateCourse'
+import { Dashboard } from '@/components/common/dashboard'
 
 export default function AdminCourses() {
   return (
-    <AuthAdminWrapper>
+    <AuthMiddleware>
       <Dashboard>
         <div className="flex justify-end p-2">
           <AddCourse />
         </div>
         <AllCourses />
       </Dashboard>
-    </AuthAdminWrapper>
+    </AuthMiddleware>
   )
 }

@@ -1,6 +1,7 @@
-import { AllModuleTest } from '@/components/Admin/ModuleTest/AllQuestions'
-import { AuthAdminWrapper } from '@/components/common/AuthAdminWrapper'
-import { Dashboard } from '@/components/common/Dashboard'
+import { AuthMiddleware } from '@/components/admin/AuthMiddleware'
+import { AllCodingQuestions } from '@/components/admin/module-test/AllQuestions'
+import { CreateQuestion } from '@/components/admin/module-test/CreateQuestion'
+import { Dashboard } from '@/components/common/dashboard'
 import { useRouter } from 'next/router'
 
 export default function AdminModuleTestPage() {
@@ -9,11 +10,13 @@ export default function AdminModuleTestPage() {
   const { moduleId } = router.query
 
   return (
-    <AuthAdminWrapper>
+    <AuthMiddleware>
       <Dashboard>
-        <div className="flex justify-end p-2"></div>
-        <AllModuleTest moduleId={moduleId as string} />
+        <div className="flex justify-end p-2">
+          <CreateQuestion moduleId={moduleId as string} />
+        </div>
+        <AllCodingQuestions />
       </Dashboard>
-    </AuthAdminWrapper>
+    </AuthMiddleware>
   )
 }

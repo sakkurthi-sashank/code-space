@@ -8,12 +8,13 @@ import {
   Title,
   useMantineTheme,
 } from '@mantine/core'
+import { notifications } from '@mantine/notifications'
 import { useSupabaseClient } from '@supabase/auth-helpers-react'
 import { useRouter } from 'next/router'
 import { useState } from 'react'
 import { useForm } from 'react-hook-form'
 
-export default function SignUpPage() {
+export default function SignInPage() {
   const theme = useMantineTheme()
   const router = useRouter()
   const supabaseClient = useSupabaseClient()
@@ -24,6 +25,7 @@ export default function SignUpPage() {
     reset,
     formState: { errors },
     setError,
+    getValues,
     handleSubmit,
   } = useForm({
     defaultValues: {
@@ -32,13 +34,10 @@ export default function SignUpPage() {
     },
   })
 
-  const handleUserSignUp = async (values: {
-    email: string
-    password: string
-  }) => {
+  async function handleUserLogin(values: { email: string; password: string }) {
     setLoading(true)
 
-    const { data, error } = await supabaseClient.auth.signUp({
+    const { data, error } = await supabaseClient.auth.signInWithPassword({
       email: values.email,
       password: values.password,
     })
@@ -49,11 +48,36 @@ export default function SignUpPage() {
       return
     }
 
-    if (data.user) {
+    if (data) {
       setLoading(false)
       reset()
-      router.push('/auth/verification')
+      router.push('/')
     }
+  }
+
+  async function handleForgotPassword() {
+    if (!getValues('email')) {
+      setError('email', { message: 'Please enter your email address' })
+      return
+    }
+
+    const { error } = await supabaseClient.auth.resetPasswordForEmail(
+      getValues('email'),
+    )
+
+    if (error) {
+      setError('email', { message: error.message })
+      return
+    }
+
+    notifications.show({
+      color: 'indigo',
+      withCloseButton: true,
+      autoClose: 10000,
+      title: 'Password Reset',
+      message:
+        'If your email address is registered with us, you will receive a password reset link shortly. Please check your inbox and spam folder.',
+    })
   }
 
   return (
@@ -68,11 +92,11 @@ export default function SignUpPage() {
           codespace
         </Title>
 
-        <Title order={3} mb={40} align="left" color={theme.colors.gray[7]}>
-          Create your account
+        <Title order={3} mb={30} align="left" color={theme.colors.gray[7]}>
+          Sign In to your account
         </Title>
 
-        <form onSubmit={handleSubmit(handleUserSignUp)} className="w-full">
+        <form onSubmit={handleSubmit(handleUserLogin)} className="w-full">
           <TextInput
             placeholder="Email Address"
             className="mb-4 w-full"
@@ -83,30 +107,35 @@ export default function SignUpPage() {
 
           <PasswordInput
             placeholder="Password"
-            className="mb-4 w-full"
             radius={'md'}
             {...register('password')}
+            className="mb-4 w-full"
           />
 
-          <Button
-            fw={500}
-            radius="md"
-            type="submit"
-            loading={loading}
-            className="mb-4 w-full"
+          <Anchor
+            className="mb-3 w-full"
+            align="right"
+            component="button"
+            size={'sm'}
+            color={'indigo'}
+            onClick={handleForgotPassword}
           >
-            Sign Up
+            Forgot your password?
+          </Anchor>
+
+          <Button fw={500} loading={loading} type="submit" fullWidth>
+            Sign In
           </Button>
         </form>
 
         <Text align="center" mt={30} size="xs" color="gray">
-          Already have an account?{' '}
+          Don&apos;t have an account?{' '}
           <Anchor
             component="a"
             color="indigo"
-            onClick={() => router.push('/auth/signin')}
+            onClick={() => router.push('/auth/signup')}
           >
-            Sign In
+            Sign Up
           </Anchor>
         </Text>
 

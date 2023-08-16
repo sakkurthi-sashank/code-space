@@ -1,12 +1,12 @@
-import { Dashboard } from '@/components/common/Dashboard'
-import { CourseCards } from '@/components/Student/Course/CourseCards'
-import { EnrollToCourse } from '@/components/Student/Course/EnrollToCourse'
+import { Dashboard } from '@/components/common/dashboard'
+import { CourseCards } from '@/components/user/course/CourseCards'
+import { CourseEnrollment } from '@/components/user/course/CourseEnrollment'
 
 export default function StudentCoursesPage() {
   return (
     <Dashboard>
       <CourseCards />
-      <EnrollToCourse />
+      <CourseEnrollment />
     </Dashboard>
   )
 }

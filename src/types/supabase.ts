@@ -11,35 +11,35 @@ export interface Database {
     Tables: {
       coding_question: {
         Row: {
-          created_at: string | null
+          created_at: string
           default_code: string | null
           id: string
-          input_formate: string
-          marks: number | null
+          input_format: string
+          marks: number
           module_id: string
-          output_formate: string
+          output_format: string
           problem_name: string
           problem_statement: string
         }
         Insert: {
-          created_at?: string | null
+          created_at?: string
           default_code?: string | null
           id?: string
-          input_formate: string
-          marks?: number | null
+          input_format: string
+          marks?: number
           module_id: string
-          output_formate: string
+          output_format: string
           problem_name: string
           problem_statement: string
         }
         Update: {
-          created_at?: string | null
+          created_at?: string
           default_code?: string | null
           id?: string
-          input_formate?: string
-          marks?: number | null
+          input_format?: string
+          marks?: number
           module_id?: string
-          output_formate?: string
+          output_format?: string
           problem_name?: string
           problem_statement?: string
         }
@@ -58,37 +58,77 @@ export interface Database {
           course_description: string
           course_image: string
           course_name: string
-          created_at: string | null
-          end_date: string | null
+          created_at: string
+          end_date: string
+          enrollent_code: string
           id: string
-          start_date: string | null
+          start_date: string
         }
         Insert: {
           course_code: string
           course_description: string
           course_image: string
           course_name: string
-          created_at?: string | null
-          end_date?: string | null
+          created_at?: string
+          end_date: string
+          enrollent_code: string
           id?: string
-          start_date?: string | null
+          start_date: string
         }
         Update: {
           course_code?: string
           course_description?: string
           course_image?: string
           course_name?: string
-          created_at?: string | null
-          end_date?: string | null
+          created_at?: string
+          end_date?: string
+          enrollent_code?: string
           id?: string
-          start_date?: string | null
+          start_date?: string
         }
         Relationships: []
+      }
+      course_enrollment: {
+        Row: {
+          course_id: string
+          created_at: string
+          id: number
+          is_achieved: boolean
+          profile_id: string
+        }
+        Insert: {
+          course_id: string
+          created_at?: string
+          id?: number
+          is_achieved?: boolean
+          profile_id: string
+        }
+        Update: {
+          course_id?: string
+          created_at?: string
+          id?: number
+          is_achieved?: boolean
+          profile_id?: string
+        }
+        Relationships: [
+          {
+            foreignKeyName: 'course_enrollment_course_id_fkey'
+            columns: ['course_id']
+            referencedRelation: 'course'
+            referencedColumns: ['id']
+          },
+          {
+            foreignKeyName: 'course_enrollment_profile_id_fkey'
+            columns: ['profile_id']
+            referencedRelation: 'profile'
+            referencedColumns: ['id']
+          },
+        ]
       }
       module: {
         Row: {
           course_id: string
-          created_at: string | null
+          created_at: string
           duration: number
           end_date: string
           id: string
@@ -97,7 +137,7 @@ export interface Database {
         }
         Insert: {
           course_id: string
-          created_at?: string | null
+          created_at?: string
           duration: number
           end_date: string
           id?: string
@@ -106,7 +146,7 @@ export interface Database {
         }
         Update: {
           course_id?: string
-          created_at?: string | null
+          created_at?: string
           duration?: number
           end_date?: string
           id?: string
@@ -127,11 +167,11 @@ export interface Database {
           admission_number: string | null
           batch: number | null
           branch: string | null
-          created_at: string | null
+          created_at: string
           display_name: string | null
           email_address: string
           id: string
-          is_admin: boolean | null
+          is_admin: boolean
           phone_number: string | null
           section: string | null
         }
@@ -139,11 +179,11 @@ export interface Database {
           admission_number?: string | null
           batch?: number | null
           branch?: string | null
-          created_at?: string | null
+          created_at?: string
           display_name?: string | null
           email_address: string
           id: string
-          is_admin?: boolean | null
+          is_admin?: boolean
           phone_number?: string | null
           section?: string | null
         }
@@ -151,11 +191,11 @@ export interface Database {
           admission_number?: string | null
           batch?: number | null
           branch?: string | null
-          created_at?: string | null
+          created_at?: string
           display_name?: string | null
           email_address?: string
           id?: string
-          is_admin?: boolean | null
+          is_admin?: boolean
           phone_number?: string | null
           section?: string | null
         }
@@ -168,159 +208,125 @@ export interface Database {
           },
         ]
       }
-      profile_completed_coding_question: {
+      profile_submitted_coding_question: {
         Row: {
           coding_question_id: string
-          created_at: string | null
+          created_at: string
           id: string
+          is_passed: boolean
           is_submitted: boolean
           profile_id: string
         }
         Insert: {
           coding_question_id: string
-          created_at?: string | null
+          created_at?: string
           id?: string
-          is_submitted: boolean
+          is_passed?: boolean
+          is_submitted?: boolean
           profile_id: string
         }
         Update: {
           coding_question_id?: string
-          created_at?: string | null
+          created_at?: string
           id?: string
+          is_passed?: boolean
           is_submitted?: boolean
           profile_id?: string
         }
         Relationships: [
           {
-            foreignKeyName: 'profile_completed_coding_question_coding_question_id_fkey'
+            foreignKeyName: 'profile_submitted_coding_question_coding_question_id_fkey'
             columns: ['coding_question_id']
             referencedRelation: 'coding_question'
             referencedColumns: ['id']
           },
           {
-            foreignKeyName: 'profile_completed_coding_question_profile_id_fkey'
+            foreignKeyName: 'profile_submitted_coding_question_profile_id_fkey'
             columns: ['profile_id']
             referencedRelation: 'profile'
             referencedColumns: ['id']
           },
         ]
       }
-      profile_completed_module: {
+      profile_submitted_module: {
         Row: {
-          created_at: string | null
+          created_at: string
           id: string
-          is_submitted: boolean | null
+          is_submitted: boolean
           module_id: string
           profile_id: string
         }
         Insert: {
-          created_at?: string | null
+          created_at?: string
           id?: string
-          is_submitted?: boolean | null
+          is_submitted?: boolean
           module_id: string
           profile_id: string
         }
         Update: {
-          created_at?: string | null
+          created_at?: string
           id?: string
-          is_submitted?: boolean | null
+          is_submitted?: boolean
           module_id?: string
           profile_id?: string
         }
         Relationships: [
           {
-            foreignKeyName: 'profile_completed_module_module_id_fkey'
+            foreignKeyName: 'profile_submitted_module_module_id_fkey'
             columns: ['module_id']
             referencedRelation: 'module'
             referencedColumns: ['id']
           },
           {
-            foreignKeyName: 'profile_completed_module_profile_id_fkey'
+            foreignKeyName: 'profile_submitted_module_profile_id_fkey'
             columns: ['profile_id']
             referencedRelation: 'profile'
             referencedColumns: ['id']
           },
         ]
       }
-      profile_completed_test_case: {
+      profile_submitted_test_case: {
         Row: {
-          code_question_id: string
-          created_at: string | null
+          coding_question_id: string
+          created_at: string
           id: string
-          is_correct: boolean
+          is_passed: boolean
           profile_id: string
           test_case_id: string
         }
         Insert: {
-          code_question_id: string
-          created_at?: string | null
+          coding_question_id: string
+          created_at?: string
           id?: string
-          is_correct: boolean
+          is_passed?: boolean
           profile_id: string
           test_case_id: string
         }
         Update: {
-          code_question_id?: string
-          created_at?: string | null
+          coding_question_id?: string
+          created_at?: string
           id?: string
-          is_correct?: boolean
+          is_passed?: boolean
           profile_id?: string
           test_case_id?: string
         }
         Relationships: [
           {
-            foreignKeyName: 'profile_completed_test_case_code_question_id_fkey'
-            columns: ['code_question_id']
+            foreignKeyName: 'profile_submitted_test_case_coding_question_id_fkey'
+            columns: ['coding_question_id']
             referencedRelation: 'coding_question'
             referencedColumns: ['id']
           },
           {
-            foreignKeyName: 'profile_completed_test_case_profile_id_fkey'
+            foreignKeyName: 'profile_submitted_test_case_profile_id_fkey'
             columns: ['profile_id']
             referencedRelation: 'profile'
             referencedColumns: ['id']
           },
           {
-            foreignKeyName: 'profile_completed_test_case_test_case_id_fkey'
+            foreignKeyName: 'profile_submitted_test_case_test_case_id_fkey'
             columns: ['test_case_id']
             referencedRelation: 'test_case'
-            referencedColumns: ['id']
-          },
-        ]
-      }
-      profile_enrolled_course: {
-        Row: {
-          course_id: string
-          created_at: string | null
-          id: string
-          is_achieved: boolean | null
-          profile_id: string
-        }
-        Insert: {
-          course_id: string
-          created_at?: string | null
-          id?: string
-          is_achieved?: boolean | null
-          profile_id: string
-        }
-        Update: {
-          course_id?: string
-          created_at?: string | null
-          id?: string
-          is_achieved?: boolean | null
-          profile_id?: string
-        }
-        Relationships: [
-          {
-            foreignKeyName: 'profile_enrolled_course_course_id_fkey'
-            columns: ['course_id']
-            referencedRelation: 'course'
-            referencedColumns: ['id']
-          },
-          {
-            foreignKeyName: 'profile_enrolled_course_profile_id_fkey'
-            columns: ['profile_id']
-            referencedRelation: 'profile'
             referencedColumns: ['id']
           },
         ]
@@ -328,26 +334,26 @@ export interface Database {
       test_case: {
         Row: {
           coding_question_id: string
-          created_at: string | null
+          created_at: string
           id: string
           input: string
-          is_sample_test_case: boolean
+          is_sample: boolean
           output: string
         }
         Insert: {
           coding_question_id: string
-          created_at?: string | null
+          created_at?: string
           id?: string
-          input?: string
-          is_sample_test_case?: boolean
-          output?: string
+          input: string
+          is_sample?: boolean
+          output: string
         }
         Update: {
           coding_question_id?: string
-          created_at?: string | null
+          created_at?: string
           id?: string
           input?: string
-          is_sample_test_case?: boolean
+          is_sample?: boolean
           output?: string
         }
         Relationships: [

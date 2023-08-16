@@ -39,8 +39,8 @@ dependencies:
     specifier: ^4.5.1
     version: 4.5.1(monaco-editor@0.41.0)(react-dom@18.2.0)(react@18.2.0)
   '@next/bundle-analyzer':
-    specifier: ^13.4.13
-    version: 13.4.13
+    specifier: ^13.4.16
+    version: 13.4.16
   '@supabase/auth-helpers-nextjs':
     specifier: ^0.7.4
     version: 0.7.4(@supabase/supabase-js@2.32.0)
@@ -57,8 +57,8 @@ dependencies:
     specifier: ^1.11.9
     version: 1.11.9
   mantine-react-table:
-    specifier: ^1.0.0
-    version: 1.0.0(@emotion/react@11.11.1)(@mantine/core@6.0.19)(@mantine/dates@6.0.19)(@mantine/hooks@6.0.19)(@tabler/icons-react@2.30.0)(react-dom@18.2.0)(react@18.2.0)
+    specifier: ^1.1.1
+    version: 1.1.1(@emotion/react@11.11.1)(@mantine/core@6.0.19)(@mantine/dates@6.0.19)(@mantine/hooks@6.0.19)(@tabler/icons-react@2.30.0)(react-dom@18.2.0)(react@18.2.0)
   next:
     specifier: 13.4.9
     version: 13.4.9(react-dom@18.2.0)(react@18.2.0)
@@ -109,6 +109,9 @@ devDependencies:
   prettier-plugin-organize-imports:
     specifier: ^3.2.3
     version: 3.2.3(prettier@3.0.1)(typescript@5.1.6)
+  prisma:
+    specifier: ^5.1.1
+    version: 5.1.1
   supabase:
     specifier: ^1.83.7
     version: 1.83.7
@@ -588,8 +591,8 @@ packages:
       react-dom: 18.2.0(react@18.2.0)
     dev: false
 
-  /@next/bundle-analyzer@13.4.13:
-    resolution: {integrity: sha512-XygyFn3V61vF9LkU1zM6GlAMp8h7FbApaLA40anMGhZtQt/0S1tGSNImv9T/Z3ZTbWIQTcbYxyHIM6Fv/uSGrA==}
+  /@next/bundle-analyzer@13.4.16:
+    resolution: {integrity: sha512-9YO6o7YeWAn7j5zlYE5oVKYxpP/3aCnh7q4niwOBeHmafmWjhkVrxi0g0t2ds19vnsBm73hNcyeXzTi/T2hE+Q==}
     dependencies:
       webpack-bundle-analyzer: 4.7.0
     transitivePeerDependencies:
@@ -712,6 +715,11 @@ packages:
   /@polka/url@1.0.0-next.21:
     resolution: {integrity: sha512-a5Sab1C4/icpTZVzZc5Ghpz88yQtGOyNqYXcZgOssB2uuAr+wF/MvN6bgtW32q7HHrvBki+BsZ0OuNv6EV3K9g==}
     dev: false
+
+  /@prisma/engines@5.1.1:
+    resolution: {integrity: sha512-NV/4nVNWFZSJCCIA3HIFJbbDKO/NARc9ej0tX5S9k2EVbkrFJC4Xt9b0u4rNZWL4V+F5LAjvta8vzEUw0rw+HA==}
+    requiresBuild: true
+    dev: true
 
   /@radix-ui/number@1.0.0:
     resolution: {integrity: sha512-Ofwh/1HX69ZfJRiRBMTy7rgjAzHmwe4kW9C9Y99HTRUcYLUuVT0KESFj15rPjRgKJs20GPq8Bm5aEDJ8DuA3vA==}
@@ -864,8 +872,8 @@ packages:
       - encoding
     dev: false
 
-  /@supabase/gotrue-js@2.46.2:
-    resolution: {integrity: sha512-tLyZZNEb3St6Dxe671seLCzYWZ2DftSWWjPEfqAwW6kNOAr+Aw2uEIW0H3gEJxSIST+E+ly9lUBm/rGlfDWKPA==}
+  /@supabase/gotrue-js@2.47.0:
+    resolution: {integrity: sha512-3e34/vsKH/DoSZCpB85UZpFWSJ2p4GRUUlqgAgeTPagPlx4xS+Nc5v7g7ic7vp3gK0J5PsYVCn9Qu2JQUp4vXg==}
     dependencies:
       cross-fetch: 3.1.8
     transitivePeerDependencies:
@@ -902,7 +910,7 @@ packages:
     resolution: {integrity: sha512-1ShFhuOI5Du7604nlCelBsRD61daXk2O0qwjumoz35bqrYThnSPPtpJqZOHw6Mg6o7mLjIInYLh/DBlh8UvzRg==}
     dependencies:
       '@supabase/functions-js': 2.1.2
-      '@supabase/gotrue-js': 2.46.2
+      '@supabase/gotrue-js': 2.47.0
       '@supabase/postgrest-js': 1.8.0
       '@supabase/realtime-js': 2.7.3
       '@supabase/storage-js': 2.5.1
@@ -1237,7 +1245,7 @@ packages:
       postcss: ^8.1.0
     dependencies:
       browserslist: 4.21.10
-      caniuse-lite: 1.0.30001519
+      caniuse-lite: 1.0.30001520
       fraction.js: 4.2.0
       normalize-range: 0.1.2
       picocolors: 1.0.0
@@ -1324,8 +1332,8 @@ packages:
     engines: {node: ^6 || ^7 || ^8 || ^9 || ^10 || ^11 || ^12 || >=13.7}
     hasBin: true
     dependencies:
-      caniuse-lite: 1.0.30001519
-      electron-to-chromium: 1.4.490
+      caniuse-lite: 1.0.30001520
+      electron-to-chromium: 1.4.491
       node-releases: 2.0.13
       update-browserslist-db: 1.0.11(browserslist@4.21.10)
     dev: true
@@ -1365,8 +1373,8 @@ packages:
     engines: {node: '>= 6'}
     dev: true
 
-  /caniuse-lite@1.0.30001519:
-    resolution: {integrity: sha512-0QHgqR+Jv4bxHMp8kZ1Kn8CH55OikjKJ6JmKkZYP1F3D7w+lnFXF70nG5eNfsZS89jadi5Ywy5UCSKLAglIRkg==}
+  /caniuse-lite@1.0.30001520:
+    resolution: {integrity: sha512-tahF5O9EiiTzwTUqAeFjIZbn4Dnqxzz7ktrgGlMYNLH43Ul26IgTMH/zvL3DG0lZxBYnlT04axvInszUsZULdA==}
 
   /chalk@2.4.2:
     resolution: {integrity: sha512-Mti+f9lpJNcwF4tWV8/OrTTtF1gZi+f8FqlyAdouralcFWFQWF2+NgCHShjkCb+IFBLq9buZwE1xckQU4peSuQ==}
@@ -1651,8 +1659,8 @@ packages:
     resolution: {integrity: sha512-jtD6YG370ZCIi/9GTaJKQxWTZD045+4R4hTk/x1UyoqadyJ9x9CgSi1RlVDQF8U2sxLLSnFkCaMihqljHIWgMg==}
     dev: false
 
-  /electron-to-chromium@1.4.490:
-    resolution: {integrity: sha512-6s7NVJz+sATdYnIwhdshx/N/9O6rvMxmhVoDSDFdj6iA45gHR8EQje70+RYsF4GeB+k0IeNSBnP7yG9ZXJFr7A==}
+  /electron-to-chromium@1.4.491:
+    resolution: {integrity: sha512-ZzPqGKghdVzlQJ+qpfE+r6EB321zed7e5JsvHIlMM4zPFF8okXUkF5Of7h7F3l3cltPL0rG7YVmlp5Qro7RQLA==}
     dev: true
 
   /emoji-regex@9.2.2:
@@ -2716,8 +2724,8 @@ packages:
       yallist: 4.0.0
     dev: true
 
-  /mantine-react-table@1.0.0(@emotion/react@11.11.1)(@mantine/core@6.0.19)(@mantine/dates@6.0.19)(@mantine/hooks@6.0.19)(@tabler/icons-react@2.30.0)(react-dom@18.2.0)(react@18.2.0):
-    resolution: {integrity: sha512-9WeIQ2N6lJdv5/9NykpxITEISbKJtt/kh32qHNfNZ1l4TpK9fQ0GbYEDGtI5hyuK79F6b29lsSDoPDrsXX+jiQ==}
+  /mantine-react-table@1.1.1(@emotion/react@11.11.1)(@mantine/core@6.0.19)(@mantine/dates@6.0.19)(@mantine/hooks@6.0.19)(@tabler/icons-react@2.30.0)(react-dom@18.2.0)(react@18.2.0):
+    resolution: {integrity: sha512-sKYZ+S7pS1HJZrKKmLUFUaC+9zYODgBoFwpkO12YUgAQ3e/vIVNwgaGHvbnfoZfW8BZ8Pc69KlWx6+EZYJU8Bg==}
     engines: {node: '>=14'}
     peerDependencies:
       '@emotion/react': '>=11'
@@ -2874,7 +2882,7 @@ packages:
       '@next/env': 13.4.9
       '@swc/helpers': 0.5.1
       busboy: 1.6.0
-      caniuse-lite: 1.0.30001519
+      caniuse-lite: 1.0.30001520
       postcss: 8.4.14
       react: 18.2.0
       react-dom: 18.2.0(react@18.2.0)
@@ -3221,6 +3229,15 @@ packages:
     resolution: {integrity: sha512-fcOWSnnpCrovBsmFZIGIy9UqK2FaI7Hqax+DIO0A9UxeVoY4iweyaFjS5TavZN97Hfehph0nhsZnjlVKzEQSrQ==}
     engines: {node: '>=14'}
     hasBin: true
+    dev: true
+
+  /prisma@5.1.1:
+    resolution: {integrity: sha512-WJFG/U7sMmcc6TjJTTifTfpI6Wjoh55xl4AzopVwAdyK68L9/ogNo8QQ2cxuUjJf/Wa82z/uhyh3wMzvRIBphg==}
+    engines: {node: '>=16.13'}
+    hasBin: true
+    requiresBuild: true
+    dependencies:
+      '@prisma/engines': 5.1.1
     dev: true
 
   /process-nextick-args@2.0.1:
