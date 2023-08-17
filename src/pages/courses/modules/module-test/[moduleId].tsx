@@ -55,7 +55,7 @@ export default function ModuleTestPage() {
   return (
     <div className="bg-gray-100">
       <div className="bg-white mx-auto h-full">
-        <ModuleTestHeader />
+        <ModuleTestHeader moduleId={moduleId as string} />
         <div className="h-full flex">
           <div className="w-5/12">
             <ScrollArea

@@ -3,7 +3,7 @@ import { useInterval } from '@mantine/hooks'
 import { useEffect, useState } from 'react'
 import { SubmitTest } from './SubmitTest'
 
-export function ModuleTestHeader() {
+export function ModuleTestHeader({ moduleId }: { moduleId: string }) {
   const [seconds, setSeconds] = useState(7200) // Set initial value to 7200 seconds (120 minutes)
   const interval = useInterval(() => {
     if (seconds > 0) {
@@ -28,7 +28,7 @@ export function ModuleTestHeader() {
         Time: {minutes}:{remainingSeconds < 10 ? '0' : ''}
         {remainingSeconds}
       </Badge>
-      <SubmitTest moduleId="" />
+      <SubmitTest moduleId={moduleId} />
     </Header>
   )
 }
