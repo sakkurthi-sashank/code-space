@@ -1,5 +1,5 @@
 import { Database } from '@/types/supabase'
-import { ActionIcon, Button, Modal, TextInput } from '@mantine/core'
+import { ActionIcon, Button, Modal, Textarea } from '@mantine/core'
 import { useDisclosure } from '@mantine/hooks'
 import { useSession, useSupabaseClient } from '@supabase/auth-helpers-react'
 import { IconPlus } from '@tabler/icons-react'
@@ -29,7 +29,9 @@ export function CourseEnrollment() {
 
   const supabaseClient = useSupabaseClient<Database>()
 
-  const handleEnrollCourse = async (values: { courseCode: string }) => {
+  async function handleCourseEnrollmentWithCode(values: {
+    courseCode: string
+  }) {
     setLoading(true)
 
     const { error: courseError, data: courseData } = await supabaseClient
@@ -56,17 +58,9 @@ export function CourseEnrollment() {
         .limit(1)
         .maybeSingle()
 
-    if (previousDataError) {
+    if (previousDataError || previousData !== null) {
       setError('courseCode', {
         message: "Couldn't enroll to the course. Please try again.",
-      })
-      setLoading(false)
-      return
-    }
-
-    if (previousData !== null) {
-      setError('courseCode', {
-        message: 'You are already enrolled to this course.',
       })
       setLoading(false)
       return
@@ -102,7 +96,7 @@ export function CourseEnrollment() {
   }
 
   return (
-    <>
+    <div>
       <div className="fixed bottom-10 right-10">
         <ActionIcon
           variant="filled"
@@ -120,8 +114,11 @@ export function CourseEnrollment() {
         fullScreen
         title="Enroll to Course"
       >
-        <form className="p-2" onSubmit={handleSubmit(handleEnrollCourse)}>
-          <TextInput
+        <form
+          className="p-2"
+          onSubmit={handleSubmit(handleCourseEnrollmentWithCode)}
+        >
+          <Textarea
             size="sm"
             radius={'md'}
             error={errors.courseCode?.message}
@@ -146,6 +143,6 @@ export function CourseEnrollment() {
           </div>
         </form>
       </Modal>
-    </>
+    </div>
   )
 }

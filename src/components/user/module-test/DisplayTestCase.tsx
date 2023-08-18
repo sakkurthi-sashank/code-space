@@ -13,9 +13,9 @@ export const DisplayTestCase = ({ testCase }: { testCase: TestCase[] }) => {
       </Tabs.List>
 
       <Tabs.Panel value="sample-test-case">
-        <ScrollArea className="h-[calc(50vh-145px)] p-2.5" type="never">
+        <ScrollArea className="h-[calc(40vh-145px)] p-2.5" type="never">
           <Accordion radius="lg" variant="separated">
-            {testCase.map((test, index) => {
+            {testCase?.map((test, index) => {
               return (
                 test.is_sample === true && (
                   <Accordion.Item key={index} value={test.input!}>

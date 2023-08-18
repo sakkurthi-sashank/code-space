@@ -1,6 +1,7 @@
 import { ChangeQuestions } from '@/components/user/module-test/ChangeQuestion'
 import { CodeEditor } from '@/components/user/module-test/CodeEditor'
 import { CompileAndSubmit } from '@/components/user/module-test/CompileAndSubmit'
+import { DisplayTestCase } from '@/components/user/module-test/DisplayTestCase'
 import { ModuleTestHeader } from '@/components/user/module-test/Header'
 import { QuestionPanel } from '@/components/user/module-test/QuestionPanel'
 import { CodingQuestion, TestCase } from '@/types/databaseExtractTypes.ts'
@@ -56,7 +57,7 @@ export default function ModuleTestPage() {
       <div className="bg-white mx-auto h-full">
         <ModuleTestHeader moduleId={moduleId as string} />
         <div className="h-full flex">
-          <div className="w-5/12">
+          <div className="w-[40%]">
             <ScrollArea
               type="never"
               className="px-4 py-4 w-full h-[calc(100vh-100px)] border-r"
@@ -66,14 +67,15 @@ export default function ModuleTestPage() {
             <CompileAndSubmit />
           </div>
 
-          <div className="w-6/12 flex flex-col">
+          <div className="w-[54%] flex flex-col">
             <CodeEditor
               defaultCode={currentQuestion?.default_code!}
               setCode={setCode}
             />
+            <DisplayTestCase testCase={currentQuestion?.test_case!} />
           </div>
 
-          <div className="w-1/12 border-l flex flex-col h-[calc(100vh-50px)] border-gray-200">
+          <div className="w-[6%] border-l flex flex-col h-[calc(100vh-50px)] border-gray-200">
             <ChangeQuestions
               questionIds={questionIds}
               allQuestions={allQuestions}
