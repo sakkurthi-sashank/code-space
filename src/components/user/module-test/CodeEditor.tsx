@@ -11,7 +11,7 @@ export function CodeEditor({
   return (
     <Box className="w-full">
       <MonacoEditor
-        height="55vh"
+        height="calc(100vh - 50px)"
         value={defaultCode}
         language="cpp"
         onChange={(code) => setCode(code!)}
