@@ -1,6 +1,6 @@
 import { Course } from '@/types/databaseExtractTypes.ts'
 import { Database } from '@/types/supabase'
-import { ActionIcon, Image } from '@mantine/core'
+import { ActionIcon, Image, Loader } from '@mantine/core'
 import { useSession, useSupabaseClient } from '@supabase/auth-helpers-react'
 import { IconArrowNarrowRight } from '@tabler/icons-react'
 import {
@@ -14,7 +14,7 @@ import { useQuery } from 'react-query'
 import { DeleteCourse } from './DeleteCourse'
 import { EditCourse } from './EditCourse'
 
-export function AllCourses() {
+export function ShowAllCourses() {
   const router = useRouter()
   const user = useSession()
   const supabaseClient = useSupabaseClient<Database>()
@@ -36,9 +36,8 @@ export function AllCourses() {
   const columns = useMemo<MRT_ColumnDef<Course>[]>(
     () => [
       {
-        accessorKey: 'id',
-        header: 'ID',
-        enableEditing: false,
+        accessorKey: 'course_name',
+        header: 'Course Name',
       },
       {
         accessorKey: 'course_image',
@@ -54,20 +53,18 @@ export function AllCourses() {
         ),
       },
       {
-        accessorKey: 'course_name',
-        header: 'Course Name',
-      },
-      {
         accessorKey: 'course_code',
         header: 'Course Code',
       },
       {
         accessorKey: 'enrollent_code',
         header: 'Enrollment Code',
+        minSize: 300,
       },
       {
         accessorKey: 'course_description',
         header: 'Course Description',
+        minSize: 400,
       },
       {
         accessorFn: (originalRow) => new Date(originalRow.start_date!),
@@ -90,12 +87,14 @@ export function AllCourses() {
         Cell: ({ row }) => (
           <ActionIcon
             color="indigo"
-            variant="light"
+            variant="filled"
+            size={'md'}
+            radius={'100%'}
             onClick={() => {
               router.push(`/admin/courses/module/${row.original.id}`)
             }}
           >
-            <IconArrowNarrowRight size={18} stroke={1.5} />
+            <IconArrowNarrowRight size={16} stroke={1.75} />
           </ActionIcon>
         ),
       },
@@ -115,11 +114,23 @@ export function AllCourses() {
     columns,
     data: data || [],
     enableFullScreenToggle: false,
-    columnFilterDisplayMode: 'subheader',
+    columnFilterDisplayMode: 'popover',
+    enablePagination: false,
+    enableColumnResizing: true,
+    enableTopToolbar: false,
+    initialState: { density: 'xl' },
   })
 
+  if (isLoading) {
+    return (
+      <div className="h-full w-full flex items-center justify-center">
+        <Loader />
+      </div>
+    )
+  }
+
   return (
-    <div className="flex flex-col w-full p-3">
+    <div className="flex flex-col w-full p-2">
       <MantineReactTable table={table} />
     </div>
   )

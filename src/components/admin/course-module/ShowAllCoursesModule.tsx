@@ -1,6 +1,6 @@
 import { Module } from '@/types/databaseExtractTypes.ts'
 import { Database } from '@/types/supabase'
-import { ActionIcon } from '@mantine/core'
+import { ActionIcon, Loader } from '@mantine/core'
 import { useSession, useSupabaseClient } from '@supabase/auth-helpers-react'
 import { IconArrowNarrowRight } from '@tabler/icons-react'
 import {
@@ -14,7 +14,7 @@ import { useQuery } from 'react-query'
 import { DeleteCourseModule } from './DeleteCourseModule'
 import { EditCourseModule } from './EditCourseModule'
 
-export function AllCoursesModule({ courseId }: { courseId: string }) {
+export function ShowAllCoursesModule({ courseId }: { courseId: string }) {
   const router = useRouter()
   const user = useSession()
   const supabaseClient = useSupabaseClient<Database>()
@@ -37,13 +37,9 @@ export function AllCoursesModule({ courseId }: { courseId: string }) {
   const columns = useMemo<MRT_ColumnDef<Module>[]>(
     () => [
       {
-        accessorKey: 'id',
-        header: 'ID',
-        enableEditing: false,
-      },
-      {
         accessorKey: 'module_name',
         header: 'Course Name',
+        minSize: 400,
       },
       {
         accessorKey: 'duration',
@@ -53,23 +49,25 @@ export function AllCoursesModule({ courseId }: { courseId: string }) {
         accessorFn: (originalRow) => new Date(originalRow.start_date!),
         accessorKey: 'start_date',
         header: 'Start Date',
-        filterVariant: 'date-range',
-        Cell: ({ cell }) => cell.getValue<Date>().toLocaleDateString(),
+        filterVariant: 'date',
+        Cell: ({ cell }) => cell.getValue<Date>().toLocaleString(),
       },
       {
         accessorFn: (originalRow) => new Date(originalRow.end_date!),
         accessorKey: 'end_date',
         header: 'End Date',
-        filterVariant: 'date-range',
+        filterVariant: 'date',
         sortingFn: 'datetime',
-        Cell: ({ cell }) => cell.getValue<Date>().toLocaleDateString(),
+        Cell: ({ cell }) => cell.getValue<Date>().toLocaleString(),
       },
       {
-        header: 'View Modules',
+        header: 'View Questions',
         Cell: ({ row }) => (
           <ActionIcon
             color="indigo"
-            variant="light"
+            variant="filled"
+            size={'md'}
+            radius={'100%'}
             onClick={() => {
               router.push(`/admin/courses/module-test/${row.original.id}`)
             }}
@@ -94,8 +92,20 @@ export function AllCoursesModule({ courseId }: { courseId: string }) {
     columns,
     data: data || [],
     enableFullScreenToggle: false,
-    columnFilterDisplayMode: 'subheader',
+    columnFilterDisplayMode: 'popover',
+    enablePagination: false,
+    enableColumnResizing: true,
+    enableTopToolbar: false,
+    initialState: { density: 'xl' },
   })
+
+  if (isLoading) {
+    return (
+      <div className="h-full w-full flex items-center justify-center">
+        <Loader />
+      </div>
+    )
+  }
 
   return (
     <div className="flex flex-col w-full p-3">

@@ -1,6 +1,6 @@
 import { RouterTransition } from '@/components/common/RouterTransition'
 import '@/styles/globals.css'
-import { MantineProvider } from '@mantine/core'
+import { InputStylesParams, MantineProvider } from '@mantine/core'
 import { ModalsProvider } from '@mantine/modals'
 import { Notifications } from '@mantine/notifications'
 import { createPagesBrowserClient } from '@supabase/auth-helpers-nextjs'
@@ -20,6 +20,12 @@ const queryClient = new QueryClient({
     },
   },
 })
+
+// .shadow-sm {
+//   --tw-shadow: 0 1px 2px 0 rgb(0 0 0 / 0.05);
+//   --tw-shadow-colored: 0 1px 2px 0 var(--tw-shadow-color);
+//   box-shadow: var(--tw-ring-offset-shadow, 0 0 #0000), var(--tw-ring-shadow, 0 0 #0000), var(--tw-shadow);
+// }
 
 export default function App({
   Component,
@@ -49,6 +55,18 @@ export default function App({
             colorScheme: 'light',
             primaryColor: 'indigo',
             fontFamily: inter.style.fontFamily,
+
+            components: {
+              Input: {
+                styles: (theme, params: InputStylesParams, { variant }) => ({
+                  input: {
+                    border: '1px solid #e5e7eb',
+                    borderRadius: '6px',
+                    boxShadow: '0 1px 2px 0 rgb(0 0 0 / 0.05)',
+                  },
+                }),
+              },
+            },
           }}
         >
           <Notifications position="top-right" limit={3} />

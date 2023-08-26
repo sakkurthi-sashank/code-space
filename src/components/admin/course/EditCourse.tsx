@@ -1,6 +1,6 @@
 import { Course } from '@/types/databaseExtractTypes.ts'
 import { Database } from '@/types/supabase'
-import { ActionIcon, Button, Drawer, TextInput, Textarea } from '@mantine/core'
+import { ActionIcon, Button, Drawer, Group, Textarea } from '@mantine/core'
 import { DatePickerInput } from '@mantine/dates'
 import { useDisclosure } from '@mantine/hooks'
 import { useSupabaseClient } from '@supabase/auth-helpers-react'
@@ -41,7 +41,7 @@ export function EditCourse(props: Course) {
     const { data, error } = await supabaseClient
       .from('course')
       .update(values)
-      .eq('id', props.id)
+      .eq('id', props.id!)
       .select('id')
 
     if (error) {
@@ -64,7 +64,7 @@ export function EditCourse(props: Course) {
       </ActionIcon>
       <Drawer
         opened={opened}
-        size="xl"
+        size={'100%'}
         position="right"
         onClose={close}
         title="Edit Course"
@@ -93,14 +93,16 @@ export function EditCourse(props: Course) {
             description="Course Description"
             placeholder="Course Description"
             radius="md"
-            minRows={2}
+            minRows={4}
             autosize
           />
 
-          <TextInput
+          <Textarea
             {...register('course_image')}
             description="Course Image"
             placeholder="Course Image"
+            minRows={2}
+            autosize
             radius="md"
           />
 
@@ -128,8 +130,23 @@ export function EditCourse(props: Course) {
             </div>
           )}
 
-          <div className="flex justify-end pt-4">
-            <Button onClick={close} fw={500} variant="light" size="xs">
+          <Group
+            spacing={'xs'}
+            sx={{
+              width: '100%',
+              display: 'flex',
+              justifyContent: 'flex-end',
+              paddingTop: '0.75rem',
+            }}
+          >
+            <Button
+              onClick={close}
+              fw={500}
+              color="red"
+              variant="filled"
+              size="xs"
+              uppercase
+            >
               Cancel
             </Button>
             <Button
@@ -138,10 +155,11 @@ export function EditCourse(props: Course) {
               fw={500}
               loading={loading}
               size="xs"
+              uppercase
             >
               Edit Course
             </Button>
-          </div>
+          </Group>
         </form>
       </Drawer>
     </>

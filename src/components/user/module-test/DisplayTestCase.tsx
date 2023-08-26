@@ -1,5 +1,5 @@
 import { TestCase } from '@/types/databaseExtractTypes.ts'
-import { Accordion, ScrollArea, Tabs } from '@mantine/core'
+import { Accordion, ScrollArea, Tabs, Text } from '@mantine/core'
 
 export const DisplayTestCase = ({ testCase }: { testCase: TestCase[] }) => {
   return (
@@ -14,14 +14,16 @@ export const DisplayTestCase = ({ testCase }: { testCase: TestCase[] }) => {
 
       <Tabs.Panel value="sample-test-case">
         <ScrollArea className="h-[calc(40vh-145px)] p-2.5" type="never">
-          <Accordion radius="lg" variant="separated">
+          <Accordion radius="sm" variant="separated">
             {testCase?.map((test, index) => {
               return (
                 test.is_sample === true && (
                   <Accordion.Item key={index} value={test.input!}>
-                    <Accordion.Control>Test Case {index + 1}</Accordion.Control>
+                    <Accordion.Control>
+                      <Text size={'xs'}>Test Case {index + 1} </Text>{' '}
+                    </Accordion.Control>
                     <Accordion.Panel>
-                      <pre className="font-mono rounded-md text-sm text-gray-600 font-normal antialiased bg-gray-100 px-3 py-2">
+                      <pre className="font-mono rounded-md text-sm text-gray-600 font-normal antialiased bg-gray-100 px-3 py-1">
                         {test.input}
                       </pre>
                     </Accordion.Panel>

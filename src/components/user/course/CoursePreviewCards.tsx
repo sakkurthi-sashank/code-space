@@ -25,7 +25,7 @@ export function CoursePreviewCards(): React.ReactElement {
       const { data, error } = await supabaseClient
         .from('course')
         .select(`*, course_enrollment!inner(*),module(id)`)
-        .eq('course_enrollment.profile_id', user?.user.id)
+        .eq('course_enrollment.profile_id', user?.user.id!)
         .order('created_at', { ascending: false })
       return error ? [] : data || []
     },

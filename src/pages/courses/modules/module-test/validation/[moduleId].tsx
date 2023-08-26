@@ -45,8 +45,8 @@ export default function TestValidation() {
       const { data, error } = await supabaseClient
         .from('profile_submitted_module')
         .select('*')
-        .eq('module_id', moduleId)
-        .eq('profile_id', user?.user?.id)
+        .eq('module_id', moduleId!)
+        .eq('profile_id', user?.user?.id!)
 
       if (error) {
         return

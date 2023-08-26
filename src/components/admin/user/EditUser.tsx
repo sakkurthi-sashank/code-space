@@ -39,7 +39,7 @@ export function EditUser(props: Profile) {
     const { error, data } = await supabaseClient
       .from('profile')
       .update(values)
-      .eq('id', props.id)
+      .eq('id', props.id!)
       .select('*')
 
     if (error) {
@@ -64,7 +64,7 @@ export function EditUser(props: Profile) {
         position="right"
         title="Update Profile"
         opened={opened}
-        size={'sm'}
+        size={'100%'}
         onClose={close}
       >
         <form onSubmit={handleSubmit(handleEditUser)} className="space-y-2">

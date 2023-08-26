@@ -1,4 +1,4 @@
-import { Loader, Title, useMantineTheme } from '@mantine/core'
+import { Box, Loader, Title, useMantineTheme } from '@mantine/core'
 import { useRouter } from 'next/router'
 import { useEffect } from 'react'
 
@@ -13,7 +13,16 @@ export default function Home() {
   }, [router])
 
   return (
-    <div className="flex items-center justify-center min-h-screen flex-col space-y-8">
+    <Box
+      sx={{
+        display: 'flex',
+        alignItems: 'center',
+        justifyContent: 'center',
+        minHeight: '100vh',
+        flexDirection: 'column',
+        gap: '2rem',
+      }}
+    >
       <Title
         color={theme.colors.indigo[7]}
         order={2}
@@ -23,7 +32,7 @@ export default function Home() {
       >
         codespace
       </Title>
-      <Loader size={'md'} variant="dots" />
-    </div>
+      <Loader size={'md'} variant="bars" />
+    </Box>
   )
 }

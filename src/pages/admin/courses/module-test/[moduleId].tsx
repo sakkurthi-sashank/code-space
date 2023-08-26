@@ -1,6 +1,6 @@
 import { AuthMiddleware } from '@/components/admin/AuthMiddleware'
-import { AllCodingQuestions } from '@/components/admin/module-test/AllQuestions'
 import { CreateQuestion } from '@/components/admin/module-test/CreateQuestion'
+import { AllCodingQuestions } from '@/components/admin/module-test/ShowAllQuestions'
 import { Dashboard } from '@/components/common/dashboard'
 import { useRouter } from 'next/router'
 
@@ -12,10 +12,10 @@ export default function AdminModuleTestPage() {
   return (
     <AuthMiddleware>
       <Dashboard>
-        <div className="flex justify-end p-2">
+        <div className="flex justify-end items-center p-2.5 border-b rounded bg-white">
           <CreateQuestion moduleId={moduleId as string} />
         </div>
-        <AllCodingQuestions />
+        <AllCodingQuestions moduleId={moduleId as string} />
       </Dashboard>
     </AuthMiddleware>
   )

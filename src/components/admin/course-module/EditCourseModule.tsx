@@ -7,7 +7,7 @@ import {
   NumberInput,
   TextInput,
 } from '@mantine/core'
-import { DatePickerInput } from '@mantine/dates'
+import { DateTimePicker } from '@mantine/dates'
 import { useDisclosure } from '@mantine/hooks'
 import { useSupabaseClient } from '@supabase/auth-helpers-react'
 import { IconEdit } from '@tabler/icons-react'
@@ -47,7 +47,7 @@ export function EditCourseModule(props: Module) {
     const { data, error } = await supabaseClient
       .from('module')
       .update(values)
-      .eq('id', props.id)
+      .eq('id', props.id!)
       .select('*')
 
     if (error) {
@@ -70,7 +70,7 @@ export function EditCourseModule(props: Module) {
       </ActionIcon>
       <Drawer
         opened={opened}
-        size="xl"
+        size="100%"
         position="right"
         onClose={close}
         title="Edit Course"
@@ -91,7 +91,7 @@ export function EditCourseModule(props: Module) {
             onChange={(value) => setValue('duration', Number(value))}
           />
 
-          <DatePickerInput
+          <DateTimePicker
             description="Start Date"
             radius="md"
             defaultValue={new Date(getValues('start_date')!)}
@@ -99,7 +99,7 @@ export function EditCourseModule(props: Module) {
             onChange={(value) => setValue('start_date', value?.toISOString()!)}
           />
 
-          <DatePickerInput
+          <DateTimePicker
             description="End Date"
             radius="md"
             placeholder="End Date"

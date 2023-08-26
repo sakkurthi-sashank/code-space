@@ -1,5 +1,5 @@
 import { Database } from '@/types/supabase'
-import { ActionIcon, Button, Modal, Textarea } from '@mantine/core'
+import { ActionIcon, Box, Button, Group, Modal, TextInput } from '@mantine/core'
 import { useDisclosure } from '@mantine/hooks'
 import { useSession, useSupabaseClient } from '@supabase/auth-helpers-react'
 import { IconPlus } from '@tabler/icons-react'
@@ -54,7 +54,7 @@ export function CourseEnrollment() {
         .from('course_enrollment')
         .select('*')
         .eq('course_id', courseData?.id)
-        .eq('profile_id', user?.user?.id)
+        .eq('profile_id', user?.user.id!)
         .limit(1)
         .maybeSingle()
 
@@ -72,7 +72,7 @@ export function CourseEnrollment() {
         course_id: courseData?.id!,
         profile_id: user?.user?.id!,
       })
-      .select('*')
+      .select(`id`)
 
     if (error) {
       setError('courseCode', {
@@ -88,6 +88,7 @@ export function CourseEnrollment() {
       close()
     }
     setLoading(false)
+    return
   }
 
   const handleCloseButton = () => {
@@ -96,8 +97,14 @@ export function CourseEnrollment() {
   }
 
   return (
-    <div>
-      <div className="fixed bottom-10 right-10">
+    <>
+      <Box
+        sx={{
+          position: 'fixed',
+          bottom: '40px',
+          right: '40px',
+        }}
+      >
         <ActionIcon
           variant="filled"
           color="indigo"
@@ -107,7 +114,7 @@ export function CourseEnrollment() {
         >
           <IconPlus size={24} stroke={1.5} />
         </ActionIcon>
-      </div>
+      </Box>
       <Modal
         opened={opened}
         onClose={handleCloseButton}
@@ -115,10 +122,10 @@ export function CourseEnrollment() {
         title="Enroll to Course"
       >
         <form
-          className="p-2"
+          style={{ padding: '0.5rem' }}
           onSubmit={handleSubmit(handleCourseEnrollmentWithCode)}
         >
-          <Textarea
+          <TextInput
             size="sm"
             radius={'md'}
             error={errors.courseCode?.message}
@@ -126,23 +133,37 @@ export function CourseEnrollment() {
             placeholder="Enter Course Code"
             {...register('courseCode', { required: 'Course Code is required' })}
           />
-
-          <div className="flex mt-4 items-center justify-end space-x-2">
+          <Group
+            spacing={'xs'}
+            sx={{
+              width: '100%',
+              display: 'flex',
+              justifyContent: 'flex-end',
+              paddingTop: '0.75rem',
+            }}
+          >
             <Button
               fw={500}
-              size="xs"
-              variant="outline"
               color="red"
+              variant="filled"
+              size="xs"
+              uppercase
               onClick={handleCloseButton}
             >
               Cancel
             </Button>
-            <Button fw={500} size="xs" type="submit" loading={loading}>
-              Enroll
+            <Button
+              fw={500}
+              uppercase
+              size="xs"
+              type="submit"
+              loading={loading}
+            >
+              Enroll to Course
             </Button>
-          </div>
+          </Group>
         </form>
       </Modal>
-    </div>
+    </>
   )
 }

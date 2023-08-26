@@ -78,7 +78,7 @@ export const CreateUser = () => {
       <Drawer
         opened={opened}
         position="right"
-        size={'sm'}
+        size={'100%'}
         onClose={close}
         title="Add Profile"
       >

@@ -24,7 +24,7 @@ export function SubmitTest({ moduleId }: { moduleId: string }) {
         const { data, error } = await supabaseClient
           .from('profile_submitted_module')
           .update({ is_submitted: true })
-          .eq('profile_id', userId)
+          .eq('profile_id', userId!)
           .eq('module_id', moduleId)
           .select('*')
         if (error) {

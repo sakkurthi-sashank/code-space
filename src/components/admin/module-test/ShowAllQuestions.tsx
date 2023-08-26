@@ -11,7 +11,7 @@ import { useQuery } from 'react-query'
 import { DeleteCourse } from './DeleteQuestion'
 import { EditCourse } from './EditQuestion'
 
-export function AllCodingQuestions() {
+export function AllCodingQuestions({ moduleId }: { moduleId: string }) {
   const user = useSession()
   const supabaseClient = useSupabaseClient<Database>()
 
@@ -22,6 +22,7 @@ export function AllCodingQuestions() {
         .from('coding_question')
         .select('*')
         .order('created_at', { ascending: false })
+        .eq('module_id', moduleId)
       return error ? [] : data || []
     },
     {
@@ -32,29 +33,28 @@ export function AllCodingQuestions() {
   const columns = useMemo<MRT_ColumnDef<CodingQuestion>[]>(
     () => [
       {
-        accessorKey: 'id',
-        header: 'ID',
-        enableEditing: false,
-      },
-      {
         accessorKey: 'problem_name',
         header: 'Problem Name',
       },
       {
         accessorKey: 'problem_statement',
         header: 'Problem Statement',
+        minSize: 500,
       },
       {
         accessorKey: 'input_format',
         header: 'Input Format',
+        minSize: 500,
       },
       {
         accessorKey: 'output_format',
         header: 'Output Format',
+        minSize: 500,
       },
       {
         accessorKey: 'default_code',
         header: 'Default Code',
+        minSize: 400,
       },
       {
         accessorKey: 'marks',
@@ -81,7 +81,11 @@ export function AllCodingQuestions() {
     columns,
     data: data || [],
     enableFullScreenToggle: false,
-    columnFilterDisplayMode: 'subheader',
+    columnFilterDisplayMode: 'popover',
+    enablePagination: false,
+    enableColumnResizing: true,
+    enableTopToolbar: false,
+    initialState: { density: 'xl' },
   })
 
   return (

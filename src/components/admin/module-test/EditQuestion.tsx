@@ -47,7 +47,7 @@ export function EditCourse(props: CodingQuestion) {
     const { data, error } = await supabaseClient
       .from('coding_question')
       .update(values)
-      .eq('id', props.id)
+      .eq('id', props.id!)
       .select('id')
 
     if (error) {
@@ -70,7 +70,7 @@ export function EditCourse(props: CodingQuestion) {
       </ActionIcon>
       <Drawer
         opened={opened}
-        size={'xl'}
+        size={'100%'}
         position="right"
         onClose={close}
         title={'Edit Course'}

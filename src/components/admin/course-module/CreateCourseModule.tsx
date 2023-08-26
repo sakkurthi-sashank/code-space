@@ -62,17 +62,18 @@ export function AddCourseModule({ courseId }: { courseId: string }) {
     <>
       <Button
         onClick={open}
-        variant="filled"
+        variant="light"
         color="indigo"
+        fw={500}
         size="xs"
-        leftIcon={<IconPlus size={16} stroke={1.5} />}
+        leftIcon={<IconPlus size={16} stroke={1.75} />}
       >
         Add Module
       </Button>
       <Drawer
-        title={'Create Course'}
+        title={'Create Course Module'}
         opened={opened}
-        size={'xl'}
+        size={'100%'}
         position="right"
         onClose={close}
       >

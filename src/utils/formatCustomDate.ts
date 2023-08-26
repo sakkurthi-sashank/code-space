@@ -8,7 +8,6 @@ export function formatCustomDate(data: string | Date) {
     hour: '2-digit',
     minute: '2-digit',
   })
-
   return `${month} ${day} ${year}, ${time}`
 }
 
@@ -18,6 +17,5 @@ export function formatCustomDateWithOutTime(data: string | Date) {
   const month = date.toLocaleString('default', { month: 'short' })
   const day = date.getDate()
   const year = date.getFullYear()
-
   return `${month} ${day} ${year}`
 }

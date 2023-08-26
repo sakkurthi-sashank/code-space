@@ -1,5 +1,6 @@
 import { Box } from '@mantine/core'
 import MonacoEditor from '@monaco-editor/react'
+import { LanguageSelection } from './LanguageSelection'
 
 export function CodeEditor({
   defaultCode,
@@ -10,6 +11,9 @@ export function CodeEditor({
 }) {
   return (
     <Box className="w-full">
+      <div className="h-12">
+        <LanguageSelection />
+      </div>
       <MonacoEditor
         height="60vh"
         value={defaultCode}

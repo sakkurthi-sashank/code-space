@@ -1,7 +1,7 @@
 import { Badge, Header } from '@mantine/core'
 import { useInterval } from '@mantine/hooks'
 import { useEffect, useState } from 'react'
-import { SubmitTest } from './SubmitTest'
+import { SubmitTest } from '../submit/SubmitTest'
 
 export function ModuleTestHeader({ moduleId }: { moduleId: string }) {
   const [seconds, setSeconds] = useState(7200) // Set initial value to 7200 seconds (120 minutes)

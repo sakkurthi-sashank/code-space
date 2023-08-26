@@ -25,8 +25,8 @@ export function ModuleCards({ courseId }: { courseId: string }) {
       const { data, error } = await supabaseClient
         .from('module')
         .select(`*, coding_question(id), profile_submitted_module(*)`)
-        .eq('course_id', courseId)
-        .eq('profile_submitted_module.profile_id', user?.user.id)
+        .eq('course_id', courseId!)
+        .eq('profile_submitted_module.profile_id', user?.user.id!)
         .order('created_at', { ascending: false })
 
       return error ? [] : data || []
@@ -48,11 +48,8 @@ export function ModuleCards({ courseId }: { courseId: string }) {
               {module.module_name}
             </Title>
             <div className="text-xs gap-2 grid grid-cols-2 text-gray-600">
-              <span>
-                Start Date:
-                {formatCustomDate(module.start_date!)}
-              </span>
-              <span>End Date: {formatCustomDate(module.end_date!)}</span>
+              <span>Start Date : {formatCustomDate(module.start_date!)}</span>
+              <span>End Date : {formatCustomDate(module.end_date!)}</span>
               <span>Duration: {module.duration} minutes</span>
               <span>No of Questions: {module.coding_question.length}</span>
             </div>
@@ -61,7 +58,7 @@ export function ModuleCards({ courseId }: { courseId: string }) {
             <TestButton {...module} />
             <Button
               onClick={() =>
-                router.push(`/courses/modules/module-test/results/${module.id}`)
+                router.push(`/courses/modules/result/${module.id}`)
               }
               variant="outline"
               color="indigo"

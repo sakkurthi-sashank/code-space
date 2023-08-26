@@ -66,16 +66,17 @@ export function CreateQuestion({ moduleId }: { moduleId: string }) {
     <>
       <Button
         onClick={open}
-        variant="filled"
+        variant="light"
         color="indigo"
+        fw={500}
         size="xs"
-        leftIcon={<IconPlus size={16} stroke={1.5} />}
+        leftIcon={<IconPlus size={16} stroke={1.75} />}
       >
         Create Question
       </Button>
       <Drawer
         opened={opened}
-        size={'xl'}
+        size={'100%'}
         position="right"
         onClose={close}
         title="Create Course"

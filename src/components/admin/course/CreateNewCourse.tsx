@@ -1,7 +1,7 @@
 import { Course } from '@/types/databaseExtractTypes.ts'
 import { Database } from '@/types/supabase'
-import { Button, Drawer, TextInput, Textarea } from '@mantine/core'
-import { DatePickerInput } from '@mantine/dates'
+import { Button, Drawer, Group, Textarea } from '@mantine/core'
+import { DateTimePicker } from '@mantine/dates'
 import { useDisclosure } from '@mantine/hooks'
 import { useSupabaseClient } from '@supabase/auth-helpers-react'
 import { IconPlus } from '@tabler/icons-react'
@@ -66,19 +66,20 @@ export function AddCourse() {
     <>
       <Button
         onClick={open}
-        variant="filled"
+        variant="light"
         color="indigo"
+        fw={500}
         size="xs"
-        leftIcon={<IconPlus size={16} stroke={1.5} />}
+        leftIcon={<IconPlus size={16} stroke={1.75} />}
       >
-        Create Course
+        CREATE COURSE
       </Button>
       <Drawer
         opened={opened}
-        size="xl"
+        title={'Create Course'}
+        size="100%"
         position="right"
         onClose={close}
-        title="Create Course"
       >
         <form onSubmit={handleSubmit(createCourse)} className="space-y-4">
           <Textarea
@@ -86,9 +87,7 @@ export function AddCourse() {
               required: "Course Name can't be empty",
             })}
             description="Course Name"
-            placeholder="Course Name"
             minRows={2}
-            radius="md"
             autosize
             error={errors.course_name?.message}
           />
@@ -98,8 +97,6 @@ export function AddCourse() {
               required: "Course Code can't be empty",
             })}
             description="Course Code"
-            placeholder="Course Code"
-            radius="md"
             minRows={2}
             autosize
             error={errors.course_code?.message}
@@ -110,37 +107,31 @@ export function AddCourse() {
               required: "Course Description can't be empty",
             })}
             description="Course Description"
-            placeholder="Course Description"
             autosize
             minRows={4}
-            radius="md"
             error={errors.course_description?.message}
           />
 
-          <TextInput
+          <Textarea
             {...register('course_image', {
               required: "Course Image can't be empty",
             })}
-            description="Course Image"
-            placeholder="Course Image"
-            radius="md"
+            description="Course Image URL"
+            minRows={2}
+            autosize
             error={errors.course_image?.message}
           />
 
-          <DatePickerInput
+          <DateTimePicker
             {...register('start_date')}
             description="Start Date"
-            placeholder="Start Date"
-            radius="md"
             error={errors.start_date?.message}
             onChange={(value) => setValue('start_date', value?.toISOString())}
           />
 
-          <DatePickerInput
+          <DateTimePicker
             {...register('end_date')}
             description="End Date"
-            placeholder="End Date"
-            radius="md"
             error={errors.end_date?.message}
             onChange={(value) => setValue('end_date', value?.toISOString())}
           />
@@ -151,8 +142,23 @@ export function AddCourse() {
             </div>
           )}
 
-          <div className="flex justify-end pt-4">
-            <Button onClick={close} fw={500} size="xs" variant="light">
+          <Group
+            spacing={'xs'}
+            sx={{
+              width: '100%',
+              display: 'flex',
+              justifyContent: 'flex-end',
+              paddingTop: '0.75rem',
+            }}
+          >
+            <Button
+              onClick={close}
+              fw={500}
+              color="red"
+              variant="filled"
+              size="xs"
+              uppercase
+            >
               Cancel
             </Button>
             <Button
@@ -161,10 +167,11 @@ export function AddCourse() {
               size="xs"
               loading={loading}
               fw={500}
+              uppercase
             >
               Create Course
             </Button>
-          </div>
+          </Group>
         </form>
       </Drawer>
     </>
