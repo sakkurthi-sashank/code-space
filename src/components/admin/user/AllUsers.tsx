@@ -29,13 +29,12 @@ export function AllUsers() {
   const columns = useMemo<MRT_ColumnDef<Profile>[]>(
     () => [
       {
-        accessorKey: 'id',
-        header: 'ID',
-        enableEditing: false,
+        accessorKey: 'email_address',
+        header: 'Email Address',
       },
       {
         accessorKey: 'is_admin',
-        header: 'Is Admin',
+        header: 'Admin',
         Cell: ({ renderedCellValue }) => {
           return <div>{renderedCellValue ? 'Yes' : 'No'}</div>
         },
@@ -48,10 +47,7 @@ export function AllUsers() {
         accessorKey: 'display_name',
         header: 'Display Name',
       },
-      {
-        accessorKey: 'email_address',
-        header: 'Email Address',
-      },
+
       {
         accessorKey: 'phone_number',
         header: 'Phone Number',
@@ -89,6 +85,9 @@ export function AllUsers() {
     data: data || [],
     enableFullScreenToggle: false,
     columnFilterDisplayMode: 'popover',
+    enablePagination: false,
+    enableTopToolbar: false,
+    initialState: { density: 'md' },
   })
 
   return (

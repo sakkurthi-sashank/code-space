@@ -1,12 +1,13 @@
 import { Profile } from '@/types/databaseExtractTypes.ts'
 import { Database } from '@/types/supabase'
-import { ActionIcon, Button, Drawer, Switch, TextInput } from '@mantine/core'
+import { ActionIcon, Checkbox, Drawer, TextInput } from '@mantine/core'
 import { useDisclosure } from '@mantine/hooks'
 import { useSupabaseClient } from '@supabase/auth-helpers-react'
 import { IconEdit } from '@tabler/icons-react'
 import { useEffect, useState } from 'react'
 import { useForm } from 'react-hook-form'
 import { useQueryClient } from 'react-query'
+import { DrawerFormActionButtons } from '../common/DrawerFormActionButtons'
 
 export function EditUser(props: Profile) {
   const [opened, { open, close }] = useDisclosure(false)
@@ -67,72 +68,56 @@ export function EditUser(props: Profile) {
         size={'100%'}
         onClose={close}
       >
-        <form onSubmit={handleSubmit(handleEditUser)} className="space-y-2">
+        <form onSubmit={handleSubmit(handleEditUser)} className="space-y-4">
           <TextInput
             placeholder="Admission Number"
-            label="Admission Number"
-            size="xs"
-            radius={'md'}
+            description="Admission Number"
             {...register('admission_number')}
           />
 
           <TextInput
             placeholder="Display Name"
-            label="Display Name"
-            size="xs"
-            radius={'md'}
+            description="Display Name"
             {...register('display_name')}
           />
 
           <TextInput
             placeholder="Email Address"
             disabled
-            size="xs"
-            label="Email Address"
-            radius={'md'}
+            description="Email Address"
             {...register('email_address')}
-          />
-
-          <Switch
-            pt={6}
-            label="Admin"
-            size="xs"
-            defaultChecked={props.is_admin!}
-            onChange={(event) =>
-              setValue('is_admin', event.currentTarget.checked)
-            }
           />
 
           <TextInput
             placeholder="Phone Number"
-            label="Phone Number"
-            size="xs"
-            radius={'md'}
+            description="Phone Number"
             {...register('phone_number')}
           />
 
           <TextInput
             placeholder="Branch"
-            label="Branch"
-            size="xs"
-            radius={'md'}
+            description="Branch"
             {...register('branch')}
           />
 
           <TextInput
             placeholder="Batch"
-            size="xs"
-            label="Batch"
-            radius={'md'}
+            description="Batch"
             {...register('batch')}
           />
 
           <TextInput
             placeholder="Section"
-            label="Section"
-            size="xs"
-            radius={'md'}
+            description="Section"
             {...register('section')}
+          />
+
+          <Checkbox
+            defaultChecked={props.is_admin!}
+            onChange={(event) =>
+              setValue('is_admin', event.currentTarget.checked)
+            }
+            description="do you want to make this user admin?"
           />
 
           {errors.root && (
@@ -141,20 +126,7 @@ export function EditUser(props: Profile) {
             </div>
           )}
 
-          <div className="flex justify-end pt-4 space-x-4">
-            <Button onClick={close} size="xs" fw={500} variant="light">
-              Cancel
-            </Button>
-            <Button
-              variant="filled"
-              size="xs"
-              fw={500}
-              type="submit"
-              loading={loading}
-            >
-              Update
-            </Button>
-          </div>
+          <DrawerFormActionButtons close={close} loading={loading} />
         </form>
       </Drawer>
     </>

@@ -1,6 +1,6 @@
 import { Course } from '@/types/databaseExtractTypes.ts'
 import { Database } from '@/types/supabase'
-import { Button, Drawer, Group, Textarea } from '@mantine/core'
+import { Button, Drawer, Textarea } from '@mantine/core'
 import { DateTimePicker } from '@mantine/dates'
 import { useDisclosure } from '@mantine/hooks'
 import { useSupabaseClient } from '@supabase/auth-helpers-react'
@@ -8,6 +8,7 @@ import { IconPlus } from '@tabler/icons-react'
 import { useState } from 'react'
 import { useForm } from 'react-hook-form'
 import { useQueryClient } from 'react-query'
+import { DrawerFormActionButtons } from '../common/DrawerFormActionButtons'
 
 export function AddCourse() {
   const [opened, { open, close }] = useDisclosure(false)
@@ -142,36 +143,7 @@ export function AddCourse() {
             </div>
           )}
 
-          <Group
-            spacing={'xs'}
-            sx={{
-              width: '100%',
-              display: 'flex',
-              justifyContent: 'flex-end',
-              paddingTop: '0.75rem',
-            }}
-          >
-            <Button
-              onClick={close}
-              fw={500}
-              color="red"
-              variant="filled"
-              size="xs"
-              uppercase
-            >
-              Cancel
-            </Button>
-            <Button
-              type="submit"
-              className="ml-2"
-              size="xs"
-              loading={loading}
-              fw={500}
-              uppercase
-            >
-              Create Course
-            </Button>
-          </Group>
+          <DrawerFormActionButtons close={close} loading={loading} />
         </form>
       </Drawer>
     </>

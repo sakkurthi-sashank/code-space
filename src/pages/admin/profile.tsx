@@ -7,7 +7,9 @@ export default function index() {
   return (
     <AuthMiddleware>
       <Dashboard>
-        <CreateUser />
+        <div className="flex justify-end items-center p-2.5 border-b rounded bg-white">
+          <CreateUser />
+        </div>
         <AllUsers />
       </Dashboard>
     </AuthMiddleware>

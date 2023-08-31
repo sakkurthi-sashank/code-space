@@ -116,7 +116,6 @@ export function ShowAllCourses() {
     enableFullScreenToggle: false,
     columnFilterDisplayMode: 'popover',
     enablePagination: false,
-    enableColumnResizing: true,
     enableTopToolbar: false,
     initialState: { density: 'xl' },
   })

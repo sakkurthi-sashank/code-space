@@ -6,6 +6,7 @@ import { IconPlus } from '@tabler/icons-react'
 import { useState } from 'react'
 import { useForm } from 'react-hook-form'
 import { useQueryClient } from 'react-query'
+import { DrawerFormActionButtons } from '../common/DrawerFormActionButtons'
 
 export const CreateUser = () => {
   const [opened, { open, close }] = useDisclosure(false)
@@ -65,13 +66,14 @@ export const CreateUser = () => {
   }
 
   return (
-    <div className="flex justify-end items-center p-2">
+    <div>
       <Button
         onClick={open}
-        variant="filled"
+        variant="light"
         color="indigo"
+        fw={500}
         size="xs"
-        leftIcon={<IconPlus size={16} stroke={1.5} />}
+        leftIcon={<IconPlus size={16} stroke={1.75} />}
       >
         Add Profile
       </Button>
@@ -84,26 +86,14 @@ export const CreateUser = () => {
       >
         <form className="space-y-1.5" onSubmit={handleSubmit(handleCreateUser)}>
           <TextInput
-            label="Email Address"
+            description="Email Address"
             error={errors.email_address?.message}
             placeholder="Enter email address"
-            size="xs"
-            required
-            radius={'md'}
+            size="sm"
             {...register('email_address')}
           />
 
-          <div className="flex justify-end pt-5">
-            <Button
-              type="submit"
-              loading={loading}
-              size="xs"
-              fw={500}
-              variant="filled"
-            >
-              Create Profile
-            </Button>
-          </div>
+          <DrawerFormActionButtons close={close} loading={loading} />
         </form>
       </Drawer>
     </div>

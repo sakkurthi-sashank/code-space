@@ -146,7 +146,7 @@ export function CourseEnrollment() {
               fw={500}
               color="red"
               variant="filled"
-              size="xs"
+              size="sm"
               uppercase
               onClick={handleCloseButton}
             >
@@ -155,7 +155,7 @@ export function CourseEnrollment() {
             <Button
               fw={500}
               uppercase
-              size="xs"
+              size="sm"
               type="submit"
               loading={loading}
             >

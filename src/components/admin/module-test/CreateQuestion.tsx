@@ -8,6 +8,7 @@ import { IconPlus } from '@tabler/icons-react'
 import { useState } from 'react'
 import { useForm } from 'react-hook-form'
 import { useQueryClient } from 'react-query'
+import { DrawerFormActionButtons } from '../common/DrawerFormActionButtons'
 
 export function CreateQuestion({ moduleId }: { moduleId: string }) {
   const [opened, { open, close }] = useDisclosure(false)
@@ -161,20 +162,7 @@ export function CreateQuestion({ moduleId }: { moduleId: string }) {
             </div>
           )}
 
-          <div className="flex justify-end pt-4">
-            <Button onClick={close} fw={500} size="xs" variant="light">
-              Cancel
-            </Button>
-            <Button
-              type="submit"
-              className="ml-2"
-              size="xs"
-              loading={loading}
-              fw={500}
-            >
-              Create Question
-            </Button>
-          </div>
+          <DrawerFormActionButtons close={close} loading={loading} />
         </form>
       </Drawer>
     </>
